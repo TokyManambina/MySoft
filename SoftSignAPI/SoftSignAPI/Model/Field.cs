@@ -16,8 +16,8 @@ namespace SoftSignAPI.Model
         public double PDF_Width { get; set; }
         public double PDF_Height { get; set; }
         public FieldType FieldType { get; set; }
-        public string Detail{ get; set; }
-        public string Text{ get; set; }
+        public string? Detail{ get; set; }
+        public string? Text{ get; set; }
 
         [ForeignKey(nameof(UserDocumentId))]
         public int UserDocumentId { get; set; }
