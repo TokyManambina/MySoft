@@ -15,6 +15,8 @@ namespace SoftSignAPI.Helpers
             CreateMap<UserDto, User>();
             CreateMap<Offer, OfferDto>();
             CreateMap<OfferDto, Offer>();
+            CreateMap<Document, DocumentDto>();
+            CreateMap<DocumentDto, DocumentDto>();
 
         }
     }
