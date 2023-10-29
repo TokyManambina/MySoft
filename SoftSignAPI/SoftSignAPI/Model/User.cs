@@ -17,7 +17,7 @@ namespace SoftSignAPI.Model
         public string? TransfertMail{ get; set; }
 
         [ForeignKey(nameof(SocietyId))]
-        public Guid SocietyId{ get; set; }
+        public Guid? SocietyId{ get; set; }
         public virtual Society Society{ get; set; }
 
         public virtual List<UserDocument> UserDocuments { get; set; }

@@ -65,11 +65,11 @@ namespace SoftSignAPI.Controllers
 
         // POST api/<userController>
         [HttpPost]
-        public ActionResult Post([FromBody] User newUser)
+        public ActionResult Post([FromBody] UserDto newUser)
         {
             try
             {
-                return Ok(_userRepository.Create(newUser));
+                return Ok(_userRepository.Create(_mapper.Map<User>(newUser)));
             }
             catch (Exception ex)
             {
@@ -79,11 +79,11 @@ namespace SoftSignAPI.Controllers
 
         // PUT api/<userController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(Guid id, [FromBody] User updateUser)
+        public ActionResult Put(Guid id, [FromBody] UserDto updateUser)
         {
             try
             {
-                return Ok(_userRepository.Update(id, updateUser));
+                return Ok(_userRepository.Update(id, _mapper.Map<User>(updateUser)));
             }
             catch (Exception ex)
             {

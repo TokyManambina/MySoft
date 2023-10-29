@@ -18,8 +18,6 @@ namespace SoftSignAPI.Repositories
         {
             try
             {
-                if (!await IsExist(user.Id))
-                    return null;
                 user = _db.Users.Add(user).Entity;
                 await Save();
                 return user;
