@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SoftSignAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class firstMigration : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,7 +56,8 @@ namespace SoftSignAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "newid()"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Storage = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -103,7 +104,7 @@ namespace SoftSignAPI.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<int>(type: "int", nullable: false),
                     TransfertMail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SocietyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SocietyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -112,8 +113,7 @@ namespace SoftSignAPI.Migrations
                         name: "FK_Users_Societies_SocietyId",
                         column: x => x.SocietyId,
                         principalTable: "Societies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(

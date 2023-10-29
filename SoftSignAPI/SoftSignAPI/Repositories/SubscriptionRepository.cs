@@ -69,7 +69,7 @@ namespace SoftSignAPI.Repositories
 
                 subscription = _db.Subscriptions.Add(subscription).Entity;
 
-                await Save();
+                Save();
 
                 return subscription;
 
@@ -97,7 +97,7 @@ namespace SoftSignAPI.Repositories
 
                 _db.Subscriptions.Update(subscription);
 
-                return await Save();
+                return Save();
 
             }
             catch (Exception ex)
@@ -116,7 +116,7 @@ namespace SoftSignAPI.Repositories
 
                 _db.Subscriptions.Remove(subscription);
 
-                return await Save();
+                return Save();
 
             }
             catch (Exception ex)
@@ -124,11 +124,11 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> Save()
+        public bool Save()
         {
             try
             {
-                return await _db.SaveChangesAsync() > 0;
+                return _db.SaveChanges() > 0;
             }
             catch (Exception ex)
             {

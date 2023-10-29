@@ -12,8 +12,8 @@ using SoftSignAPI.Context;
 namespace SoftSignAPI.Migrations
 {
     [DbContext(typeof(dbContext))]
-    [Migration("20231029143510_firstMigration")]
-    partial class firstMigration
+    [Migration("20231029164238_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,6 +173,10 @@ namespace SoftSignAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Storage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Societies");
@@ -235,7 +239,7 @@ namespace SoftSignAPI.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("SocietyId")
+                    b.Property<Guid?>("SocietyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TransfertMail")
@@ -319,9 +323,7 @@ namespace SoftSignAPI.Migrations
                 {
                     b.HasOne("SoftSignAPI.Model.Society", "Society")
                         .WithMany("Users")
-                        .HasForeignKey("SocietyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SocietyId");
 
                     b.Navigation("Society");
                 });

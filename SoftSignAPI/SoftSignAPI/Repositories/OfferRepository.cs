@@ -85,7 +85,7 @@ namespace SoftSignAPI.Repositories
 
                 offer = _db.Offers.Add(offer).Entity;
 
-                await Save();
+                Save();
 
                 return offer;
 
@@ -117,7 +117,7 @@ namespace SoftSignAPI.Repositories
 
                 _db.Offers.Update(offer);
 
-                return await Save();
+                return Save();
 
             }
             catch (Exception ex)
@@ -137,7 +137,7 @@ namespace SoftSignAPI.Repositories
 
                 _db.Offers.Remove(offer);
 
-                return await Save();
+                return Save();
 
             }
             catch (Exception ex)
@@ -145,13 +145,14 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-       
-        public async Task<bool> Save()
+
+        public bool Save()
         {
             try
             {
-                return await _db.SaveChangesAsync() > 0;
-            }catch (Exception ex)
+                return _db.SaveChanges() > 0;
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

@@ -23,7 +23,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //Repository
 builder.Services.AddScoped<ISocietyRepository, SocietyRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOfferRepository, OfferRepository>();
 builder.Services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
@@ -84,12 +84,12 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 #region dbContext
 builder.Services.AddDbContext<dbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("dbContext"));
-    /*sqlServerOptionsAction: sqlOption =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("dbContext"),
+    sqlServerOptionsAction: sqlOption =>
 	{
 		sqlOption.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(5), errorNumbersToAdd: null);
 	});
-	options.EnableSensitiveDataLogging();*/
+	options.EnableSensitiveDataLogging();
 });
 
 

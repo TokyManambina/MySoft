@@ -67,11 +67,11 @@ namespace SoftSignAPI.Controllers
 
         // POST api/<SocietyController>
         [HttpPost]
-        public ActionResult Post([FromBody] Society newSociety)
+        public ActionResult Post([FromBody] SocietyDto newSociety)
         {
             try
             {
-                return Ok(_societyRepository.Create(newSociety));
+                return Ok(_societyRepository.Create(_mapper.Map<Society>(newSociety)));
             }
             catch (Exception ex)
             {

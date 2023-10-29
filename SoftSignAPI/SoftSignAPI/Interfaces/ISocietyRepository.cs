@@ -10,7 +10,7 @@ namespace SoftSignAPI.Interfaces
         Task<List<Society>?> GetAll(string? search = null, int? count = null, int? page = null);
         Task<Society?> GetByUser(string mail);
         Task<bool> IsExist(Guid id);
-        Task<bool> Save();
+        bool Save();
         Task<bool> Update(Guid id, Society updateSociety);
     }
 }

@@ -9,7 +9,7 @@ namespace SoftSignAPI.Interfaces
         Task<Field?> Get(int id);
         Task<List<Field>?> GetAll(int? userDocumentId = null, int? count = null, int? page = null);
         Task<bool> IsExist(int id);
-        Task<bool> Save();
+        bool Save();
         Task<bool> Update(int id, Field updateField);
     }
 }

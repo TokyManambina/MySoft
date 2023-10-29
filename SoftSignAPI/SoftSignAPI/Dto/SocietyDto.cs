@@ -4,8 +4,8 @@ namespace SoftSignAPI.Dto
 {
     public class SocietyDto
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Storage { get; set; }
+        public Guid? Id { get; set; }
+        public string? Name { get; set; }
+        public string? Storage { get; set; }
     }
 }

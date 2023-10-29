@@ -19,7 +19,7 @@ namespace SoftSignAPI.Services
             _societyRepository = societyRepository;
         }
 
-        public async void BuildDocument(UploadFileDto upload, string mail)
+        public async Task<bool> BuildDocument(UploadFileDto upload, string mail)
         {
             var uploadFile = upload.File.FileName.Replace(" ", "_");
             string filename = Path.GetFileNameWithoutExtension(uploadFile);
@@ -32,7 +32,7 @@ namespace SoftSignAPI.Services
 
             var society = await _societyRepository.GetByUser(mail);
             if (society == null)
-                return;
+                return false;
 
 
             document.Filename = $"{date.ToString("yyyyMMdd-")}{filename}.{Path.GetExtension(uploadFile)}";
@@ -44,7 +44,7 @@ namespace SoftSignAPI.Services
             CreateFile(upload.File, "(_original_)"+document.Filename);
 
             document = await _documentRepository.Create(document);
-
+            return false;
         }
 
         public void CreateDirectory(string directory)

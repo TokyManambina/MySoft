@@ -19,17 +19,14 @@ namespace SoftSignAPI.Repositories
         {
             try
             {
-                if (!await IsExist(society.Id))
-                    return null;
                 society = _db.Societies.Add(society).Entity;
-                await Save();
+                Save();
                 return society;
             }
             catch(Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            
         }
         public async Task<bool> Update(Guid id, Society updateSociety)
         {
@@ -40,8 +37,8 @@ namespace SoftSignAPI.Repositories
                     return false;
                 society.Name = updateSociety.Name;
                 society.Storage = updateSociety.Storage;
-                await Save();
-                return true;
+
+                return Save();
                 
             }
             catch (Exception ex)
@@ -57,7 +54,8 @@ namespace SoftSignAPI.Repositories
                 if (society == null)
                     return false;
                 _db.Remove(society);
-                return true;
+
+                return Save();
             }
             catch(Exception ex)
             {
@@ -117,11 +115,12 @@ namespace SoftSignAPI.Repositories
         {
             return await _db.Societies.AnyAsync(x => x.Id == id);
         }
-        public async Task<bool> Save()
+        public bool Save()
         {
             try
             {
-                return await _db.SaveChangesAsync() > 0;
+
+                return _db.SaveChanges() > 0;
             }
             catch (Exception ex)
             {

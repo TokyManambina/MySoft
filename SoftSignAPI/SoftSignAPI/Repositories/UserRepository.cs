@@ -19,7 +19,7 @@ namespace SoftSignAPI.Repositories
             try
             {
                 user = _db.Users.Add(user).Entity;
-                await Save();
+                Save();
                 return user;
             }
             catch (Exception ex)
@@ -40,8 +40,8 @@ namespace SoftSignAPI.Repositories
                 user.FirstName = updateUser.FirstName;
                 user.Role = updateUser.Role;
                 user.TransfertMail = updateUser.TransfertMail;
-                await Save();
-                return true;
+
+                return Save();
 
             }
             catch (Exception ex)
@@ -57,7 +57,8 @@ namespace SoftSignAPI.Repositories
                 if (user == null)
                     return false;
                 _db.Remove(user);
-                return true;
+
+                return Save();
             }
             catch (Exception ex)
             {
@@ -117,11 +118,11 @@ namespace SoftSignAPI.Repositories
         {
             return await _db.Users.AnyAsync(x => x.Id == id);
         }
-        public async Task<bool> Save()
+        public bool Save()
         {
             try
             {
-                return await _db.SaveChangesAsync() > 0;
+                return _db.SaveChanges() > 0;
             }
             catch (Exception ex)
             {

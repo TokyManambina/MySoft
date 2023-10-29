@@ -18,7 +18,7 @@ namespace SoftSignAPI.Model
 
         [ForeignKey(nameof(SocietyId))]
         public Guid? SocietyId{ get; set; }
-        public virtual Society Society{ get; set; }
+        public virtual Society? Society{ get; set; }
 
         public virtual List<UserDocument> UserDocuments { get; set; }
 

@@ -11,7 +11,7 @@ namespace SoftSignAPI.Interfaces
         Task<List<Offer>?> GetAll(string? search =null, bool? isActive = null, int? count = null, int? page = null);
         Task<bool> IsExist(int id);
         Task<bool> IsExist(string code);
-        Task<bool> Save();
+        bool Save();
         Task<bool> Update(int id, Offer updateOffer);
     }
 }

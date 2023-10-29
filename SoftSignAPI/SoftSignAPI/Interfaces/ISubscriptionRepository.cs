@@ -10,7 +10,7 @@ namespace SoftSignAPI.Interfaces
         Task<List<Subscription>?> GetAll(string? search = null, int? count = null, int? page = null);
         Task<bool> IsExist(string code);
         Task<bool> IsExist(int id);
-        Task<bool> Save();
+        bool Save();
         Task<bool> Update(int id, Subscription updateSubscription);
     }
 }
