@@ -72,28 +72,26 @@ namespace SoftSignAPI.Controllers
 
         // POST api/<DocumentController>
         [HttpPost]
-        public ActionResult Post([FromForm] FileUploadRequest upload, [FromBody] DocumentDto newDocument)
+        public ActionResult Post([FromBody] UploadFileDto upload)
         {
             try
             {
-                /*var uploadFile = upload.FileName.Replace(" ", "_");
-                string filename = Path.GetFileNameWithoutExtension(uploadFile);
-                string extension = Path.GetExtension(uploadFile);
-                if (extension != ".pdf")
+                if (Path.GetExtension(upload.File.FileName) != ".pdf")
                     return StatusCode(415, "Unsupported Media Type - Incorrect File Format");
-                */
+
+
+                Document document = new Document();
+
                 var date = DateTime.Now;
-                newDocument.DateSend = date;
-                newDocument.Code = $"{Convert.ToHexString(BitConverter.GetBytes(date.Ticks))}-{date.ToString("yyyyMM")}";
+                document.DateSend = date;
+                document.Code = $"{Convert.ToHexString(BitConverter.GetBytes(date.Ticks))}-{date.ToString("yyyyMM")}";
 
 
                 //filename = newDocument.DateSend.Value.ToString("yyyyMMdd-") + filename;
                 
-                return RedirectToRoute("/sdf");
 
                 var urlDoc = $"{_hostingEnvironment.WebRootPath}/Documents/{""}";
 
-                var document = _mapper.Map<Document>(newDocument);
                 
                 return Ok(_documentRepository.Create(document));
             }
@@ -114,11 +112,5 @@ namespace SoftSignAPI.Controllers
         public void Delete(int id)
         {
         }
-    }
-    public class FileUploadRequest
-    {
-        public string? UploaderName { get; set; }
-        public string? UploaderAddress { get; set; }
-        public IFormFile? File { get; set; }
     }
 }

@@ -51,7 +51,6 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-
         public async Task<bool> Delete(Guid id)
         {
             try
@@ -67,7 +66,6 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-
         public async Task<User?> Get(Guid id)
         {
             try
@@ -81,7 +79,17 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-
+        public async Task<User?> GetByMail(string mail)
+        {
+            try
+            {
+                return await _db.Users.FirstOrDefaultAsync(x => x.Email == mail);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public async Task<List<User>?> GetAll(string? search = null, int? count = null, int? page = null)
         {
             try
@@ -107,12 +115,10 @@ namespace SoftSignAPI.Repositories
             }
 
         }
-
         public async Task<bool> IsExist(Guid id)
         {
             return await _db.Users.AnyAsync(x => x.Id == id);
         }
-
         public async Task<bool> Save()
         {
             try

@@ -5,6 +5,7 @@ using SoftSignAPI.Context;
 using SoftSignAPI.Helpers;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Repositories;
+using SoftSignAPI.Services;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
@@ -18,6 +19,9 @@ builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 //Scope
+#region Scope
+
+//Repository
 builder.Services.AddScoped<ISocietyRepository, SocietyRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IOfferRepository, OfferRepository>();
@@ -26,6 +30,10 @@ builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 builder.Services.AddScoped<IFieldRepository, FieldRepository>();
 builder.Services.AddScoped<IUserDocumentRepository, UserDocumentRepository>();
 
+//Service
+builder.Services.AddTransient<IDocumentService, DocumentService>();
+
+#endregion
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
