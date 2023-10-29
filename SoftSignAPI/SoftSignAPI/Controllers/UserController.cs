@@ -65,11 +65,12 @@ namespace SoftSignAPI.Controllers
 
         // POST api/<userController>
         [HttpPost]
-        public ActionResult Post([FromBody] UserDto newUser)
+        public async Task<ActionResult<Guid>> Post([FromBody] UserDto newUser)
         {
             try
             {
-                return Ok(_userRepository.Create(_mapper.Map<User>(newUser)));
+                var user = await _userRepository.Create(_mapper.Map<User>(newUser));
+                return Ok(user.Id);
             }
             catch (Exception ex)
             {
