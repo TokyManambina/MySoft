@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
+using SoftSignAPI.Repositories;
 
 namespace SoftSignAPI.Controllers
 {
@@ -26,6 +27,20 @@ namespace SoftSignAPI.Controllers
             try
             {
                 return Ok(_mapper.Map<List<User>?>(_userRepository.GetAll(count: count, page: page)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        // GET: api/<userController>/text
+        [HttpGet("{search}")]
+        public ActionResult<List<Society>> Get([FromQuery] string search, [FromQuery] int? count, [FromQuery] int? page)
+        {
+            try
+            {
+                return Ok(_mapper.Map<List<Society>?>(_userRepository.GetAll(search, count: count, page: page)));
             }
             catch (Exception ex)
             {

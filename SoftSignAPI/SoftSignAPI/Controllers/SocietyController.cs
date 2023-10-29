@@ -36,6 +36,20 @@ namespace SoftSignAPI.Controllers
             }
         }
 
+        // GET: api/<SocietyController>/text
+        [HttpGet("{search}")]
+        public ActionResult<List<Society>> Get([FromQuery] string search,[FromQuery] int? count, [FromQuery] int? page)
+        {
+            try
+            {
+                return Ok(_mapper.Map<List<Society>?>(_societyRepository.GetAll(search,count: count, page: page)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
         // GET api/<SocietyController>/5
         [HttpGet("{id}")]
         public ActionResult<Society> Get(Guid id)
