@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SoftSignAPI.Dto;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
 
@@ -11,10 +12,10 @@ namespace SoftSignAPI.Controllers
     [ApiController]
     public class OfferController : ControllerBase
     {
-        private readonly IRepository<Offer> _offerRepository;
+        private readonly IOfferRepository _offerRepository;
         private readonly IMapper _mapper;
 
-        public OfferController(IRepository<Offer> offerRepository, IMapper mapper)
+        public OfferController(IOfferRepository offerRepository, IMapper mapper)
         {
             _offerRepository = offerRepository;
             _mapper = mapper;
@@ -22,12 +23,26 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<OfferController>
         [HttpGet]
-        public ActionResult<List<Offer>?> Get([FromQuery] int? count, [FromQuery] int? page)
+        public ActionResult<List<OfferDto>?> Get([FromQuery] bool? isActive, [FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<Offer>?>(_offerRepository.GetAll(count: count, page: page)));
+                return Ok(_mapper.Map<List<OfferDto>?>(_offerRepository.GetAll(isActive: isActive,count: count, page: page)));
             }catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        // GET: api/<OfferController>/find
+        [HttpGet("{find}")]
+        public ActionResult<List<OfferDto>?> Get([FromQuery] string search,[FromQuery] int? count, [FromQuery] int? page)
+        {
+            try
+            {
+                return Ok(_mapper.Map<List<OfferDto>?>(_offerRepository.GetAll(search: search,count: count, page: page)));
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal Server Error");
             }
@@ -35,11 +50,11 @@ namespace SoftSignAPI.Controllers
 
         // GET api/<OfferController>/5
         [HttpGet("{id}")]
-        public ActionResult<Offer?> Get(int id)
+        public ActionResult<OfferDto?> Get(int id)
         {
             try
             {
-                return Ok(_mapper.Map<Offer?>(_offerRepository.Get(id)));
+                return Ok(_mapper.Map<OfferDto?>(_offerRepository.Get(id)));
             }
             catch (Exception ex)
             {
@@ -63,14 +78,31 @@ namespace SoftSignAPI.Controllers
 
         // PUT api/<OfferController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult Put(int id, [FromBody] Offer updateOffer)
         {
+            try
+            {
+                return Ok(_offerRepository.Update(id, updateOffer));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
         }
 
         // DELETE api/<OfferController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
+            try
+            {
+                return Ok(_offerRepository.Delete(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
         }
+
     }
 }

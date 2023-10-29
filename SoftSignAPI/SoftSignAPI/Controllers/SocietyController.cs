@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SoftSignAPI.Model;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Repositories;
+using SoftSignAPI.Dto;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,11 +25,11 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<SocietyController>
         [HttpGet]
-        public ActionResult<List<Society>> Get([FromQuery] int? count, [FromQuery] int? page)
+        public ActionResult<List<SocietyDto>> Get([FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<Society>?>(_societyRepository.GetAll(count: count, page: page)));
+                return Ok(_mapper.Map<List<SocietyDto>?>(_societyRepository.GetAll(count: count, page: page)));
             }
             catch (Exception ex)
             {
@@ -38,11 +39,11 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<SocietyController>/text
         [HttpGet("find")]
-        public ActionResult<List<Society>> Get([FromQuery] string search,[FromQuery] int? count, [FromQuery] int? page)
+        public ActionResult<List<SocietyDto>> Get([FromQuery] string search,[FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<Society>?>(_societyRepository.GetAll(search,count: count, page: page)));
+                return Ok(_mapper.Map<List<SocietyDto>?>(_societyRepository.GetAll(search,count: count, page: page)));
             }
             catch (Exception ex)
             {
@@ -52,11 +53,11 @@ namespace SoftSignAPI.Controllers
 
         // GET api/<SocietyController>/5
         [HttpGet("{id}")]
-        public ActionResult<Society> Get(Guid id)
+        public ActionResult<SocietyDto> Get(Guid id)
         {
             try
             {
-                return Ok(_mapper.Map<Society?>(_societyRepository.Get(id)));
+                return Ok(_mapper.Map<SocietyDto?>(_societyRepository.Get(id)));
             }
             catch (Exception ex)
             {

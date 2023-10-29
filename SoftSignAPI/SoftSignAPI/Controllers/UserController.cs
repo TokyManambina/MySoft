@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SoftSignAPI.Dto;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
 using SoftSignAPI.Repositories;
@@ -22,11 +23,11 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<userController>
         [HttpGet]
-        public ActionResult<List<User>> Get([FromQuery] int? count, [FromQuery] int? page)
+        public ActionResult<List<UserDto>> Get([FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<User>?>(_userRepository.GetAll(count: count, page: page)));
+                return Ok(_mapper.Map<List<UserDto>?>(_userRepository.GetAll(count: count, page: page)));
             }
             catch (Exception ex)
             {
@@ -36,11 +37,11 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<userController>/text
         [HttpGet("find")]
-        public ActionResult<List<Society>> Get([FromQuery] string search, [FromQuery] int? count, [FromQuery] int? page)
+        public ActionResult<List<UserDto>> Get([FromQuery] string search, [FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<Society>?>(_userRepository.GetAll(search, count: count, page: page)));
+                return Ok(_mapper.Map<List<UserDto>?>(_userRepository.GetAll(search, count: count, page: page)));
             }
             catch (Exception ex)
             {
@@ -50,11 +51,11 @@ namespace SoftSignAPI.Controllers
 
         // GET api/<userController>/5
         [HttpGet("{id}")]
-        public ActionResult<User> Get(Guid id)
+        public ActionResult<UserDto> Get(Guid id)
         {
             try
             {
-                return Ok(_mapper.Map<User?>(_userRepository.Get(id)));
+                return Ok(_mapper.Map<UserDto?>(_userRepository.Get(id)));
             }
             catch (Exception ex)
             {

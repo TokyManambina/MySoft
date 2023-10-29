@@ -125,36 +125,7 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> Update(string code, Offer updateOffer)
-        {
-            try
-            {
-                var offer = await Get(code);
-
-                if (offer == null)
-                    return false;
-
-                offer.Code = updateOffer.Code;
-                offer.Name = updateOffer.Name;
-                offer.Description = updateOffer.Description;
-                offer.Hour = updateOffer.Hour;
-                offer.Day = updateOffer.Day;
-                offer.Month = updateOffer.Month;
-                offer.Year = updateOffer.Year;
-                offer.Description = updateOffer.Description;
-                offer.Price = updateOffer.Price;
-                offer.IsActive = updateOffer.IsActive;
-
-                _db.Offers.Update(offer);
-
-                return await Save();
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+        
         public async Task<bool> Delete(int id)
         {
             try
@@ -174,25 +145,7 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> Delete(string code)
-        {
-            try
-            {
-                var offer = await Get(code);
-
-                if (offer == null)
-                    return false;
-
-                _db.Remove(offer);
-
-                return await Save();
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
+       
         public async Task<bool> Save()
         {
             try
