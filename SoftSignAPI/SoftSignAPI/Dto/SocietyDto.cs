@@ -6,5 +6,6 @@ namespace SoftSignAPI.Dto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string Storage { get; set; }
     }
 }

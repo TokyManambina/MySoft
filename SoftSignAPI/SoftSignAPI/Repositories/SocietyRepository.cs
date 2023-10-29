@@ -39,6 +39,7 @@ namespace SoftSignAPI.Repositories
                 if (society == null)
                     return false;
                 society.Name = updateSociety.Name;
+                society.Storage = updateSociety.Storage;
                 await Save();
                 return true;
                 
