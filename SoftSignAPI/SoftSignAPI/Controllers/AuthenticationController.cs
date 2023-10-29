@@ -6,6 +6,7 @@ using SoftSignAPI.Dto;
 using SoftSignAPI.Helpers;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
+using SoftSignAPI.Repositories;
 using SoftSignAPI.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -83,7 +84,31 @@ namespace SoftSignAPI.Controllers
             }
         }
 
-        
+        [HttpGet]
+        [Route("refreshToken")]
+        [AllowAnonymous]
+        public async Task<ActionResult<string>> RefreshTokens()
+        {
+
+            var refreshToken = Request.Cookies["refreshToken"];
+            if(refreshToken == null)
+                return Unauthorized();
+            var user = await _userRepository.GetByToken(refreshToken);
+
+            if (user == null)
+                return NotFound("User not found");
+
+            if (!user.RefreshToken.Equals(refreshToken))
+                return Unauthorized("Invalid Refresh Token.");
+
+            if (user.TokenExpires < DateTime.Now)
+                return Unauthorized("Token Expired");
+
+            string token = _tokenService.CreateToken(user);
+            _tokenService.SetRefreshToken(user, Response);
+
+            return Ok(token);
+        }
 
     }
 }

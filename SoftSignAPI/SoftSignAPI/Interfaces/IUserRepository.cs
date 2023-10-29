@@ -10,6 +10,7 @@ namespace SoftSignAPI.Interfaces
         Task<User?> Get(Guid id);
         Task<List<User>?> GetAll(string? search = null, int? count = null, int? page = null);
         Task<User?> GetByMail(string mail);
+        Task<User?> GetByToken(string token);
         Task<bool> IsExist(Guid id);
         Task<bool> IsExist(string mail);
         bool Save();

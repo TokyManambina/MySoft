@@ -109,6 +109,17 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<User?> GetByToken(string token)
+        {
+            try
+            {
+                return await _db.Users.FirstOrDefaultAsync(x => x.RefreshToken == token);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public async Task<List<User>?> GetAll(string? search = null, int? count = null, int? page = null)
         {
             try
