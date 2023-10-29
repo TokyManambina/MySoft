@@ -17,6 +17,7 @@ namespace SoftSignAPI.Model
         public int Year { get; set; }
         public string? Description { get; set; }
         public string Price { get; set; } = "0";
+        public bool IsActive { get; set; }
 
         public virtual List<Subscription> Subscriptions { get; set;}
     }

@@ -9,7 +9,7 @@ namespace SoftSignAPI.Interfaces
         Task<bool> Delete(string code);
         Task<Offer?> Get(int id);
         Task<Offer?> Get(string code);
-        Task<List<Offer>?> GetAll(string? search =null, int? count = null, int? page = null);
+        Task<List<Offer>?> GetAll(string? search =null, bool? isActive = null, int? count = null, int? page = null);
         Task<bool> IsExist(int id);
         Task<bool> IsExist(string code);
         Task<bool> Save();

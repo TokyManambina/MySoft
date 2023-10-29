@@ -14,11 +14,14 @@ namespace SoftSignAPI.Repositories
             _db = db;
         }
 
-        public async Task<List<Offer>?> GetAll(string? search = null, int? count = null, int? page = null)
+        public async Task<List<Offer>?> GetAll(string? search = null, bool? isActive = null, int? count = null, int? page = null)
         {
             try
             {
                 var query = _db.Offers.AsQueryable();
+
+                if (isActive != null)
+                    query = query.Where(x => x.IsActive == isActive);
 
                 if(!string.IsNullOrEmpty(search))
                     query = query.Where(x => x.Name.ToLower().Contains(search.ToLower()) || x.Code.ToLower().Contains(search.ToLower()));
@@ -110,6 +113,7 @@ namespace SoftSignAPI.Repositories
                 offer.Year = updateOffer.Year;
                 offer.Description = updateOffer.Description;
                 offer.Price = updateOffer.Price;
+                offer.IsActive = updateOffer.IsActive;
 
                 _db.Offers.Update(offer);
 
@@ -139,6 +143,7 @@ namespace SoftSignAPI.Repositories
                 offer.Year = updateOffer.Year;
                 offer.Description = updateOffer.Description;
                 offer.Price = updateOffer.Price;
+                offer.IsActive = updateOffer.IsActive;
 
                 _db.Offers.Update(offer);
 
