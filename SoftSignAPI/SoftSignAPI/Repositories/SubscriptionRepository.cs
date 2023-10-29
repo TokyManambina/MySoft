@@ -114,7 +114,7 @@ namespace SoftSignAPI.Repositories
                 if (subscription == null)
                     return false;
 
-                _db.Remove(subscription);
+                _db.Subscriptions.Remove(subscription);
 
                 return await Save();
 

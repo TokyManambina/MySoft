@@ -106,7 +106,7 @@ namespace SoftSignAPI.Repositories
                 if (document == null)
                     return false;
 
-                _db.Remove(document);
+                _db.Documents.Remove(document);
 
                 return await Save();
 

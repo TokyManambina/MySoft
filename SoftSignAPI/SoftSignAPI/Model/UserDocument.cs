@@ -10,8 +10,8 @@ namespace SoftSignAPI.Model
         public Guid UserId { get; set; }
         public virtual User User { get; set; }
 
-        [ForeignKey(nameof(DocumentId))]
-        public Guid DocumentId { get; set; }
+        [ForeignKey(nameof(DocumentCode))]
+        public string DocumentCode { get; set; }
         public virtual Document Document { get; set; }
 
         public int Step { get; set; }

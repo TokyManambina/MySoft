@@ -159,7 +159,7 @@ namespace SoftSignAPI.Repositories
                 if (offer == null)
                     return false;
 
-                _db.Remove(offer);
+                _db.Offers.Remove(offer);
 
                 return await Save();
 
