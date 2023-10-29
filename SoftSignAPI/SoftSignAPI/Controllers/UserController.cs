@@ -1,34 +1,31 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SoftSignAPI.Model;
 using SoftSignAPI.Interfaces;
-using SoftSignAPI.Repositories;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using SoftSignAPI.Model;
 
 namespace SoftSignAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SocietyController : ControllerBase
+    public class UserController : ControllerBase
     {
-
-        private readonly ISocietyRepository _societyRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public SocietyController(ILogger<AuthenticationController> logger, IMapper mapper, ISocietyRepository societyRepository)
+        public UserController(ILogger<AuthenticationController> logger, IMapper mapper, IUserRepository userRepository)
         {
             _mapper = mapper;
-            _societyRepository= societyRepository;
+            _userRepository = userRepository;
         }
 
-        // GET: api/<SocietyController>
+        // GET: api/<userController>
         [HttpGet]
-        public ActionResult<List<Society>> Get([FromQuery] int? count, [FromQuery] int? page)
+        public ActionResult<List<User>> Get([FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<Society>?>(_societyRepository.GetAll(count: count, page: page)));
+                return Ok(_mapper.Map<List<User>?>(_userRepository.GetAll(count: count, page: page)));
             }
             catch (Exception ex)
             {
@@ -36,13 +33,13 @@ namespace SoftSignAPI.Controllers
             }
         }
 
-        // GET api/<SocietyController>/5
+        // GET api/<userController>/5
         [HttpGet("{id}")]
-        public ActionResult<Society> Get(Guid id)
+        public ActionResult<User> Get(Guid id)
         {
             try
             {
-                return Ok(_mapper.Map<Society?>(_societyRepository.Get(id)));
+                return Ok(_mapper.Map<User?>(_userRepository.Get(id)));
             }
             catch (Exception ex)
             {
@@ -50,13 +47,13 @@ namespace SoftSignAPI.Controllers
             }
         }
 
-        // POST api/<SocietyController>
+        // POST api/<userController>
         [HttpPost]
-        public ActionResult Post([FromBody] Society newSociety)
+        public ActionResult Post([FromBody] User newUser)
         {
             try
             {
-                return Ok(_societyRepository.Create(newSociety));
+                return Ok(_userRepository.Create(newUser));
             }
             catch (Exception ex)
             {
@@ -64,13 +61,13 @@ namespace SoftSignAPI.Controllers
             }
         }
 
-        // PUT api/<SocietyController>/5
+        // PUT api/<userController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(Guid id, [FromBody] Society updateSociety)
+        public ActionResult Put(Guid id, [FromBody] User updateUser)
         {
             try
             {
-                return Ok(_societyRepository.Update(id,updateSociety));
+                return Ok(_userRepository.Update(id, updateUser));
             }
             catch (Exception ex)
             {
@@ -78,13 +75,13 @@ namespace SoftSignAPI.Controllers
             }
         }
 
-        // DELETE api/<SocietyController>/5
+        // DELETE api/<userController>/5
         [HttpDelete("{id}")]
         public ActionResult Delete(Guid id)
         {
             try
             {
-                return Ok(_societyRepository.Delete(id));
+                return Ok(_userRepository.Delete(id));
             }
             catch (Exception ex)
             {
