@@ -23,10 +23,15 @@ namespace SoftSignAPI.Model
         public virtual List<UserDocument> UserDocuments { get; set; }
 
 
+        public string RefreshToken { get; set; } = string.Empty;
+        public DateTime TokenCreated { get; set; }
+        public DateTime TokenExpires { get; set; }
+
+
     }
 
     public enum Role
     {
-        User, Admin, sa
+        User, Admin, sa, Commercial, Controller
     }
 }

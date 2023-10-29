@@ -32,10 +32,13 @@ builder.Services.AddScoped<IUserDocumentRepository, UserDocumentRepository>();
 
 //Service
 builder.Services.AddTransient<IDocumentService, DocumentService>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ITokenService, TokenService>();
 
 #endregion
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
@@ -75,6 +78,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 #endregion
+
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
     // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -91,8 +95,6 @@ builder.Services.AddDbContext<dbContext>(options =>
 	});
 	options.EnableSensitiveDataLogging();
 });
-
-
 #endregion
 
 var app = builder.Build();

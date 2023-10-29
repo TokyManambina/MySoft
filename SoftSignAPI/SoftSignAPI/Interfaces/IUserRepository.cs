@@ -1,4 +1,5 @@
-﻿using SoftSignAPI.Model;
+﻿using SoftSignAPI.Helpers;
+using SoftSignAPI.Model;
 
 namespace SoftSignAPI.Interfaces
 {
@@ -10,7 +11,9 @@ namespace SoftSignAPI.Interfaces
         Task<List<User>?> GetAll(string? search = null, int? count = null, int? page = null);
         Task<User?> GetByMail(string mail);
         Task<bool> IsExist(Guid id);
+        Task<bool> IsExist(string mail);
         bool Save();
         Task<bool> Update(Guid id, User updateUser);
+        Task<bool> UpdateToken(Guid id, RefreshToken refreshToken);
     }
 }

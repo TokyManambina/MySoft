@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SoftSignAPI.Context;
+using SoftSignAPI.Helpers;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
 
@@ -26,7 +27,6 @@ namespace SoftSignAPI.Repositories
             {
                 throw new Exception(ex.Message);
             }
-
         }
         public async Task<bool> Update(Guid id, User updateUser)
         {
@@ -40,6 +40,26 @@ namespace SoftSignAPI.Repositories
                 user.FirstName = updateUser.FirstName;
                 user.Role = updateUser.Role;
                 user.TransfertMail = updateUser.TransfertMail;
+
+                return Save();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task<bool> UpdateToken(Guid id, RefreshToken refreshToken)
+        {
+            try
+            {
+                User? user = await Get(id);
+                if (user == null)
+                    return false;
+
+                user.RefreshToken = refreshToken.Token;
+                user.TokenCreated = refreshToken.Created;
+                user.TokenExpires = refreshToken.Expires;
 
                 return Save();
 
@@ -117,6 +137,10 @@ namespace SoftSignAPI.Repositories
         public async Task<bool> IsExist(Guid id)
         {
             return await _db.Users.AnyAsync(x => x.Id == id);
+        }
+        public async Task<bool> IsExist(string mail)
+        {
+            return await _db.Users.AnyAsync(x => x.Email == mail);
         }
         public bool Save()
         {
