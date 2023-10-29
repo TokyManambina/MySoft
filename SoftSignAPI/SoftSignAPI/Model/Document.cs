@@ -6,7 +6,7 @@ namespace SoftSignAPI.Model
     public class Document
     {
         [Key]
-        public string CodeDoc { get; set; }
+        public string Code { get; set; }
         public string? DocPasword { get; set; }
         public string Filename { get; set; }
         public string Url { get; set; }

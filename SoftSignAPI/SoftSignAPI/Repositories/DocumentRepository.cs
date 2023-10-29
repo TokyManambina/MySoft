@@ -5,23 +5,24 @@ using SoftSignAPI.Model;
 
 namespace SoftSignAPI.Repositories
 {
-    public class SubscriptionRepository : ISubscriptionRepository
+    public class DocumentRepository : IDocumentRepository
     {
+
         private readonly dbContext _db;
 
-        public SubscriptionRepository(dbContext db)
+        public DocumentRepository(dbContext db)
         {
             _db = db;
         }
 
-        public async Task<List<Subscription>?> GetAll(string? search = null, int? count = null, int? page = null)
+        public async Task<List<Document>?> GetAll(string? search = null, int? count = null, int? page = null)
         {
             try
             {
-                var query = _db.Subscriptions.AsQueryable();
+                var query = _db.Documents.AsQueryable();
 
-                if(!string.IsNullOrEmpty(search))
-                    query = query.Where(x=>x.Code.ToLower().Contains(search.ToLower()));
+                if (!string.IsNullOrEmpty(search))
+                    query = query.Where(x => x.Filename.ToLower().Contains(search.ToLower()) || x.Code.ToLower().Contains(search.ToLower()));
 
                 if (count != null && page != null)
                     return await query.Skip(count.Value * (page.Value - 1)).Take(count.Value).ToListAsync();
@@ -38,14 +39,14 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<Subscription?> Get(int id)
+        public async Task<Document?> Get(string code)
         {
             try
             {
-                if (!await IsExist(id))
+                if (!await IsExist(code))
                     return null;
 
-                return await _db.Subscriptions.FirstOrDefaultAsync(x => x.Id == id);
+                return await _db.Documents.FirstOrDefaultAsync(x => x.Code == code);
             }
             catch (Exception ex)
             {
@@ -54,24 +55,20 @@ namespace SoftSignAPI.Repositories
         }
         public async Task<bool> IsExist(string code)
         {
-            return await _db.Subscriptions.AnyAsync(x => x.Code == code);
+            return await _db.Documents.AnyAsync(x => x.Code == code);
         }
-        public async Task<bool> IsExist(int id)
-        {
-            return await _db.Subscriptions.AnyAsync(x => x.Id == id);
-        }
-        public async Task<Subscription?> Create(Subscription subscription)
+        public async Task<Document?> Create(Document document)
         {
             try
             {
-                if (await IsExist(subscription.Id))
+                if (await IsExist(document.Code))
                     return null;
 
-                subscription = _db.Subscriptions.Add(subscription).Entity;
+                document = _db.Documents.Add(document).Entity;
 
                 await Save();
 
-                return subscription;
+                return document;
 
             }
             catch (Exception ex)
@@ -79,23 +76,18 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> Update(int id, Subscription updateSubscription)
+        public async Task<bool> Update(string code, Document updateDocument)
         {
             try
             {
-                var subscription = await Get(id);
+                var document = await Get(code);
 
-                if (subscription == null)
+                if (document == null)
                     return false;
 
-                subscription.Code = updateSubscription.Code;
-                subscription.BeginDate = updateSubscription.BeginDate;
-                subscription.EndDate = updateSubscription.EndDate;
-                subscription.OfferId = updateSubscription.OfferId;
-                subscription.SocietyId = updateSubscription.SocietyId;
+                document.Status = updateDocument.Status;
 
-
-                _db.Subscriptions.Update(subscription);
+                _db.Documents.Update(document);
 
                 return await Save();
 
@@ -105,16 +97,16 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(string code)
         {
             try
             {
-                var subscription = await Get(id);
+                var document = await Get(code);
 
-                if (subscription == null)
+                if (document == null)
                     return false;
 
-                _db.Remove(subscription);
+                _db.Remove(document);
 
                 return await Save();
 

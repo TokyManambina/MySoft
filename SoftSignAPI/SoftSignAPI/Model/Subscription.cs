@@ -7,6 +7,7 @@ namespace SoftSignAPI.Model
     {
         [Key]
         public int Id { get; set; }
+        public string Code { get; set; }
 
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }

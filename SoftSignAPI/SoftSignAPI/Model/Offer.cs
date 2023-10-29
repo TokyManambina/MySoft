@@ -4,11 +4,12 @@ using System.Data.SqlTypes;
 
 namespace SoftSignAPI.Model
 {
-    [Index(nameof(Name), IsUnique = true)]
+    [Index(nameof(Code), IsUnique = true)]
     public class Offer
     {
         [Key]
         public int Id { get; set; }
+        public string Code { get; set; }
         public string Name { get; set; }
         public int Hour { get; set; }
         public int Day { get; set; }
