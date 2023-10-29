@@ -59,7 +59,7 @@ namespace SoftSignAPI.Controllers
         [HttpPost]
         [Route("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody] AuthenticationDto request)
+        public async Task<ActionResult<string>> Login([FromBody] AuthenticationDto request)
         {
             try
             {
