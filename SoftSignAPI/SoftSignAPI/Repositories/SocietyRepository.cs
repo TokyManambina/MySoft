@@ -2,10 +2,11 @@
 using SoftSignAPI.Context;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
+using System.Net.Sockets;
 
 namespace SoftSignAPI.Repositories
 {
-    public class SocietyRepository : IRepository<Society>
+    public class SocietyRepository : ISocietyRepository
     {
         private readonly dbContext _db;
 
@@ -14,11 +15,78 @@ namespace SoftSignAPI.Repositories
             _db = db;
         }
 
-        public async Task<List<Society>?> GetAll(object? id = null, int? count = null, int? page = null)
+        public async Task<Society?> Create(Society society)
+        {
+            try
+            {
+                if (!await IsExist(society.Id))
+                    return null;
+                society = _db.Societies.Add(society).Entity;
+                await Save();
+                return society;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
+        }
+        public async Task<bool> Update(Guid id, Society updateSociety)
+        {
+            try
+            {
+                Society? society = await Get(id);
+                if (society == null)
+                    return false;
+                society.Name = updateSociety.Name;
+                await Save();
+                return true;
+                
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> Delete(Guid id)
+        {
+            try
+            {
+                Society? society = await Get(id);
+                if (society == null)
+                    return false;
+                _db.Remove(society);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<Society?> Get(Guid id)
+        {
+            try
+            {
+                if (!await IsExist(id))
+                    return null;
+                return await _db.Societies.FirstOrDefaultAsync(x => x.Id == id);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<List<Society>?> GetAll(string? search = null, int? count = null, int? page = null)
         {
             try
             {
                 var query = _db.Societies.AsQueryable();
+
+                if (!string.IsNullOrEmpty(search))
+                    query = query.Where(x => x.Name.ToLower().Contains(search.ToLower()));
 
                 if (count != null && page != null)
                     return await query.Skip(count.Value * (page.Value - 1)).Take(count.Value).ToListAsync();
@@ -34,100 +102,13 @@ namespace SoftSignAPI.Repositories
             {
                 throw new Exception(ex.Message);
             }
+           
         }
 
-        public async Task<Offer?> Get(object id)
+        public async Task<bool> IsExist(Guid id)
         {
-            try
-            {
-                if (!await IsExist(id))
-                    return null;
-
-                return await _db.Offers.FirstOrDefaultAsync(x => x.Id == (int)id);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            return await _db.Societies.AnyAsync(x => x.Id == id);
         }
-
-        public async Task<bool> IsExist(string name)
-        {
-            return await _db.Offers.AnyAsync(x => x.Name == name);
-        }
-
-        public async Task<bool> IsExist(object id)
-        {
-            return await _db.Offers.AnyAsync(x => x.Id == (int)id);
-        }
-
-        public async Task<Offer?> Create(Offer offer)
-        {
-            try
-            {
-                if (await IsExist(offer.Name))
-                    return null;
-
-                offer = _db.Offers.Add(offer).Entity;
-
-                await Save();
-
-                return offer;
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<bool> Update(object id, Offer updateOffer)
-        {
-            try
-            {
-                var offer = await Get(id);
-
-                if (offer == null)
-                    return false;
-
-                offer.Name = updateOffer.Name;
-                offer.Description = updateOffer.Description;
-                offer.Hour = updateOffer.Hour;
-                offer.Hour = updateOffer.Hour;
-                offer.Hour = updateOffer.Hour;
-                offer.Hour = updateOffer.Hour;
-
-                _db.Offers.Update(offer);
-
-                return await Save();
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
-        public async Task<bool> Delete(object id)
-        {
-            try
-            {
-                var offer = await Get(id);
-
-                if (offer == null)
-                    return false;
-
-                _db.Remove(offer);
-
-                return await Save();
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-
 
         public async Task<bool> Save()
         {
@@ -139,6 +120,9 @@ namespace SoftSignAPI.Repositories
             {
                 throw new Exception(ex.Message);
             }
+           
         }
+
+        
     }
 }

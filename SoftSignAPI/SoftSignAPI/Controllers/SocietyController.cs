@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SoftSignAPI.Model;
 using SoftSignAPI.Interfaces;
+using SoftSignAPI.Repositories;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,10 +13,10 @@ namespace SoftSignAPI.Controllers
     public class SocietyController : ControllerBase
     {
 
-        private readonly IRepository<Society> _societyRepository;
+        private readonly ISocietyRepository _societyRepository;
         private readonly IMapper _mapper;
 
-        public SocietyController(ILogger<AuthenticationController> logger, IMapper mapper, IRepository<Society> societyRepository)
+        public SocietyController(ILogger<AuthenticationController> logger, IMapper mapper, ISocietyRepository societyRepository)
         {
             _mapper = mapper;
             _societyRepository= societyRepository;
@@ -41,8 +42,7 @@ namespace SoftSignAPI.Controllers
         {
             try
             {
-                if (_societyRepository.IsExist(id))
-                    return Ok(_mapper.Map<Society?>(_societyRepository.Get(id)));
+                return Ok(_mapper.Map<Society?>(_societyRepository.Get(id)));
             }
             catch (Exception ex)
             {
@@ -52,20 +52,44 @@ namespace SoftSignAPI.Controllers
 
         // POST api/<OfferController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult Post([FromBody] Society newSociety)
         {
+            try
+            {
+                return Ok(_societyRepository.Create(newSociety));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
         }
 
         // PUT api/<OfferController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult Put(Guid id, [FromBody] Society updateSociety)
         {
+            try
+            {
+                return Ok(_societyRepository.Update(id,updateSociety));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
         }
 
         // DELETE api/<OfferController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(Guid id)
         {
+            try
+            {
+                return Ok(_societyRepository.Delete(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
         }
     }
 }
