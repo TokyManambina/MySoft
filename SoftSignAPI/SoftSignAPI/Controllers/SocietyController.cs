@@ -37,7 +37,7 @@ namespace SoftSignAPI.Controllers
         }
 
         // GET: api/<SocietyController>/text
-        [HttpGet("{search}")]
+        [HttpGet("find")]
         public ActionResult<List<Society>> Get([FromQuery] string search,[FromQuery] int? count, [FromQuery] int? page)
         {
             try

@@ -28,13 +28,13 @@ namespace SoftSignAPI.Controllers
             //var a = _mapper.Map<List<User>>(await _WorkspaceRepository.GetByUserId(user.Id))
             return new string[] { "value1", "value2" };
         }
-
+        /*
         [HttpGet]
         [Route("")]
         public IEnumerable<User> GetAll()
         {
             return null;
-        }
+        }*/
 
         //ActionResult
         [HttpGet]

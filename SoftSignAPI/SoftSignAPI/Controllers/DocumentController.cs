@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SoftSignAPI.Interfaces;
+using SoftSignAPI.Model;
+using SoftSignAPI.Repositories;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,11 +12,28 @@ namespace SoftSignAPI.Controllers
     [ApiController]
     public class DocumentController : ControllerBase
     {
+        private readonly IDocumentRepository _documentRepository;
+        private readonly IMapper _mapper;
+
+        public DocumentController(IDocumentRepository documentRepository, IMapper mapper)
+        {
+            _documentRepository = documentRepository;
+            _mapper = mapper;
+        }
+
+
         // GET: api/<DocumentController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<List<Document>> Get([FromQuery] int? count, [FromQuery] int? page)
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                return Ok(_mapper.Map<List<Document>?>(_documentRepository.GetAll(count: count, page: page)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
         }
 
         // GET api/<DocumentController>/5
