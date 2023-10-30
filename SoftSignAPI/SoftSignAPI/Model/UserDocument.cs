@@ -14,10 +14,10 @@ namespace SoftSignAPI.Model
         public string DocumentCode { get; set; }
         public virtual Document Document { get; set; }
 
-        public int Step { get; set; }
-        public string Role { get; set; }
+        public int Step { get; set; } = 0;
+        public string Role { get; set; } = string.Empty;
 
-        public bool IsFinished { get; set; }
+        public bool IsFinished { get; set; } = false;
 
         public virtual List<Field> Fields { get; set;}
     }

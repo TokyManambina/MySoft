@@ -15,13 +15,13 @@ namespace SoftSignAPI.Repositories
             _db = db;
         }
 
-        public async Task<User?> Create(User user)
+        public async Task<User> Create(User user)
         {
             try
             {
-                user = _db.Users.Add(user).Entity;
+                var u = await _db.Users.AddAsync(user);
                 Save();
-                return user;
+                return u.Entity;
             }
             catch (Exception ex)
             {

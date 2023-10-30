@@ -34,6 +34,7 @@ builder.Services.AddScoped<IUserDocumentRepository, UserDocumentRepository>();
 builder.Services.AddTransient<IDocumentService, DocumentService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddTransient<IUserDocumentService, UserDocumentService>();
 
 #endregion
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
