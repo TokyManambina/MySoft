@@ -53,16 +53,23 @@ namespace SoftSignAPI.Repositories
         {
             try
             {
-                User? user = await Get(id);
+                var user = await Get(id);
                 if (user == null)
                     return false;
-
+               
                 user.RefreshToken = refreshToken.Token;
                 user.TokenCreated = refreshToken.Created;
                 user.TokenExpires = refreshToken.Expires;
+                _db.Users.Update(user);
 
-                return Save();
+                /*var rows = await _db.Users.Where(x => x.Id == id).ExecuteUpdateAsync(x => x
+                    .SetProperty(u => u.RefreshToken ,refreshToken.Token)
+                    .SetProperty(u => u.TokenCreated , refreshToken.Created)
+                    .SetProperty(u => u.TokenExpires , refreshToken.Expires)
+                );*/
 
+                _db.SaveChanges();
+                return true;
             }
             catch (Exception ex)
             {

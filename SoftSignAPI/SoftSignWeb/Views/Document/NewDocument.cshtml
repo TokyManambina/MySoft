@@ -1,0 +1,243 @@
+﻿@{
+	//ViewBag.Title = "NewDocument";
+}
+
+<partial name="~/Views/Widget/headerCard.cshtml" />
+
+<!-- Titre Page -->
+<section class="content-header">
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<div class="col-sm-6">
+				@* <h1>Nouveau Document</h1> *@
+			</div>
+			<div class="col-sm-6">
+				<ul class="breadcrumb float-sm-right">
+					<li class="breadcrumb-item"><a href="#">Home</a></li>
+					<li class="breadcrumb-item active">Nouveau Documents</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Fin Titre Page -->
+<!-- Main content -->
+<section class="content">
+	<div class="row">
+		<!-- Action  -->
+		<div >
+			<div class="BoxSetting col-8 col-sm-6 col-md-5 col-lg-3" id="BoxSettingMenu">
+				<div class="toggleBoxSetting text-center d-flex justify-content-center align-items-center btn"><i class="fa fa-bars"></i></div>
+				<div class="btn btn-block mb-1 p-3 font-weight-bolder">
+					<h3>Nouveau Document</h3>
+				</div>
+				<hr />
+				<div class="btn btn-primary btn-block mb-3 p-3" data-action="openPDF">
+					<i class="fa fa-upload"></i> Importer un document
+				</div>
+				<hr />
+				<div class="BoxSettingInfo">
+					<!-- Card -->
+					<!-- Card Action -->
+					<div class="card">
+						<div class="card-header bg-teal">
+							<h3 class="card-title text-bold">Action</h3>
+
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus text-white"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body p-0">
+							<ul class="nav nav-pills flex-column" id="actionmenu">
+								<li class="nav-item form-inline justify-content-between">
+									<label for="usign" class="col-6"><input type="radio" class="col-2" id="usign" name="radioSign" checked /> Invité à signer</label>
+									<label for="isign" class="col-6"><input type="radio" class="col-2" id="isign" name="radioSign" /> Signer moi même</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- Card Flow -->
+					<div class="card">
+						<div class="card-header bg-teal">
+							<h3 class="card-title text-bold"><i class="fa fa-circle-nodes"></i> Circuit de traitement</h3>
+
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus text-white"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body p-0">
+							<ul class="nav nav-pills flex-column" id="flowmenu">
+								<li class="nav-item active" data-bs-toggle="modal" data-bs-target="#destinataire" id="ui_destinataire">
+									<div class="nav-link">
+										<i class="fa fa-user-plus"></i> Ajouter un Destinataire
+									</div>
+								</li>
+
+								<li id="showListDestinataire"></li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- Card Fields -->
+					<div class="card">
+						<div class="card-header bg-teal">
+							<h3 class="card-title text-bold"><i class="fa fa-cubes-stacked"></i> Champs</h3>
+
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus text-white"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body p-0">
+							<ul class="nav nav-pills flex-column" id="actionmenu">
+
+								<li class="nav-item active" data-action="addSignBox">
+									<div class="nav-link">
+										<i class="fa fa-signature col-1" id="addSignature"></i> <span class="col">Signature</span>
+									</div>
+								</li>
+
+								<li class="nav-item active" id="ui_paraphe" data-action="addParapheBox">
+									<div class="nav-link">
+										<i class="fa fa-pen col-1" id="addParaphe"></i> <span class="col">Paraphe</span>
+									</div>
+								</li>
+
+								<li class="nav-item active" id="ui_paraphe" data-action="addStamp">
+									<div class="nav-link">
+										<i class="fa fa-stamp col-1" id="addParaphe"></i> <span class="col">Tampon</span>
+									</div>
+								</li>
+
+								<li class="nav-item active" id="ui_paraphe" data-action="addText">
+									<div class="nav-link">
+										<i class="fa fa-calendar col-1" id="addParaphe"></i> <span class="col">Date de signature</span>
+									</div>
+								</li>
+
+								<li class="nav-item active" id="ui_paraphe" data-action="addText">
+									<div class="nav-link">
+										<i class="fa fa-t col-1" id="addParaphe"></i> <span class="col">Texte</span>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- Card Dossier/Archivage -->
+					@* <div class="card collapsed-card"> *@
+					<div class="card">
+						<div class="card-header bg-teal">
+							<h3 class="card-title text-bold"><i class="fa fa-folder-open"></i> Type de document</h3>
+
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus text-white"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body p-0">
+							<ul class="nav nav-pills flex-column">
+								<li class="nav-item active">
+									<div class="nav-link">
+										<div class="form-group">
+											<label>Type :</label>
+											<select class="form-control select2" id="selectType">
+												<option>Attestation</option>
+												<option selected="selected">Contrat</option>
+												<option>Facture Achat</option>
+												<option>Facture Vente</option>
+											</select>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- Fin card -->
+					
+				</div>
+				<hr />
+				<div id="sendorsign">
+					<div class="btn btn-primary btn-block p-3 disabled" data-action="sendDocument" title="verifier les champs dans déstinataire et/ou les differents mails">
+						<i class="fa fa-paper-plane"></i> Envoyer
+					</div>
+					<div class="btn btn-primary btn-block p-3 hide" data-bs-toggle="modal" data-bs-target="#signature_tab" id="ISign" onclick="ISign()">
+						<i class="fas fa-signature"></i> Signer
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Fin Action  -->
+		<!-- JS PDF -->
+		@* <div class="col-md-9 text-center overflow-hidden mb-5"> *@
+		<div class="text-center mb-5">
+
+			<div class="flex-column">
+				<form enctype="multipart/form-data" method="post" id="getfile">
+					<input type="file" id="inputFile" name="doc" accept="application/pdf" hidden>
+					<input type="submit" id="test" hidden />
+				</form>
+				<div class="col-lg-12">
+					<div id="previous" class="nav-link d-inline-block"><i class="fas fa-arrow-alt-circle-left" style="cursor: pointer"></i></div>
+					<span id="current_page" class="nav-link d-inline-block">0 sur 0</span>
+					<div id="next" class="nav-link d-inline-block"><i class="fas fa-arrow-alt-circle-right" style="cursor: pointer"></i></div>
+				</div>
+				<div id="pagination" class="hidden"></div>
+				<div style="position: relative;" id="test">
+					<canvas id="pdfViewer" class="pdf-viewer"></canvas>
+					<div class="text-center" id="pdftext" style="position: absolute; color: rgb(214, 171, 27); top: 50%; left: 50%; font-size: 26px;transform: translate(-50%,-50%);">Ouvrir un fichier</div>
+				</div>
+
+				<!--
+				<div style="display: none;">
+					<span id="zoomValue">150%</span>
+					<input type="range" id="zoom" name="cowbell" min="100" max="300" value="150" step="50" disabled>
+				</div>
+				-->
+			</div>
+		</div>
+		<!--Fin JS PDF -->
+		@*
+		<partial name="~/Views/Main/ModalDocument.cshtml" />
+		*@
+	</div>
+</section>
+<!-- Fin Main content -->
+<!-- Signature et Paraphe Box -->
+<style>
+</style>
+
+<div id="signatureListBox" class="hidden">
+</div>
+
+<div class="boxSign hidden" id="signature">
+	<div class="ribbon-wrapper">
+		<div class="ribbon bg-primary">
+			sign
+		</div>
+	</div>
+</div>
+
+<div class="boxSign hidden" id="paraphe">
+	<div class="ribbon-wrapper">
+		<div class="ribbon bg-primary">
+			Paraphe
+		</div>
+	</div>
+</div>
+
+
+<partial name="~/Views/Modal/ModalDestinataire.cshtml" />
+<script src="~/js/pdf/jquery-ui.js"></script>
+
+
+<script src="~/js/doc/NewDocument.js" asp-append-version="true"></script>
+<script src="~/js/doc/myPDF.js" asp-append-version="true"></script>
+<script src="~/js/doc/SignBox.js" asp-append-version="true"></script>

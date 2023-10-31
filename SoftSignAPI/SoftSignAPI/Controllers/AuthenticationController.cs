@@ -36,7 +36,7 @@ namespace SoftSignAPI.Controllers
 
         [HttpPost]
         [Route("register")]
-        [Authorize(Roles = $"{nameof(Role.Commercial)}, {nameof(Role.sa)}" )]
+        //[Authorize(Roles = $"{nameof(Role.Commercial)}, {nameof(Role.sa)}" )]
         public async Task<ActionResult<User>> Register(AuthenticationDto request)
         {
             try
@@ -73,14 +73,19 @@ namespace SoftSignAPI.Controllers
                     return Unauthorized("Wrong password.");
 
                 string token = _tokenService.CreateToken(user); 
-                _tokenService.SetRefreshToken(user, Response);
+                var refresh = await _tokenService.SetRefreshToken(user, Response);
 
-                return Ok(token);
+                return Ok(new {
+                    token = token,
+                    refresh = refresh.Token,
+                    Created = refresh.Created,
+                    Expires = refresh.Expires
+                });
 
             }
             catch (Exception ex)
             {
-                return BadRequest(new { type = "error", message = ex.Message });
+                return StatusCode(500, "Internal Server Error");
             }
         }
 

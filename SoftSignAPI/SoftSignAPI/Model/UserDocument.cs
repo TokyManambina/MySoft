@@ -16,6 +16,8 @@ namespace SoftSignAPI.Model
 
         public int Step { get; set; } = 0;
         public string Role { get; set; } = string.Empty;
+        public string? Message { get; set; }
+        public string? Cc { get; set; }
 
         public bool IsFinished { get; set; } = false;
 

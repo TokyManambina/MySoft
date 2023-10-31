@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SoftSignAPI.Context;
 using SoftSignAPI.Helpers;
@@ -87,6 +88,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 #region dbContext
+
 builder.Services.AddDbContext<dbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("dbContext"),

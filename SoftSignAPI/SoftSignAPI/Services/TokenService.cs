@@ -55,7 +55,7 @@ namespace SoftSignAPI.Services
             };
         }
 
-        public async void SetRefreshToken(User user, HttpResponse response)
+        public async Task<RefreshToken> SetRefreshToken(User user, HttpResponse response)
         {
             var newrefreshToken= GenerateRefreshToken(user);
             var coockieOption = new CookieOptions
@@ -67,6 +67,8 @@ namespace SoftSignAPI.Services
             response.Cookies.Append("refreshToken", newrefreshToken.Token, coockieOption);
 
             await _userRepository.UpdateToken(user.Id, newrefreshToken);
+
+            return newrefreshToken;
         }
     }
 }

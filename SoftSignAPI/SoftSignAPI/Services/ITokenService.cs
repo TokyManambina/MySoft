@@ -7,6 +7,6 @@ namespace SoftSignAPI.Services
     {
         string CreateToken(User user);
         RefreshToken GenerateRefreshToken(User user);
-        void SetRefreshToken(User user, HttpResponse response);
+        Task<RefreshToken> SetRefreshToken(User user, HttpResponse response);
     }
 }
