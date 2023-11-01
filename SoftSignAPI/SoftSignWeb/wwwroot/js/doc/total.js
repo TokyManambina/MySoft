@@ -1,7 +1,7 @@
 ﻿$(document).ready(() => {
 	$.ajax({
 		type: "GET",
-		url: "/Document/GetInfoDoc",
+		url: "/Document/GetDocumentInfo",
 		data: null,
 
 		success: function (result) {
@@ -9,17 +9,17 @@
 			if (result.type == "error") {
 				return;
 			}
-			console.log(result);
+
 			let count = 0;
-			$.each(result.data, (k, v) => {
-                switch (v.Key) {
-					case 0: $(`[data-id="ct_DocRemain"]`).text(v.Value); count += v.Value; break;
-					case 2: $(`[data-id="ct_DocSign"]`).text(v.Value); count += v.Value; break;
-					case 3: $(`[data-id="ct_DocArc"]`).text(v.Value); count += v.Value; break;
+			$.each(result, (k, v) => {
+                switch (v.stat) {
+					case 0: $(`[data-id="ct_DocRemain"]`).text(v.count); count += v.count; break;
+					case 1: $(`[data-id="ct_DocSign"]`).text(v.count); count += v.count; break;
+					case 2: $(`[data-id="ct_DocArc"]`).text(v.count); count += v.count; break;
 					default: break;
                 }
 			});
-			
+
 			$(`[data-id="ct_DocTot"]`).text(count);
 		},
 

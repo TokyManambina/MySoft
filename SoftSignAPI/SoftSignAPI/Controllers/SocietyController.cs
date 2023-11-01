@@ -25,11 +25,11 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<SocietyController>
         [HttpGet]
-        public ActionResult<List<SocietyDto>> Get([FromQuery] int? count, [FromQuery] int? page)
+        public async Task<ActionResult<List<SocietyDto>>> Get([FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<SocietyDto>?>(_societyRepository.GetAll(count: count, page: page)));
+                return Ok(_mapper.Map<List<SocietyDto>?>(await _societyRepository.GetAll(count: count, page: page)));
             }
             catch (Exception ex)
             {
@@ -39,11 +39,11 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<SocietyController>/text
         [HttpGet("find")]
-        public ActionResult<List<SocietyDto>> Get([FromQuery] string search,[FromQuery] int? count, [FromQuery] int? page)
+        public async Task<ActionResult<List<SocietyDto>>> Get([FromQuery] string search,[FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<SocietyDto>?>(_societyRepository.GetAll(search,count: count, page: page)));
+                return Ok(_mapper.Map<List<SocietyDto>?>(await _societyRepository.GetAll(search, count: count, page: page)));
             }
             catch (Exception ex)
             {
@@ -53,11 +53,11 @@ namespace SoftSignAPI.Controllers
 
         // GET api/<SocietyController>/5
         [HttpGet("{id}")]
-        public ActionResult<SocietyDto> Get(Guid id)
+        public async Task<ActionResult<SocietyDto>> Get(Guid id)
         {
             try
             {
-                return Ok(_mapper.Map<SocietyDto?>(_societyRepository.Get(id)));
+                return Ok(_mapper.Map<SocietyDto?>(await _societyRepository.Get(id)));
             }
             catch (Exception ex)
             {
@@ -67,11 +67,11 @@ namespace SoftSignAPI.Controllers
 
         // POST api/<SocietyController>
         [HttpPost]
-        public ActionResult Post([FromBody] SocietyDto newSociety)
+        public async Task<ActionResult> Post([FromBody] SocietyDto newSociety)
         {
             try
             {
-                return Ok(_societyRepository.Create(_mapper.Map<Society>(newSociety)));
+                return Ok(await _societyRepository.Create(_mapper.Map<Society>(newSociety)));
             }
             catch (Exception ex)
             {
@@ -81,11 +81,11 @@ namespace SoftSignAPI.Controllers
 
         // PUT api/<SocietyController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(Guid id, [FromBody] Society updateSociety)
+        public async Task<ActionResult> Put(Guid id, [FromBody] Society updateSociety)
         {
             try
             {
-                return Ok(_societyRepository.Update(id,updateSociety));
+                return Ok(await _societyRepository.Update(id, updateSociety));
             }
             catch (Exception ex)
             {
@@ -95,7 +95,7 @@ namespace SoftSignAPI.Controllers
 
         // DELETE api/<SocietyController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(Guid id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             try
             {

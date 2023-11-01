@@ -23,11 +23,11 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<userController>
         [HttpGet]
-        public ActionResult<List<UserDto>> Get([FromQuery] int? count, [FromQuery] int? page)
+        public async Task<ActionResult<List<UserDto>>> Get([FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<UserDto>?>(_userRepository.GetAll(count: count, page: page)));
+                return Ok(_mapper.Map<List<UserDto>?>(await _userRepository.GetAll(count: count, page: page)));
             }
             catch (Exception ex)
             {
@@ -37,11 +37,11 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<userController>/text
         [HttpGet("find")]
-        public ActionResult<List<UserDto>> Get([FromQuery] string search, [FromQuery] int? count, [FromQuery] int? page)
+        public async Task<ActionResult<List<UserDto>>> Get([FromQuery] string search, [FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<UserDto>?>(_userRepository.GetAll(search, count: count, page: page)));
+                return Ok(_mapper.Map<List<UserDto>?>(await _userRepository.GetAll(search, count: count, page: page)));
             }
             catch (Exception ex)
             {
@@ -51,11 +51,11 @@ namespace SoftSignAPI.Controllers
 
         // GET api/<userController>/5
         [HttpGet("{id}")]
-        public ActionResult<UserDto> Get(Guid id)
+        public async Task<ActionResult<UserDto>> Get(Guid id)
         {
             try
             {
-                return Ok(_mapper.Map<UserDto?>(_userRepository.Get(id)));
+                return Ok(_mapper.Map<UserDto?>(await _userRepository.Get(id)));
             }
             catch (Exception ex)
             {
@@ -80,11 +80,11 @@ namespace SoftSignAPI.Controllers
 
         // PUT api/<userController>/5
         [HttpPut("{id}")]
-        public ActionResult Put(Guid id, [FromBody] UserDto updateUser)
+        public async Task<ActionResult> Put(Guid id, [FromBody] UserDto updateUser)
         {
             try
             {
-                return Ok(_userRepository.Update(id, _mapper.Map<User>(updateUser)));
+                return Ok(await _userRepository.Update(id, _mapper.Map<User>(updateUser)));
             }
             catch (Exception ex)
             {
@@ -94,11 +94,11 @@ namespace SoftSignAPI.Controllers
 
         // DELETE api/<userController>/5
         [HttpDelete("{id}")]
-        public ActionResult Delete(Guid id)
+        public async Task<ActionResult> Delete(Guid id)
         {
             try
             {
-                return Ok(_userRepository.Delete(id));
+                return Ok(await _userRepository.Delete(id));
             }
             catch (Exception ex)
             {

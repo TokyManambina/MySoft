@@ -28,11 +28,13 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<UserDocumentController>
         [HttpGet]
-        public ActionResult<List<UserDocument>> Get([FromQuery] Guid? userId, [FromQuery] string? code, [FromQuery] int? count, [FromQuery] int? page)
+        public async Task<ActionResult<List<DocumentByUserDto>>> Get([FromQuery] Guid? userId, [FromQuery] string? code, [FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_userDocumentRepository.GetAll(userId, code, count, page));
+                var a = await _userDocumentRepository.GetAll(userId, code, count, page);
+                var ds = _mapper.Map<List<DocumentByUserDto>>(a);
+				return Ok(ds);
             }
             catch (Exception ex)
             {
@@ -40,13 +42,14 @@ namespace SoftSignAPI.Controllers
             }
         }
 
-        // GET api/<UserDocumentController>/5
-        [HttpGet("{id}")]
-        public ActionResult<UserDocument> Get(int id)
+
+		// GET api/<UserDocumentController>/5
+		[HttpGet("{id}")]
+        public async Task<ActionResult<UserDocument>> Get(int id)
         {
             try
             {
-                return Ok(_userDocumentRepository.Get(id));
+                return Ok(await _userDocumentRepository.Get(id));
             }
             catch (Exception ex)
             {

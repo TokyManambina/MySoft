@@ -33,11 +33,11 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<DocumentController>
         [HttpGet]
-        public ActionResult<List<Document>> Get([FromQuery] int? count, [FromQuery] int? page)
+        public async Task<ActionResult<List<DocumentDto>>> Get([FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<Document>?>(_documentRepository.GetAll(count: count, page: page)));
+                return Ok(_mapper.Map<List<DocumentDto>>(await _documentRepository.GetAll(count: count, page: page)));
             }
             catch (Exception ex)
             {
@@ -47,25 +47,62 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<DocumentController>/find?search=
         [HttpGet("find")]
-        public ActionResult<List<Document>> Get([FromQuery] string search, [FromQuery] int? count, [FromQuery] int? page)
+        public async Task<ActionResult<List<Document>>> Get([FromQuery] string search, [FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<Document>?>(_documentRepository.GetAll(search: search, count: count, page: page)));
+                return Ok(_mapper.Map<List<Document>?>(await _documentRepository.GetAll(search: search, count: count, page: page)));
             }
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal Server Error");
             }
-        }
-
-        // GET api/<DocumentController>/5
-        [HttpGet("{code}")]
-        public ActionResult<Document> Get(string code)
+		}
+		// GET: api/<DocumentController>/filter/posted?userId=
+		[HttpGet("filter/posted")]
+		public async Task<ActionResult<List<ShowDocument>>> GetSenderDocument([FromQuery] Guid? userId, [FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+		{
+			try
+			{
+				return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetSenderDocument(userId: userId, search: search, count: count, page: page)));
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+		// GET: api/<DocumentController>/filter/received?userId=
+		[HttpGet("filter/received")]
+		public async Task<ActionResult<List<ShowDocument>>> GetRecipientDocument([FromQuery] Guid? userId, [FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+		{
+			try
+			{
+				return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetRecipientDocument(userId: userId, search: search, count: count, page: page)));
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+		[HttpGet("u/info")]
+		public async Task<ActionResult<List<DocInfo>>> GetInfo([FromQuery] Guid userId)
+		{
+			try
+			{
+				return Ok(await _documentRepository.GetDocumentInfo(userId));
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+		// GET api/<DocumentController>/5
+		[HttpGet("{code}")]
+        public async Task<ActionResult<Document>> Get(string code)
         {
             try
             {
-                return Ok(_mapper.Map<Document?>(_documentRepository.Get(code)));
+                return Ok(_mapper.Map<Document?>(await _documentRepository.Get(code)));
             }
             catch (Exception ex)
             {
@@ -98,11 +135,11 @@ namespace SoftSignAPI.Controllers
 
         // DELETE api/<DocumentController>/5
         [HttpDelete("{id}")]
-        public ActionResult<bool> Delete(string code)
+        public async Task<ActionResult<bool>> Delete(string code)
         {
             try
             {
-                return Ok(_documentRepository.Delete(code));
+                return Ok(await _documentRepository.Delete(code));
             }
             catch (Exception ex)
             {

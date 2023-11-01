@@ -52,10 +52,14 @@ canvas{
 .toggleBoxSetting:hover {
 	opacity: 1;
 }
-
+.recipientRoundBox{
+	width : 20px;
+	height : 20px;
+	border-radius : 100%;
+}
 
 .hidden {
-	display: none;
+	display: none !important;
 }
 
 .pagination{

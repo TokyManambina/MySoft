@@ -4,7 +4,6 @@
 })
 
 function MyDocument() {
-	console.log("ok")
 	$.ajax({
 		type: "GET",
 		url: "/Document/GetMyDocument",
@@ -21,8 +20,8 @@ function MyDocument() {
 			$(`#listDocument`).text("");
 
 			let code = ``;
-			$.each(result.data, (k, v) => {
-				var date = v.DateSign;
+			$.each(result, (k, v) => {
+				//var date = v.DateSign;
 				var icon = "fa-star";
 				switch (v.Status) {
 					case 0 : icon = "fa-spinner fa-spin"; break;
@@ -47,40 +46,17 @@ function MyDocument() {
                           </div>
                         </td>
                         <td class="mailbox-star"><a href="#"><i class="fa ${icon} text-secondary"></i></a></td>
-                        <td onclick="ViewDocument('${v.Id}')" class="mailbox-name"><small style="color:grey;opacity:0.5">${v.Sender == "" ? "Pour" : "De"} : </small> <a href="#">${v.Sender == "" ? v.Receiver : v.Sender}</a></td>
-                        <td onclick="ViewDocument('${v.Id}')" class="mailbox-subject pointer" style="min-width : 250px">
-							<b>${v.Object}</b>
-							<span>${convertToPlain(v.Message)}</span>`;
-				/*
-				if (v.Progress) {
-					//v.vlast
-					//v.vcurrent
-					var bar = parseInt(parseInt(v.vcurrent) * 100 / parseInt(v.vlast));
-					if (bar < 100)
-						code += `</br>
-						<div class="progress">
-							<div class="progress-bar progress-bar-striped progress-bar-animated" style="width: ${bar}%"></div>
-						</div>
-					`;
-				}
-				*/
-				code += `
+                        <td onclick="ViewDocument('${v.code}')" class="mailbox-name"></td>
+                        <td onclick="ViewDocument('${v.code}')" class="mailbox-subject pointer" style="min-width : 250px">
+							<span class="text-bold">${v.object}</span>
+							<span>${convertToPlain(v.message)}</span>
                         </td>
-                        <td class="mailbox-date">${DateLast(v.DateSend)}</td>
+                        <td class="mailbox-date">${DateLast(v.dateSend)}</td>
                         <td> <div></div> </td>
 					</tr>`;
 			});
 
 			$(`#listDocument`).append(code);
-
-
-			//Remaining, Validate, Sign, Archive
-			$("[data-id='ct_DocRemain']").text($('#listDocument').find("[data-stat='Remaining']").length);
-			$("[data-id='ct_DocSign']").text($('#listDocument').find("[data-stat='Sign']").length);
-			$("[data-id='ct_DocArc']").text($('#listDocument').find("[data-stat='Archive']").length);
-			$("[data-id='ct_DocTot']").text(result.data.length);
-
-			$(`#all_doc`).text($(`#p_MyDocument`).find(`tr:visible`).length);
 		},
 
 		Error: function (x, e) {

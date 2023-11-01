@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SoftSignAPI.Context;
+using SoftSignAPI.Dto;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
 
@@ -15,7 +16,7 @@ namespace SoftSignAPI.Repositories
             _db = db;
         }
 
-        public async Task<List<Document>?> GetAll(string? search = null, int? count = null, int? page = null)
+        public async Task<List<Document>> GetAll(string? search = null, int? count = null, int? page = null)
         {
             try
             {
@@ -39,7 +40,90 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<Document?> Get(string code)
+		public async Task<List<Document>?> GetSenderDocument(Guid? userId = null, string? search = null, int? count = null, int? page = null)
+		{
+			try
+			{
+				var query = _db.UserDocuments
+					.Include(x => x.User)
+					.Include(x => x.Document)
+					.Where(x => x.UserId == userId && x.Step == 0)
+					.Select(x => x.Document)
+					.AsQueryable();
+
+				if (!string.IsNullOrEmpty(search))
+					query = query.Where(x => x.Object.ToLower().Contains(search.ToLower()) || x.Message.ToLower().Contains(search.ToLower()));
+
+				if (count != null && page != null)
+					return await query.Skip(count.Value * (page.Value - 1)).Take(count.Value).ToListAsync();
+
+				if (count != null)
+					query = query.Skip(count.Value);
+				if (page != null)
+					query = query.Take(page.Value);
+
+
+				return await query.ToListAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+		public async Task<List<Document>?> GetRecipientDocument(Guid? userId = null, string? search = null, int? count = null, int? page = null)
+		{
+			try
+			{
+				var query = _db.UserDocuments
+					.Include(x => x.User)
+					.Include(x => x.Document)
+					.Where(x => x.UserId == userId && (x.IsFinished || x.MyTurn))
+					.Select(x => x.Document)
+					.AsQueryable();
+
+				if (!string.IsNullOrEmpty(search))
+					query = query.Where(x => x.Object.ToLower().Contains(search.ToLower()) || x.Message.ToLower().Contains(search.ToLower()));
+
+				if (count != null && page != null)
+					return await query.Skip(count.Value * (page.Value - 1)).Take(count.Value).ToListAsync();
+
+				if (count != null)
+					query = query.Skip(count.Value);
+				if (page != null)
+					query = query.Take(page.Value);
+
+
+				return await query.ToListAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+		public async Task<List<DocInfo>?> GetDocumentInfo(Guid userId)
+		{
+			try
+			{
+
+				return await _db.UserDocuments
+					.Include(x => x.User)
+					.Include(x => x.Document)
+					.Where(x => x.UserId == userId && (x.IsFinished || x.MyTurn || x.Step == 0))
+					.Select(x => x.Document.Status)
+					.GroupBy(x => x)
+					.Select(x => new DocInfo
+					{
+                        Stat = x.Key,
+                        Count = x.Count()
+					})
+					.ToListAsync(); ;
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+		public async Task<Document?> Get(string code)
         {
             try
             {

@@ -51,36 +51,6 @@ $("#valid").change(function () {
 //validator
 var countValidator = 0;
 
-function addValidator() {
-	var autorite = $("#autorite").val();
-
-	if (verifyMail(autorite)) {
-		$("#listValidator").append(
-			'<li class="nav-item" id="validator' + countValidator + '">' +
-			'<div class="nav-link float-right">' +
-			'<span id="validator' + countValidator + '">' + autorite + '</span>' +
-			' <i class="fa fa-times text-danger" onclick="return removeValidator(\'validator' + countValidator + '\')"></i>' +
-			'</div>' +
-			'</li>'
-		);
-		countValidator++;
-		$("#autorite").val("");
-
-		if (!$("#errorValidator").hasClass("hidden")) $("#errorValidator").addClass("hidden");
-
-	} else {
-		if ($("#errorValidator").hasClass("hidden")) $("#errorValidator").removeClass("hidden");
-	}
-}
-$(`[data-action="addValidator"]`).on('click', (e) => {
-	addValidator();
-});
-$("#autorite").on('keypress', function (e) {
-	if (e.which == 13) {
-		addValidator();
-	}
-});
-
 //#region Windows Resize : DropDown Position
 $(window).on('resize', (e) => {
 	var win = $(this);

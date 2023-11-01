@@ -2,8 +2,6 @@
 	//ViewBag.Title = "NewDocument";
 }
 
-<partial name="~/Views/Widget/headerCard.cshtml" />
-
 <!-- Titre Page -->
 <section class="content-header">
 	<div class="container-fluid">
@@ -39,7 +37,7 @@
 				<div class="BoxSettingInfo">
 					<!-- Card -->
 					<!-- Card Action -->
-					<div class="card">
+					<div class="card" card-id="action">
 						<div class="card-header bg-teal">
 							<h3 class="card-title text-bold">Action</h3>
 
@@ -60,7 +58,7 @@
 					</div>
 
 					<!-- Card Flow -->
-					<div class="card">
+					<div class="card" card-id="recipient">
 						<div class="card-header bg-teal">
 							<h3 class="card-title text-bold"><i class="fa fa-circle-nodes"></i> Circuit de traitement</h3>
 
@@ -72,19 +70,19 @@
 						</div>
 						<div class="card-body p-0">
 							<ul class="nav nav-pills flex-column" id="flowmenu">
-								<li class="nav-item active" data-bs-toggle="modal" data-bs-target="#destinataire" id="ui_destinataire">
+								<li class="nav-item active" data-bs-toggle="modal" data-bs-target="#recipient" id="ui_recipient">
 									<div class="nav-link">
 										<i class="fa fa-user-plus"></i> Ajouter un Destinataire
 									</div>
 								</li>
 
-								<li id="showListDestinataire"></li>
+								<li id="RecipientListTab"></li>
 							</ul>
 						</div>
 					</div>
 
 					<!-- Card Fields -->
-					<div class="card">
+					<div class="card" card-id="field">
 						<div class="card-header bg-teal">
 							<h3 class="card-title text-bold"><i class="fa fa-cubes-stacked"></i> Champs</h3>
 
@@ -109,9 +107,9 @@
 									</div>
 								</li>
 
-								<li class="nav-item active" id="ui_paraphe" data-action="addStamp">
+								<li class="nav-item active" data-action="addField">
 									<div class="nav-link">
-										<i class="fa fa-stamp col-1" id="addParaphe"></i> <span class="col">Tampon</span>
+										<i class="fa fa-stamp col-1"></i> <span class="col">Tampon</span>
 									</div>
 								</li>
 
@@ -132,7 +130,7 @@
 
 					<!-- Card Dossier/Archivage -->
 					@* <div class="card collapsed-card"> *@
-					<div class="card">
+					<div class="card"  card-id="type">
 						<div class="card-header bg-teal">
 							<h3 class="card-title text-bold"><i class="fa fa-folder-open"></i> Type de document</h3>
 
@@ -189,7 +187,7 @@
 					<span id="current_page" class="nav-link d-inline-block">0 sur 0</span>
 					<div id="next" class="nav-link d-inline-block"><i class="fas fa-arrow-alt-circle-right" style="cursor: pointer"></i></div>
 				</div>
-				<div id="pagination" class="hidden"></div>
+				<div id="pagination"></div>
 				<div style="position: relative;" id="test">
 					<canvas id="pdfViewer" class="pdf-viewer"></canvas>
 					<div class="text-center" id="pdftext" style="position: absolute; color: rgb(214, 171, 27); top: 50%; left: 50%; font-size: 26px;transform: translate(-50%,-50%);">Ouvrir un fichier</div>
@@ -234,10 +232,56 @@
 </div>
 
 
-<partial name="~/Views/Modal/ModalDestinataire.cshtml" />
+<!-- Modal Recipient -->
+<div class="modal fade" id="recipient">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header bg-gray-dark">
+				<h4 class="modal-title"><i class="fa fa-user-alt"></i> Destinataire</h4>
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="form-group container row">
+						<label for="role">Rôle</Label><input type="text" class="col form-control form-control-border" id="role" placeholder="Rôle :">
+					</div>
+
+                    <div class="form-group container row">
+                        <label for="receiver">Email</Label><input type="email" class="col form-control form-control-border" id="receiver" placeholder="À :">
+                        <div class="col-1" role="group" aria-label="Basic checkbox toggle button group">
+                            <input type="checkbox" class="btn-check" id="ccCheck" autocomplete="off">
+                            <label class="btn btn-outline-secondary" style="padding : 6px 20px" for="ccCheck">CC</label>
+                        </div>
+                    </div>
+					<div class="form-group container row" id="ccContainer">
+						<label for="cc">Cc</Label><div class="col p-0" id="cc"></div>
+                    </div>
+
+					<div class="form-group container row">
+						<label for="message">Message</Label><textarea id="message"></textarea>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer justify-content-between">
+				<button type="button" class="btn btn-danger" data-action="resetRecipient">Réinitialiser</button>
+				@*<button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveMail">Enregistrer</button>*@
+				<button type="button" class="btn btn-primary" data-action="saveRecipient">Ajouter</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Fin Modal Mail -->
+
 <script src="~/js/pdf/jquery-ui.js"></script>
 
+<script src="~/js/doc/newDocument/script.js" asp-append-version="true"></script>
 
 <script src="~/js/doc/NewDocument.js" asp-append-version="true"></script>
+
 <script src="~/js/doc/myPDF.js" asp-append-version="true"></script>
 <script src="~/js/doc/SignBox.js" asp-append-version="true"></script>
+
+<script src="~/js/doc/newDocument/recipient.js" asp-append-version="true"></script>
+<script src="~/js/doc/newDocument/fields.js" asp-append-version="true"></script>

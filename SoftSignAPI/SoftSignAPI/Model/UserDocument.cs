@@ -15,10 +15,12 @@ namespace SoftSignAPI.Model
         public virtual Document Document { get; set; }
 
         public int Step { get; set; } = 0;
-        public string Role { get; set; } = string.Empty;
+        public string Role { get; set; }
+        public string Color { get; set; }
         public string? Message { get; set; }
         public string? Cc { get; set; }
 
+        public bool MyTurn { get; set; } = false;
         public bool IsFinished { get; set; } = false;
 
         public virtual List<Field> Fields { get; set;}
@@ -26,6 +28,6 @@ namespace SoftSignAPI.Model
 
     public enum DocumentRole
     {
-        Sender, Receiver, Validator, Signatory
+        Sender, Recipient, Receiver, Validator, Signatory
     }
 }

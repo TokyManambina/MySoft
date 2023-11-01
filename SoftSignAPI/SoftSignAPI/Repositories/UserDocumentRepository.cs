@@ -48,7 +48,7 @@ namespace SoftSignAPI.Repositories
         {
             try
             {
-                var query = _db.UserDocuments.AsQueryable();
+                var query = _db.UserDocuments.Include(x=>x.User).Include(x=>x.Document).AsQueryable();
 
                 if(userId != null)
                     query = query.Where(x=>x.UserId == userId);
@@ -71,7 +71,7 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<UserDocument?> Create(UserDocument newUserDocument)
+		public async Task<UserDocument?> Create(UserDocument newUserDocument)
         {
             try
             {

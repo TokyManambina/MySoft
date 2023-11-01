@@ -200,10 +200,6 @@ $("#autorite").on('keypress', function (e) {
     }
 });
 
-function removeValidator(id) {
-    $("#" + id).remove();
-}
-
 var canvasOffset = $('#pdfViewer').offset();
 
 //paraphe
