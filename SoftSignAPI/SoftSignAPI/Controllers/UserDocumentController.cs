@@ -90,14 +90,30 @@ namespace SoftSignAPI.Controllers
 
         // PUT api/<UserDocumentController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult> Put(int id, [FromBody] UserDocumentDto userDocument)
         {
+            try
+            {
+                return Ok(await _userDocumentRepository.Update(id, _mapper.Map<UserDocument>(userDocument)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
         }
 
         // DELETE api/<UserDocumentController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            try
+            {
+                return Ok(await _userDocumentRepository.Delete(id));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
         }
     }
 }

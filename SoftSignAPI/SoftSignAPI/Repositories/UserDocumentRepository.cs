@@ -98,6 +98,9 @@ namespace SoftSignAPI.Repositories
                 if (userDocument == null)
                     return false;
 
+                userDocument.UserId = updateUserDocument.UserId;
+                userDocument.Step = updateUserDocument.Step;
+                userDocument.Role = updateUserDocument.Role;
                 userDocument.IsFinished = updateUserDocument.IsFinished;
 
                 _db.UserDocuments.Update(userDocument);
