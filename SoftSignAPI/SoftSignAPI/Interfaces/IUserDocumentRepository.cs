@@ -11,5 +11,6 @@ namespace SoftSignAPI.Interfaces
 		Task<bool> IsExist(int id);
         bool Save();
         Task<bool> Update(int id, UserDocument updateUserDocument);
+        Task<bool> Update(string documentCode, Guid UserId);
     }
 }

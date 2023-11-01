@@ -110,6 +110,46 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<bool> Update(string documentCode, Guid userId)
+        {
+            try
+            {
+                var userDocument = await Get(userId:userId, code:documentCode);
+
+                if (userDocument == null)
+                    return false;
+
+                userDocument.IsFinished = true;
+                userDocument.MyTurn = false;
+
+                _db.UserDocuments.Update(userDocument);
+
+                var nextUserDocument = _db.UserDocuments.Where(x=>x.Step == (userDocument.Step + 1)).FirstOrDefault();
+                if (nextUserDocument == null)
+                {
+                    var document = _db.Documents.Where(x=> x.Code== documentCode).FirstOrDefault();
+                    if (document == null)
+                        return false;
+
+                    document.Status = DocumentStat.Completed; 
+                    _db.Documents.Update(document);
+                    return Save();
+                }
+
+                nextUserDocument.MyTurn = true;
+
+                _db.UserDocuments.Update(nextUserDocument);
+
+                return Save();
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<bool> Delete(int id)
         {
             try

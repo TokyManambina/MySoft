@@ -75,6 +75,20 @@ namespace SoftSignAPI.Controllers
         }
 
         // PUT api/<UserDocumentController>/5
+        [HttpPut("{documentCode}")]
+        public async Task<ActionResult> Put(string documentCode, [FromQuery] Guid userId)
+        {
+            try
+            {
+                return Ok(await _userDocumentRepository.Update(documentCode, userId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        // PUT api/<UserDocumentController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
