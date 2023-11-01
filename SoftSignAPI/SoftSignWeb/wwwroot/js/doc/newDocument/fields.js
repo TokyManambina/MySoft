@@ -19,15 +19,21 @@ $(`[data-action="addField"]`).on("click", (e) => {
     let firstPage = parseInt(header.find(`[data-id="firstPage"]`).val());
     let lastPage = parseInt(header.find(`[data-id="lastPage"]`).val());
 
-    if (firstPage == NaN || lastPage == NaN)
+    if (Number.isNaN(firstPage))
         return alert("Vérifier le numero de page");
 
     let listContainer = $(e.target).attr("data-target");
 
 
-    let page = firstPage.toString();
-    if (lastPage != NaN || lastPage != 0)
-        page += ` - ${lastPage}`;
+    let page = `${firstPage}`;
+    
+    if (!Number.isNaN(lastPage) && lastPage !== 0) {
+        if (firstPage > lastPage)
+            page = `${lastPage} - ${firstPage}`;
+        else
+            page += ` - ${lastPage}`;
+    }
+        
 
     let type = `${header.attr("data-type")}`;
     let id = `${type}${count++}`;
@@ -58,7 +64,7 @@ function activeField(id, recipient) {
             $(`[page-id="${id}"]`).css("background-color", ListUserDocument[recipient].color);
 
         $($(`[recipient-id="${recipient}"]`).find('span')).css("color", "white");
-        $($(`[page-id="${recipient}"]`).find('span')).css("color", "white");
+        $(`[page-id="${id}"]`).find('span').css("color", "white");
     }, (e) => {
         if ($(`[recipient-id="${recipient}"]`).css("background-color"))
             $(`[recipient-id="${recipient}"]`).css("background-color","");
@@ -66,7 +72,7 @@ function activeField(id, recipient) {
             $(`[page-id="${id}"]`).css("background-color", "");
 
         $($(`[recipient-id="${recipient}"]`).find('span')).css("color", "");
-        $($(`[page-id="${recipient}"]`).find('span')).css("color", "");
+        $(`[page-id="${id}"]`).find('span').css("color", "");
     });
 
     $(`[field-id="${id}"]`).mousemove((e) => {
