@@ -3,7 +3,6 @@
 	$(`[card-id="field"]`).hide();
 });
 
-
 $('input[name="radioSign"]').on('change', (e) => {
 	if (e.target.id == "isign") {
 		$("#ISign").show();
@@ -19,3 +18,4 @@ $('input[name="radioSign"]').on('change', (e) => {
 		//$("#ui_paraphe").show();
 	}
 });
+

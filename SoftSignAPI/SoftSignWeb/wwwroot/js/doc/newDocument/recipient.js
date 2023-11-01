@@ -1,24 +1,14 @@
 ﻿let ListUserDocument = [];
 let selectedRecipient = "";
-let RecipientCount = 0;
+
 $(document).ready(function () {
     //$('[data-toggle="tooltip"]').tooltip();
     $('#message').summernote({
         lang: 'fr-FR',
         height: 200,
         toolbar: [
-            //['style', ['style']],
-            /*
-            ['font', ['bold', 'underline', 'clear']],
-            ['color', ['color']],
-            ['para', ['ul', 'ol', 'paragraph']],
-            ['table', ['table']],
-            ['insert', ['link']],
-            ['view', ['fullscreen']]
-            */
         ]
     });
-    //$('.dropdown-toggle').dropdown();
 
     mailCc = lib.EmailsInput(document.querySelector('#cc'), { pasteSplitPattern: ',', placeholder: 'CC :' });
 });
@@ -74,12 +64,14 @@ $(`[data-action="saveRecipient"]`).on("click", (e) => {
     if (!canSend())
         return;
 
-    let role = $("#role").val();
     let receiver = $("#receiver").val();
+
+    if (ListUserDocument.hasOwnProperty(receiver))
+        return alert("Le mail existe déjà");
 
     let user = {
         role: $("#role").val(),
-        mail: $("#receiver").val(),
+        mail: receiver,
         cc: $("#cc").val(),
         message: $("#message").summernote("code"),
         color: RandomColor(),
@@ -88,7 +80,7 @@ $(`[data-action="saveRecipient"]`).on("click", (e) => {
 
     $(`#RecipientListTab`).before(RecipientAdd(user.mail, user.color));
 
-    ListUserDocument.push(user);
+    ListUserDocument[receiver] = user;
 
     $($(`[recipient-id="${user.mail}"]`).find('input')).click();
 
@@ -132,14 +124,12 @@ $(document).on('change', `[name=recipient-radio]`, (e) => {
     $(`[card-id="field"]`).show();
 });
 
-function removeRecipient(mail) {
-    let indexToRemove = ListUserDocument.findIndex(obj => obj.mail === mail);
-
-    if (indexToRemove === -1)
+function removeRecipient(id) {
+    if (!ListUserDocument.hasOwnProperty(id))
         return;
 
-    ListUserDocument.splice(indexToRemove, 1);
-    $(`[recipient-id="${mail}"]`).remove();
+    delete ListUserDocument[id];
+    $(`[recipient-id="${id}"]`).remove();
 
     if (ListUserDocument.length == 0)
         $(`[card-id="field"]`).hide();

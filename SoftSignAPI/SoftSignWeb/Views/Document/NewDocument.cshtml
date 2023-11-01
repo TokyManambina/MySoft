@@ -95,35 +95,95 @@
 						<div class="card-body p-0">
 							<ul class="nav nav-pills flex-column" id="actionmenu">
 
-								<li class="nav-item active" data-action="addSignBox">
-									<div class="nav-link">
-										<i class="fa fa-signature col-1" id="addSignature"></i> <span class="col">Signature</span>
+								<li class="nav-item active" data-type="signature">
+									<div class="nav-link navbar dropdown">
+										<div class="pl-2 w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											<i class="fa fa-signature col-1"> </i> <span class="col" data-title>Signature</span>
+										</div>
+										<div class="dropdown-menu form-inline">
+											<div class="dropdown-item dropdown-header text-left">Page :</div>
+											<i class="small text-gray col-2">De : </i>
+											<input type="number" class="form-control col-3" data-id="firstPage" placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-2"> à </i>
+											<input type="number" class="form-control col-3" data-id="lastPage" placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listSignature"></i>
+										</div>
 									</div>
 								</li>
+								<li id="listSignature"></li>
 
-								<li class="nav-item active" id="ui_paraphe" data-action="addParapheBox">
-									<div class="nav-link">
-										<i class="fa fa-pen col-1" id="addParaphe"></i> <span class="col">Paraphe</span>
-									</div>
-								</li>
 
-								<li class="nav-item active" data-action="addField">
-									<div class="nav-link">
-										<i class="fa fa-stamp col-1"></i> <span class="col">Tampon</span>
+								<li class="nav-item active" data-type="paraphe">
+									<div class="nav-link navbar dropdown">
+										<div class="pl-2 w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											<i class="fa fa-pen col-1"> </i> <span class="col" data-title>Paraphe</span>
+										</div>
+										<div class="dropdown-menu form-inline">
+											<div class="dropdown-item dropdown-header text-left">Page :</div>
+											<i class="small text-gray col-2">De : </i>
+											<input type="number" class="form-control col-3" data-id="firstPage" placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-2"> à </i>
+											<input type="number" class="form-control col-3" data-id="lastPage" placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listParaphe"></i>
+										</div>
 									</div>
 								</li>
+								<li id="listParaphe"></li>
 
-								<li class="nav-item active" id="ui_paraphe" data-action="addText">
-									<div class="nav-link">
-										<i class="fa fa-calendar col-1" id="addParaphe"></i> <span class="col">Date de signature</span>
-									</div>
-								</li>
 
-								<li class="nav-item active" id="ui_paraphe" data-action="addText">
-									<div class="nav-link">
-										<i class="fa fa-t col-1" id="addParaphe"></i> <span class="col">Texte</span>
+								<li class="nav-item active" data-type="stamp">
+									<div class="nav-link navbar dropdown">
+										<div class="pl-2 w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											<i class="fa fa-stamp col-1"> </i> <span class="col" data-title>Tampon</span>
+										</div>
+										<div class="dropdown-menu form-inline">
+											<div class="dropdown-item dropdown-header text-left">Page :</div>
+											<i class="small text-gray col-2">De : </i>
+											<input type="number" class="form-control col-3" data-id="firstPage" placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-2"> à </i>
+											<input type="number" class="form-control col-3" data-id="lastPage" placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listStamp"></i>
+										</div>
 									</div>
 								</li>
+								<li id="listStamp"></li>
+
+
+								<li class="nav-item active" data-type="dateSign">
+									<div class="nav-link navbar dropdown">
+										<div class="pl-2 w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											<i class="fa fa-calendar col-1"> </i> <span class="col" data-title>Date de signature</span>
+										</div>
+										<div class="dropdown-menu form-inline">
+											<div class="dropdown-item dropdown-header text-left">Page :</div>
+											<i class="small text-gray col-2">De : </i>
+											<input type="number" class="form-control col-3" data-id="firstPage" placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-2"> à </i>
+											<input type="number" class="form-control col-3" data-id="lastPage" placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listDateSign"></i>
+										</div>
+									</div>
+								</li>
+								<li id="listDateSign"></li>
+
+
+								<li class="nav-item active" data-type="text">
+									<div class="nav-link navbar dropdown">
+										<div class="pl-2 w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											<i class="fa fa-t col-1"> </i> <span class="col" data-title>Text</span>
+										</div>
+										<div class="dropdown-menu form-inline">
+											<div class="dropdown-item dropdown-header text-left">Page :</div>
+											<i class="small text-gray col-2">De : </i>
+											<input type="number" class="form-control col-3" data-id="firstPage" placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-2"> à </i>
+											<input type="number" class="form-control col-3" data-id="lastPage" placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listText"></i>
+										</div>
+									</div>
+								</li>
+								<li id="listText"></li>
+
 							</ul>
 						</div>
 					</div>
