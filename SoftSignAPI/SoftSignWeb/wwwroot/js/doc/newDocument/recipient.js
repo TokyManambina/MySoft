@@ -51,11 +51,14 @@ function canSend() {
 }
 
 //#region Reset Recipient
-$(`[data-action="resetRecipient"]`).on("click", (e) => {
+function resetRecipient() {
     $("#receiver").val("");
     mailCc = lib.EmailsInput(document.querySelector('#cc'), { pasteSplitPattern: ',', placeholder: 'CC :' });
     $("#role").val("");
     $("#message").summernote('code', "");
+}
+$(`[data-action="resetRecipient"]`).on("click", (e) => {
+    resetRecipient();
 });
 //#endregion
 
@@ -85,6 +88,7 @@ $(`[data-action="saveRecipient"]`).on("click", (e) => {
     $($(`[recipient-id="${user.mail}"]`).find('input')).click();
 
     $('#recipient').modal('toggle');
+    resetRecipient();
 });
 //#endregion
 
@@ -133,5 +137,7 @@ function removeRecipient(id) {
 
     if (ListUserDocument.length == 0)
         $(`[card-id="field"]`).hide();
+
+    $(`[by="${id}"]`).remove();
 }
 

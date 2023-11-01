@@ -15,7 +15,6 @@ $(`[data-action="addField"]`).on("click", (e) => {
     if (!existDocument())
         return alert("Veuillez uploader d'abord un document");
 
-
     let header = $(e.target).closest("[data-type]");
     let firstPage = parseInt(header.find(`[data-id="firstPage"]`).val());
     let lastPage = parseInt(header.find(`[data-id="lastPage"]`).val());
@@ -39,25 +38,35 @@ $(`[data-action="addField"]`).on("click", (e) => {
 
     $(`#FieldsListBox`).append(field(type, page, id, title));
 
-    activeField(id);
-
-    let field = {
+    let newfield = {
         x: 0,
         y: 0,
         type: header.attr("[data-id]"),
         page: page
     };
 
-    ListUserDocument[selectedRecipient].fields[id] = field;
+    ListUserDocument[selectedRecipient].fields[id] = newfield;
+
+    activeField(id, selectedRecipient);
 });
 
-function activeField(id) {
+function activeField(id, recipient) {
     $(`[field-id="${id}"]`).hover((e, x) => {
-        if ($(`[page-id="${id}"]`).css("background-color") !== ListUserDocument[selectedRecipient].color)
-            $(`[page-id="${id}"]`).css("background-color", ListUserDocument[selectedRecipient].color);
+        if ($(`[recipient-id="${recipient}"]`).css("background-color") !== ListUserDocument[recipient].color)
+            $(`[recipient-id="${recipient}"]`).css("background-color", ListUserDocument[recipient].color);
+        if ($(`[page-id="${id}"]`).css("background-color") !== ListUserDocument[recipient].color)
+            $(`[page-id="${id}"]`).css("background-color", ListUserDocument[recipient].color);
+
+        $($(`[recipient-id="${recipient}"]`).find('span')).css("color", "white");
+        $($(`[page-id="${recipient}"]`).find('span')).css("color", "white");
     }, (e) => {
+        if ($(`[recipient-id="${recipient}"]`).css("background-color"))
+            $(`[recipient-id="${recipient}"]`).css("background-color","");
         if ($(`[page-id="${id}"]`).css("background-color"))
             $(`[page-id="${id}"]`).css("background-color", "");
+
+        $($(`[recipient-id="${recipient}"]`).find('span')).css("color", "");
+        $($(`[page-id="${recipient}"]`).find('span')).css("color", "");
     });
 
     $(`[field-id="${id}"]`).mousemove((e) => {
@@ -68,8 +77,16 @@ function activeField(id) {
         if (divPos.left > $(this).width() - 11 && divPos.top > $(this).height() - 11) dragOption.disabled = true;
         else dragOption.disabled = false;
 
+        let pdfContainer = $('#pdfViewer').offset();
+        var offsetSign = $(e.target).offset();
+        let posSign = {
+            top: offsetSign.top - pdfContainer.top,
+            left: offsetSign.left - pdfContainer.left
+        };
+        ListUserDocument[recipient].fields[id].x = parseFloat(posSign.left);
+        ListUserDocument[recipient].fields[id].y = parseFloat(posSign.top);
+
         $(`[field-id="${id}"]`).draggable(dragOption);
-        $(`[field-id="${id}"]`).draggableTouch(dragOption);
     });
     $(`[field-id="${id}"]`).hover();
     $(`[field-id="${id}"]`).mousemove();
@@ -79,7 +96,7 @@ function activeField(id) {
 }
 function listField(type, page, id) {
     return `
-        <li class="nav-item parapheList" page-id="${id}" data-type="${type}" data-value="${page}">
+        <li class="nav-item" page-id="${id}" by="${selectedRecipient}" data-type="${type}" data-value="${page}">
             <div class="nav-link float-right">
                 <span id="${id}">Page : ${page}</span>
                 <i class="fa fa-times text-danger" onclick="return removeField('${id}')"></i>
@@ -89,7 +106,7 @@ function listField(type, page, id) {
 }
 function field(type, page, id, title) {
     return `
-        <div class="boxSign" data-type="${type}" field-id="${id}" data-page="${page}" style="border: 5px dashed ${ListUserDocument[selectedRecipient].color}">
+        <div class="boxSign" data-type="${type}" by="${selectedRecipient}" field-id="${id}" data-page="${page}" style="border: 5px dashed ${ListUserDocument[selectedRecipient].color}">
 	        <div class="ribbon-wrapper">
 		        <div class="ribbon text-white" style="background-color:${ListUserDocument[selectedRecipient].color}">
 			        ${title}
@@ -97,4 +114,16 @@ function field(type, page, id, title) {
 	        </div>
         </div>
     `;
+}
+
+function removeField(id) {
+    let field = $(`[field-id="${id}"]`);
+    let recipient = field.attr("by");
+    let pageLine = $(`[page-id="${id}"]`);
+
+    field.remove();
+    pageLine.remove();
+
+    delete ListUserDocument[recipient].fields[id];
+
 }
