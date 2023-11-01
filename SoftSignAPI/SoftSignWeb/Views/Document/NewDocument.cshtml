@@ -2,6 +2,8 @@
 	//ViewBag.Title = "NewDocument";
 }
 
+<partial name="~/Views/Widget/headerCard.cshtml" />
+
 <!-- Titre Page -->
 <section class="content-header">
 	<div class="container-fluid">
@@ -95,7 +97,7 @@
 						<div class="card-body p-0">
 							<ul class="nav nav-pills flex-column" id="actionmenu">
 
-								<li class="nav-item active" data-type="signature">
+								<li class="nav-item active" data-type="signature" data-id="0">
 									<div class="nav-link navbar dropdown">
 										<div class="pl-2 w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 											<i class="fa fa-signature col-1"> </i> <span class="col" data-title>Signature</span>
@@ -113,7 +115,7 @@
 								<li id="listSignature"></li>
 
 
-								<li class="nav-item active" data-type="paraphe">
+								<li class="nav-item active" data-type="paraphe" data-id="1">
 									<div class="nav-link navbar dropdown">
 										<div class="pl-2 w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 											<i class="fa fa-pen col-1"> </i> <span class="col" data-title>Paraphe</span>
@@ -131,7 +133,7 @@
 								<li id="listParaphe"></li>
 
 
-								<li class="nav-item active" data-type="stamp">
+								<li class="nav-item active" data-type="stamp" data-id="2">
 									<div class="nav-link navbar dropdown">
 										<div class="pl-2 w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 											<i class="fa fa-stamp col-1"> </i> <span class="col" data-title>Tampon</span>
@@ -149,7 +151,7 @@
 								<li id="listStamp"></li>
 
 
-								<li class="nav-item active" data-type="dateSign">
+								<li class="nav-item active" data-type="dateSign" data-id="3">
 									<div class="nav-link navbar dropdown">
 										<div class="pl-2 w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 											<i class="fa fa-calendar col-1"> </i> <span class="col" data-title>Date de signature</span>
@@ -167,7 +169,7 @@
 								<li id="listDateSign"></li>
 
 
-								<li class="nav-item active" data-type="text">
+								<li class="nav-item active" data-type="text" data-id="4">
 									<div class="nav-link navbar dropdown">
 										<div class="pl-2 w-100" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 											<i class="fa fa-t col-1"> </i> <span class="col" data-title>Text</span>
@@ -274,23 +276,8 @@
 
 <div id="signatureListBox" class="hidden">
 </div>
-
-<div class="boxSign hidden" id="signature">
-	<div class="ribbon-wrapper">
-		<div class="ribbon bg-primary">
-			sign
-		</div>
-	</div>
+<div id="FieldsListBox">
 </div>
-
-<div class="boxSign hidden" id="paraphe">
-	<div class="ribbon-wrapper">
-		<div class="ribbon bg-primary">
-			Paraphe
-		</div>
-	</div>
-</div>
-
 
 <!-- Modal Recipient -->
 <div class="modal fade" id="recipient">

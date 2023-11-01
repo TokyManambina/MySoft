@@ -75,7 +75,7 @@ $(`[data-action="saveRecipient"]`).on("click", (e) => {
         cc: $("#cc").val(),
         message: $("#message").summernote("code"),
         color: RandomColor(),
-        Fields: []
+        fields: []
     };
 
     $(`#RecipientListTab`).before(RecipientAdd(user.mail, user.color));

@@ -15,6 +15,7 @@ $(`[data-action="addField"]`).on("click", (e) => {
     if (!existDocument())
         return alert("Veuillez uploader d'abord un document");
 
+
     let header = $(e.target).closest("[data-type]");
     let firstPage = parseInt(header.find(`[data-id="firstPage"]`).val());
     let lastPage = parseInt(header.find(`[data-id="lastPage"]`).val());
@@ -36,17 +37,27 @@ $(`[data-action="addField"]`).on("click", (e) => {
 
     $(`#${listContainer}`).before(listField(type, page, id));
 
-    $(`#signatureListBox`).append(field(type, page, id, title));
+    $(`#FieldsListBox`).append(field(type, page, id, title));
 
+    activeField(id);
+
+    let field = {
+        x: 0,
+        y: 0,
+        type: header.attr("[data-id]"),
+        page: page
+    };
+
+    ListUserDocument[selectedRecipient].fields[id] = field;
+});
+
+function activeField(id) {
     $(`[field-id="${id}"]`).hover((e, x) => {
-        $(`[page-id="${id}"]`).addClass("bg-primary");
-        if (!$(`[page-id="${id}"]`).hasClass("bg-primary")) {
-            $(`[page-id="${id}"]`).addClass("bg-primary");
-            //$(`#signature${countSignature} .span`).css("color", "white");
-        }
+        if ($(`[page-id="${id}"]`).css("background-color") !== ListUserDocument[selectedRecipient].color)
+            $(`[page-id="${id}"]`).css("background-color", ListUserDocument[selectedRecipient].color);
     }, (e) => {
-        if ($(`[page-id="${id}"]`).hasClass("bg-primary"))
-            $(`[page-id="${id}"]`).removeClass("bg-primary");
+        if ($(`[page-id="${id}"]`).css("background-color"))
+            $(`[page-id="${id}"]`).css("background-color", "");
     });
 
     $(`[field-id="${id}"]`).mousemove((e) => {
@@ -58,15 +69,14 @@ $(`[data-action="addField"]`).on("click", (e) => {
         else dragOption.disabled = false;
 
         $(`[field-id="${id}"]`).draggable(dragOption);
-        //$("#signatureBox${countSignature}").draggableTouch(dragOption);
+        $(`[field-id="${id}"]`).draggableTouch(dragOption);
     });
     $(`[field-id="${id}"]`).hover();
     $(`[field-id="${id}"]`).mousemove();
 
     var canvasOffset = $('#pdfViewer').offset();
     $(`[field-id="${id}"]`).css({ "top": (canvasOffset.top + 125) + "px", "left": (canvasOffset.left + 25) + "px" });
-
-});
+}
 function listField(type, page, id) {
     return `
         <li class="nav-item parapheList" page-id="${id}" data-type="${type}" data-value="${page}">

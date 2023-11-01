@@ -26,6 +26,6 @@ namespace SoftSignAPI.Model
 
     public enum FieldType
     {
-        Signature, Paraphe, Tampon, Text
+        Signature, Paraphe, Tampon, DateSign, Text
     }
 }
