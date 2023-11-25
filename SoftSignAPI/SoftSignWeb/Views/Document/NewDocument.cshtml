@@ -228,7 +228,7 @@
 					<div class="btn btn-primary btn-block p-3 disabled" data-action="sendDocument" id="YouSign" title="verifier les champs dans déstinataire et/ou les differents mails">
 						<i class="fa fa-paper-plane"></i> Envoyer
 					</div>
-					<div class="btn btn-primary btn-block p-3 hide" data-bs-toggle="modal" data-bs-target="#signature_tab" id="ISign" onclick="ISign()">
+					<div class="btn btn-primary btn-block p-3 hide" data-bs-toggle="modal" data-bs-target="#signature_tab" id="ISign" onclick="resizeCanvas()">
 						<i class="fas fa-signature"></i> Signer
 					</div>
 				</div>
@@ -321,6 +321,8 @@
 </div>
 <!-- Fin Modal Mail -->
 
+<partial name="~/Views/Modal/SignaturePad.cshtml" />
+
 <script src="~/js/pdf/jquery-ui.js"></script>
 
 <script src="~/js/doc/newDocument/script.js" asp-append-version="true"></script>
@@ -332,3 +334,6 @@
 
 <script src="~/js/doc/newDocument/recipient.js" asp-append-version="true"></script>
 <script src="~/js/doc/newDocument/fields.js" asp-append-version="true"></script>
+
+<script src="~/lib/signaturepad/signature_pad.umd.js" asp-append-version="true"></script>
+<script src="~/lib/signaturepad/app.js" asp-append-version="true"></script>

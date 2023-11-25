@@ -87,6 +87,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
     options.CheckConsentNeeded = context => true;
     options.MinimumSameSitePolicy = SameSiteMode.None;
 });
+
 #region dbContext
 
 builder.Services.AddDbContext<dbContext>(options =>

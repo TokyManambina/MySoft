@@ -7,8 +7,8 @@ namespace SoftSignAPI.Model
     {
         [Key]
         public int Id { get; set; }
-        public string Variable { get; set; }
-        public string Page { get; set; }
+        public string? Variable { get; set; }
+        public required string Page { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
         public double Width { get; set; }
@@ -19,9 +19,9 @@ namespace SoftSignAPI.Model
         public string? Detail{ get; set; }
         public string? Text{ get; set; }
 
-        [ForeignKey(nameof(UserDocumentId))]
         public int UserDocumentId { get; set; }
-        public virtual UserDocument UserDocument { get; set; }
+        [ForeignKey(nameof(UserDocumentId))]
+        public required virtual UserDocument UserDocument { get; set; }
     }
 
     public enum FieldType

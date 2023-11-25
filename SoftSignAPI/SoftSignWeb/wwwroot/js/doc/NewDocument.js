@@ -61,7 +61,7 @@ $(window).on('resize', (e) => {
 })
 //#endregion
 
-$(`[data-action="sendDocument"]`).on('click', (e) => {
+$(`[data-action="sendDocumen"]`).on('click', (e) => {
 	if ($(e.target).hasClass("disabled"))
 		return;
 

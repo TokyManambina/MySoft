@@ -112,20 +112,13 @@ namespace SoftSignAPI.Controllers
 
         // POST api/<DocumentController>
         [HttpPost]
-        public ActionResult<string> Post([FromBody] UploadFileDto upload)
+        public async Task<ActionResult<string>> Post( IFormFile upload)
         {
             try
             {
-                if (Path.GetExtension(upload.File.FileName) != ".pdf")
-                    return StatusCode(415, "Unsupported Media Type - Incorrect File Format");
-
-                //var document = _documentService.BuildDocument(upload, _userService.GetMail()).Result;
-                var document = _documentService.BuildDocument(upload, "test").Result;
+				var document = await _documentService.CreateDocument(upload, "test");
                 
-                if(document == null)
-                    return StatusCode(500, "Internal Server Error");
-
-                return Ok(document.Code);
+				return Ok(document.Code);
             }
             catch (Exception ex)
             {
@@ -133,8 +126,22 @@ namespace SoftSignAPI.Controllers
             }
         }
 
-        // DELETE api/<DocumentController>/5
-        [HttpDelete("{id}")]
+		[HttpPost("{code}")]
+		public ActionResult<string> Posts(string code, [FromBody] AllUserDocument list)
+		{
+			try
+			{
+				
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+
+		// DELETE api/<DocumentController>/5
+		[HttpDelete("{id}")]
         public async Task<ActionResult<bool>> Delete(string code)
         {
             try

@@ -8,19 +8,22 @@ namespace SoftSignAPI.Model
         [Key]
         public string Code { get; set; }
         public string? DocPasword { get; set; }
-        public string Filename { get; set; }
-        public string Url { get; set; }
-        public string? Cc { get; set; }
-        public string Object { get; set; }
-        public string Message { get; set; }
-        public DateTime DateSend { get; set; }
+        public required string[] Filenames { get; set; }
+        public required string Location { get; set; }
+        public required DateTime DateSend { get; set; }
         public DocumentStat Status { get; set; }
+        public PriorityLevel Priority { get; set; }
+        public string? Detail { get;set; }
 
 
-        public virtual List<UserDocument> UserDocuments { get; set; }
+        public required virtual List<UserDocument> UserDocuments { get; set; }
     }
     public enum DocumentStat
     {
         Remaining, Completed, Archived, Canceled
+    }
+    public enum PriorityLevel
+    {
+        NonUrgent, Normal, Important, Urgent, VeryUrgent
     }
 }

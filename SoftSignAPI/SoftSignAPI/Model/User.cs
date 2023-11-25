@@ -9,8 +9,8 @@ namespace SoftSignAPI.Model
     {
         [Key]
         public Guid Id { get; set; }
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public Role Role{ get; set; }
@@ -19,19 +19,16 @@ namespace SoftSignAPI.Model
         [ForeignKey(nameof(SocietyId))]
         public Guid? SocietyId{ get; set; }
         public virtual Society? Society{ get; set; }
+        public virtual List<UserDocument>? UserDocuments { get; set; }
 
-        public virtual List<UserDocument> UserDocuments { get; set; }
-
-
+        //Token JWT
         public string RefreshToken { get; set; } = string.Empty;
         public DateTime TokenCreated { get; set; }
         public DateTime TokenExpires { get; set; }
-
-
     }
 
     public enum Role
     {
-        User, Admin, sa, Commercial, Controller
+        User, Admin, Controller, sa = 100
     }
 }
