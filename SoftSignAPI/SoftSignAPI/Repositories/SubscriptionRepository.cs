@@ -38,7 +38,7 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<Subscription?> Get(int id)
+        public async Task<Subscription?> Get(Guid id)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace SoftSignAPI.Repositories
         {
             return await _db.Subscriptions.AnyAsync(x => x.Code == code);
         }
-        public async Task<bool> IsExist(int id)
+        public async Task<bool> IsExist(Guid id)
         {
             return await _db.Subscriptions.AnyAsync(x => x.Id == id);
         }
@@ -79,7 +79,7 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> Update(int id, Subscription updateSubscription)
+        public async Task<bool> Update(Guid id, Subscription updateSubscription)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(Guid id)
         {
             try
             {

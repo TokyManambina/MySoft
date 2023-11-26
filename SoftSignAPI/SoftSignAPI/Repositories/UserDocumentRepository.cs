@@ -89,7 +89,25 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> Update(int id, UserDocument updateUserDocument)
+		public async Task<UserDocument?> CreateRange(UserDocument newUserDocument)
+		{
+			try
+			{
+				if (await IsExist(newUserDocument.Id))
+					return null;
+
+				newUserDocument = _db.UserDocuments.Add(newUserDocument).Entity;
+				Save();
+
+				return newUserDocument;
+
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+		public async Task<bool> Update(int id, UserDocument updateUserDocument)
         {
             try
             {

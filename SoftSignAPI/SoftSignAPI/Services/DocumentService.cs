@@ -18,61 +18,42 @@ namespace SoftSignAPI.Services
             _societyRepository = societyRepository;
             _hostingEnvironment = hostingEnvironment;
         }
-        public async Task<Document?> CreateDocument(IFormFile upload, User user)
+        public Document? CreateDocument(IFormFile upload, User user)
         {
-            var uploadFile = upload.FileName.Replace(" ", "_");
-            string filename = Path.GetFileNameWithoutExtension(uploadFile);
+            try
+            {
 
-            Document? document = new Document();
+                var uploadFile = upload.FileName.Replace(" ", "_");
+                string filename = Path.GetFileNameWithoutExtension(uploadFile);
 
-            var date = DateTime.Now;
-            document.DateSend = date;
-            document.Code = $"{Convert.ToHexString(BitConverter.GetBytes(date.Ticks))}-{date.ToString("yyyyMM")}";
+                Document? document = new Document();
 
-            /*var society = await _societyRepository.GetByUser(mail);
-			if (society == null)
-				return null;
-            */
+                var date = DateTime.Now;
+                document.DateSend = date;
+                document.Code = $"{Convert.ToHexString(BitConverter.GetBytes(date.Ticks))}-{date.ToString("yyyyMM")}";
 
-            document.Filename = $"{date.ToString("yyyyMMddhhmmss-")}{filename}{Path.GetExtension(uploadFile)}";
+                var Location = user.Subscription.Location!;
+                if (string.IsNullOrEmpty(Location))
+                    return null;
 
-            //document.Url = society.Storage;
-            document.Url = @"C:/Users/manam/OneDrive/Documents/docs/" + document.Filename;
-            //CreateDirectory(document.Url);
+                document.Filename = $"{date.ToString("yyyyMMddhhmmss-")}{filename}{Path.GetExtension(uploadFile)}";
 
-            CreateFile(upload, document.Url);
-            CreateFile(upload, "(_original_)" + document.Filename);
+			    CreateDirectory(Location);
+			    document.Url = Path.Combine(Location, document.Filename);
+            
 
-            document = await _documentRepository.Create(document);
-            return document;
-        }
-        public async Task<Document?> BuildDocument(UploadFileDto upload, string mail)
-        {
-            var uploadFile = upload.File.FileName.Replace(" ", "_");
-            string filename = Path.GetFileNameWithoutExtension(uploadFile);
+                CreateFile(upload, document.Url);
+                CreateFile(upload, "(_original_)" + document.Filename);
 
-            Document? document = new Document();
+                //document = await _documentRepository.Create(document);
+                return document;
 
-            var date = DateTime.Now;
-            document.DateSend = date;
-            document.Code = $"{Convert.ToHexString(BitConverter.GetBytes(date.Ticks))}-{date.ToString("yyyyMM")}";
+			}catch(Exception ex)
+            {
+                throw new Exception();
+            }
 
-            var society = await _societyRepository.GetByUser(mail);
-            if (society == null)
-                return null;
-
-
-            document.Filename = $"{date.ToString("yyyyMMdd-")}{filename}.{Path.GetExtension(uploadFile)}";
-
-            document.Url = society.Storage;
-            CreateDirectory(document.Url);
-
-            CreateFile(upload.File, document.Filename);
-            CreateFile(upload.File, "(_original_)" + document.Filename);
-
-            document = await _documentRepository.Create(document);
-            return document;
-        }
+		}
 
         public void CreateDirectory(string directory)
         {

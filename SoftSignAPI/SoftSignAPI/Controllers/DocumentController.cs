@@ -136,10 +136,15 @@ namespace SoftSignAPI.Controllers
 				if (doc.Files == null || string.IsNullOrEmpty(doc.Recipients))
                     return BadRequest("File not exist");
 
-				var recipients = JsonConvert.DeserializeObject<List<DocumentRecipientsDto>>(doc.Recipients);
+				var recipients = JsonConvert.DeserializeObject<List<UserDocument>>(doc.Recipients);
 
 
-				//var document = await _documentService.CreateDocument(doc.Files);
+				var document = _documentService.CreateDocument(doc.Files, user);
+
+                if(document == null)
+					return BadRequest("error on document");
+
+                
 
 				return Ok();
 
