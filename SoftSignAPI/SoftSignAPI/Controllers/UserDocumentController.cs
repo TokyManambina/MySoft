@@ -75,7 +75,7 @@ namespace SoftSignAPI.Controllers
         }
 
         // PUT api/<UserDocumentController>/5
-        [HttpPut("/Send/{documentCode}")]
+        [HttpPut("{documentCode}")]
         public async Task<ActionResult> Put(string documentCode, [FromQuery] Guid userId)
         {
             try
