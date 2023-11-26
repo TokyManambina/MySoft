@@ -15,9 +15,8 @@ namespace SoftSignAPI.Model
 
 
         [ForeignKey(nameof(OfferId))]
-        public int OfferId { get; set; }
-        public virtual Offer Offer { get; set; }
-
+        public int? OfferId { get; set; }
+        public virtual Offer? Offer { get; set; }
 
 		public virtual List<User> Users { get; set; }
 	}

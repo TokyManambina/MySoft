@@ -115,7 +115,6 @@ namespace SoftSignAPI.Repositories
                 offer.Price = updateOffer.Price;
                 offer.IsActive = updateOffer.IsActive;
                 offer.Capacity = updateOffer.Capacity;
-                offer.CapacityUnit = updateOffer.CapacityUnit;
 
                 _db.Offers.Update(offer);
 

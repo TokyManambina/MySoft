@@ -19,6 +19,7 @@ namespace SoftSignAPI.Context
         {
             modelBuilder.Entity<Society>().Property(x => x.Id).HasDefaultValueSql("newid()");
             modelBuilder.Entity<User>().Property(x => x.Id).HasDefaultValueSql("newid()");
+            modelBuilder.Entity<Subscription>().Property(x => x.Id).HasDefaultValueSql("newid()");
         }
     }
 }

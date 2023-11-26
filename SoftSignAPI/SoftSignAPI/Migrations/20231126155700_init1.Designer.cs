@@ -12,8 +12,8 @@ using SoftSignAPI.Context;
 namespace SoftSignAPI.Migrations
 {
     [DbContext(typeof(dbContext))]
-    [Migration("20231126152419_init")]
-    partial class init
+    [Migration("20231126155700_init1")]
+    partial class init1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -124,29 +124,26 @@ namespace SoftSignAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Capacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CapacityUnit")
+                    b.Property<int?>("Capacity")
                         .HasColumnType("int");
 
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Day")
+                    b.Property<int?>("Day")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Hour")
+                    b.Property<int?>("Hour")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Month")
+                    b.Property<int?>("Month")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -154,10 +151,9 @@ namespace SoftSignAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Price")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Year")
+                    b.Property<int?>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -192,7 +188,8 @@ namespace SoftSignAPI.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("newid()");
 
                     b.Property<DateTime>("BeginDate")
                         .HasColumnType("datetime2");
@@ -207,7 +204,7 @@ namespace SoftSignAPI.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OfferId")
+                    b.Property<int?>("OfferId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -335,9 +332,7 @@ namespace SoftSignAPI.Migrations
                 {
                     b.HasOne("SoftSignAPI.Model.Offer", "Offer")
                         .WithMany("Subscriptions")
-                        .HasForeignKey("OfferId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OfferId");
 
                     b.Navigation("Offer");
                 });
