@@ -18,7 +18,7 @@ namespace SoftSignAPI.Services
             _societyRepository = societyRepository;
             _hostingEnvironment = hostingEnvironment;
         }
-        public async Task<Document?> CreateDocument(IFormFile upload, string mail)
+        public async Task<Document?> CreateDocument(IFormFile upload, User user)
         {
             var uploadFile = upload.FileName.Replace(" ", "_");
             string filename = Path.GetFileNameWithoutExtension(uploadFile);

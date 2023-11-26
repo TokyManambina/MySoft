@@ -13,12 +13,12 @@ namespace SoftSignAPI.Model
         public DateTime EndDate { get; set; }
         public string? Location { get; set; }
 
-        public Guid UserId { get; set; }
-		[ForeignKey(nameof(UserId))]
-		public virtual User User { get; set; }
 
         [ForeignKey(nameof(OfferId))]
         public int OfferId { get; set; }
         public virtual Offer Offer { get; set; }
-    }
+
+
+		public virtual List<User> Users { get; set; }
+	}
 }

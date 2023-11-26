@@ -96,9 +96,7 @@ namespace SoftSignAPI.Repositories
         {
             try
             {
-                if (!await IsExist(id))
-                    return null;
-                return await _db.Users.FirstOrDefaultAsync(x => x.Id == id);
+                return await _db.Users.Include(x => x.Society).Include(x => x.Subscription).FirstOrDefaultAsync(x => x.Id == id);
             }
             catch (Exception ex)
             {
