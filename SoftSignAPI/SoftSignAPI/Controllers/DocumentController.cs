@@ -123,33 +123,17 @@ namespace SoftSignAPI.Controllers
             }
         }
 
-        // POST api/<DocumentController>
-        //[HttpPost]
-        //public async Task<ActionResult<string>> Post(IFormFile upload)
-        //{
-        //    try
-        //    {
-        //        var document = await _documentService.CreateDocument(upload, "test");
-
-        //        return Ok(document.Code);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, "Internal Server Error");
-        //    }
-        //}
-
 		[HttpPost]
 		public async Task<ActionResult<string>> Post([FromForm] AllUserDocumentDto doc)
 		{
 			try
 			{
-
 				var recipients = JsonConvert.DeserializeObject<List<DocumentRecipientsDto>>(doc.Recipients);
-				var fil = JsonConvert.DeserializeObject<IFormFile>(doc.Document);
+
+
+				//var document = await _documentService.CreateDocument(upload, "test");
 
 				return Ok();
-				//var document = await _documentService.CreateDocument(upload, "test");
 
 				//return Ok(document.Code);
 			}

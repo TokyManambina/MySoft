@@ -54,15 +54,18 @@ $("#YouSign").on("click", (e) => {
 	}
 
 
-	let formData = new FormData();
-	var a = ListUserDocument.length;
 	var files = $("#inputFile").get(0).files;
- //   for (var i = 0; i < 5; i++) {
+
+	let formData = new FormData();
+	//for (var i = 0; i < 5; i++) {
 	//	formData.append("Files", files[0]);
 	//}
+	let width = $("#pdfViewer").width();
+	let height = $("#pdfViewer").height();
 	formData.append("Files", files[0]);
 	formData.append("Recipients", JSON.stringify(dicoToList1(ListUserDocument)));
-	formData.append("Documents", JSON.stringify(files));
+	formData.append("PDF_Width", width.toString().replace(".",","));
+	formData.append("PDF_Height", height.toString().replace(".", ","));
 
 	$.ajax({
 		type: "POST",
@@ -76,7 +79,6 @@ $("#YouSign").on("click", (e) => {
 			'Authorization': sessionStorage.getItem("Authentication")
 		},
 
-		
 
 		success: function (result) {
 			var result = JSON.parse(result);

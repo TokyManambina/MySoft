@@ -12,12 +12,10 @@ namespace SoftSignAPI.Dto
     }
 	public class AllUserDocumentDto
 	{
-		//public double PDF_Width { get; set; }
-		//public double PDF_Height { get; set; }
+		public double PDF_Width { get; set; }
+		public double PDF_Height { get; set; }
 		public string? Recipients { get; set; }
-		public List<DocumentRecipientsDto>? Recipientss { get; set; }
 		public List<IFormFile>? Files { get; set; }
-		public string? Document { get; set; }
 	}
 
 
