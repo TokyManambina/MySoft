@@ -16,12 +16,15 @@ namespace SoftSignAPI.Model
         public Role Role{ get; set; }
         public string? TransfertMail{ get; set; }
 
-        [ForeignKey(nameof(SocietyId))]
         public Guid? SocietyId{ get; set; }
-        public virtual Society? Society{ get; set; }
+		[ForeignKey(nameof(SocietyId))]
+		public virtual Society? Society{ get; set; }
+
+		public Guid? SubscriptionId { get; set; }
+		[ForeignKey(nameof(SubscriptionId))]
+		public virtual Subscription Subscription { get; set; }
 
         public virtual List<UserDocument> UserDocuments { get; set; }
-        public virtual List<Subscription> Subscriptions { get; set; }
 
 
         public string RefreshToken { get; set; } = string.Empty;

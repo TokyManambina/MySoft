@@ -6,7 +6,7 @@ namespace SoftSignAPI.Model
     public class Subscription
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Code { get; set; }
 
         public DateTime BeginDate { get; set; }
