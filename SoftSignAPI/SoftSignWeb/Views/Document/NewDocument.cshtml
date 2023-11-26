@@ -297,13 +297,6 @@
 
                     <div class="form-group container row">
                         <label for="receiver">Email</Label><input type="email" class="col form-control form-control-border" id="receiver" placeholder="À :">
-                        <div class="col-1" role="group" aria-label="Basic checkbox toggle button group">
-                            <input type="checkbox" class="btn-check" id="ccCheck" autocomplete="off">
-                            <label class="btn btn-outline-secondary" style="padding : 6px 20px" for="ccCheck">CC</label>
-                        </div>
-                    </div>
-					<div class="form-group container row" id="ccContainer">
-						<label for="cc">Cc</Label><div class="col p-0" id="cc"></div>
                     </div>
 
 					<div class="form-group container row">
@@ -325,15 +318,16 @@
 
 <script src="~/js/pdf/jquery-ui.js"></script>
 
-<script src="~/js/doc/newDocument/script.js" asp-append-version="true"></script>
+@* <script src="~/js/doc/newDocument/script.js" asp-append-version="true"></script> *@
 
-<script src="~/js/doc/NewDocument.js" asp-append-version="true"></script>
+<script src="~/js/doc/newDocument.js" asp-append-version="true" type="module"></script>
+@* <script src="~/js/doc/NewDocument.js" asp-append-version="true"></script> *@
 
 <script src="~/js/doc/myPDF.js" asp-append-version="true"></script>
 <script src="~/js/doc/SignBox.js" asp-append-version="true"></script>
 
-<script src="~/js/doc/newDocument/recipient.js" asp-append-version="true"></script>
+@* <script src="~/js/doc/newDocument/recipient.js" asp-append-version="true"></script>
 <script src="~/js/doc/newDocument/fields.js" asp-append-version="true"></script>
-
+ *@
 <script src="~/lib/signaturepad/signature_pad.umd.js" asp-append-version="true"></script>
 <script src="~/lib/signaturepad/app.js" asp-append-version="true"></script>

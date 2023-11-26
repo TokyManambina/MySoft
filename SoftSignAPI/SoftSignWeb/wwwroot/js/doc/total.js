@@ -1,14 +1,17 @@
-﻿$(document).ready(() => {
+﻿import { apiUrl, webUrl } from "../apiConfig.js";
+
+$(document).ready(() => {
 	$.ajax({
 		type: "GET",
-		url: "/Document/GetDocumentInfo",
-		data: null,
-
+		url: apiUrl + "api/Document/u/info",
+		contentType: "application/json",
+		datatype: 'json',
+		headers: {
+			'Authorization': sessionStorage.getItem("Authentication")
+		},
+		xhrFields: { withCredentials: true },
 		success: function (result) {
-			var result = JSON.parse(result);
-			if (result.type == "error") {
-				return;
-			}
+			console.log(result)
 
 			let count = 0;
 			$.each(result, (k, v) => {

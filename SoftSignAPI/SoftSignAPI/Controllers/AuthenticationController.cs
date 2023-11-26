@@ -16,7 +16,7 @@ using System.Text;
 
 namespace SoftSignAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Auth")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {

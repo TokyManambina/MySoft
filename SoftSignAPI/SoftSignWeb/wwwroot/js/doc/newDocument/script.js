@@ -1,4 +1,6 @@
-﻿$(document).ready(() => {
+﻿import { apiUrl, webUrl } from "../apiConfig.js";
+
+$(document).ready(() => {
 	$("#ISign").hide();
 	$(`[card-id="field"]`).hide();
 	$('#signature_tab').hide();

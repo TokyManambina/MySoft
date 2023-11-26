@@ -1,4 +1,6 @@
-var typed = new Typed(".typing",{
+import { apiUrl, webUrl } from "../apiConfig.js";
+
+var typed = new Typed(".typing", {
     strings: ["Zéro Papier","Facile à utiliser", "Rapide et Sécurisé"],
     typeSpeed: 100,
     backSpeed: 70,
@@ -24,31 +26,36 @@ $(`[data-id="login"]`).on('click', (k, v) => {
 		return;
 	}
 
-	let formData = new FormData();
-	formData.append("mail", mail);
-	formData.append("password", password);
+	var login = {
+		email: mail,
+		password: password
+	};
 
 	$.ajax({
 		type: "POST",
-		url: "/Auth",
-		data: formData,
+		url: apiUrl + "api/Auth/login",
+		data: JSON.stringify(login),
 		xhrFields: { withCredentials: true },
-		cache: false,
-		contentType: false,
-		processData: false,
-		async: true,
+		contentType: "application/json",
+		datatype: 'json',
 
 		success: function (result) {
-			var result = JSON.parse(result);
-
-			if (result.type == "error") {
-				alert("Veuillez verifier votre mail!");
-				return;
-			}
-
+			console.log(result)
 			sessionStorage.setItem("Authentication", `Bearer ${result.token}`);
 
-			window.location.href = result.uri;
+			$.ajax({
+				type: "GET",
+				url: webUrl + "Auth",
+				contentType: "application/json",
+				success: function (data) {
+					localStorage.setItem("webBaseUrl", data.baseUrl);
+					window.location = data.url;
+				},
+
+				Error: function (x, e) {
+					alert("Some error");
+				}
+			})
 		},
 		Error: function (x, e) {
 			alert("Please contact the administrator");

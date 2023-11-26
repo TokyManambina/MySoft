@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SoftSignAPI.Dto;
@@ -20,14 +22,16 @@ namespace SoftSignAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IUserService _userService;
+        private readonly IUserRepository _userRepository;
 
-        public DocumentController(IDocumentRepository documentRepository, IMapper mapper, IWebHostEnvironment hostingEnvironment, IDocumentService documentService, IUserService userService)
+        public DocumentController(IDocumentRepository documentRepository, IMapper mapper, IWebHostEnvironment hostingEnvironment, IDocumentService documentService, IUserService userService, IUserRepository userRepository)
         {
             _documentRepository = documentRepository;
             _mapper = mapper;
             _hostingEnvironment = hostingEnvironment;
             _documentService = documentService;
             _userService = userService;
+            _userRepository = userRepository;
         }
 
 
@@ -60,11 +64,16 @@ namespace SoftSignAPI.Controllers
         }
         // GET: api/<DocumentController>/filter/posted?userId=
         [HttpGet("filter/posted")]
-        public async Task<ActionResult<List<ShowDocument>>> GetSenderDocument([FromQuery] Guid? userId, [FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+        [Authorize]
+        public async Task<ActionResult<List<ShowDocument>>> GetSenderDocument([FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetSenderDocument(userId: userId, search: search, count: count, page: page)));
+                var user = await _userRepository.GetByMail(_userService.GetMail());
+                if(user == null)
+					return SignOut("Logout");
+
+				return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetSenderDocument(userId: user.Id, search: search, count: count, page: page)));
             }
             catch (Exception ex)
             {
@@ -85,11 +94,15 @@ namespace SoftSignAPI.Controllers
             }
         }
         [HttpGet("u/info")]
-        public async Task<ActionResult<List<DocInfo>>> GetInfo([FromQuery] Guid userId)
+        [Authorize]
+        public async Task<ActionResult<List<DocInfo>>> GetInfo()
         {
             try
             {
-                return Ok(await _documentRepository.GetDocumentInfo(userId));
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+				return Ok(await _documentRepository.GetDocumentInfo(user.Id));
             }
             catch (Exception ex)
             {
@@ -127,12 +140,15 @@ namespace SoftSignAPI.Controllers
         //}
 
 		[HttpPost]
-		public async Task<ActionResult<string>> Post([FromForm] AllUserDocument aeaz)
+		public async Task<ActionResult<string>> Post([FromForm] AllUserDocumentDto doc)
 		{
 			try
 			{
 
-                return Ok();
+				var recipients = JsonConvert.DeserializeObject<List<DocumentRecipientsDto>>(doc.Recipients);
+				var fil = JsonConvert.DeserializeObject<IFormFile>(doc.Document);
+
+				return Ok();
 				//var document = await _documentService.CreateDocument(upload, "test");
 
 				//return Ok(document.Code);

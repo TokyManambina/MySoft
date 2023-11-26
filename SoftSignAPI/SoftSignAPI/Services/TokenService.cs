@@ -24,7 +24,6 @@ namespace SoftSignAPI.Services
 
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Hash, hashkey),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Role, nameof(user.Role)),
             };

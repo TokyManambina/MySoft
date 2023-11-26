@@ -1,4 +1,6 @@
-﻿$(document).ready(() => {
+﻿import { apiUrl, webUrl } from "../apiConfig.js";
+
+$(document).ready(() => {
 	$("#sign").text("");
 	MyDocument();
 })
@@ -6,17 +8,16 @@
 function MyDocument() {
 	$.ajax({
 		type: "GET",
-		url: "/Document/GetMyDocument",
-		data: null,
-
+		url: apiUrl + "api/Document/filter/posted",
+		contentType: "application/json",
+		datatype: 'json',
+		headers: {
+			'Authorization': sessionStorage.getItem("Authentication")
+		},
+		xhrFields: { withCredentials: true },
 		success: function (result) {
-			var result = JSON.parse(result);
+			console.log(result)
 			
-			if (result.type == "error") {
-				return;
-			}
-			console.log(result);
-
 			$(`#listDocument`).text("");
 
 			let code = ``;
@@ -28,13 +29,6 @@ function MyDocument() {
 					case 1 : icon = "fa-file-signature"; break;
 					case 2 : icon = "fa-file-archive"; break;
 					default: icon = "fa-star"; break;
-
-					/*
-					case "Remaining": icon = "fa-spinner fa-spin"; break;
-					case "Sign": icon = "fa-file-signature"; break;
-					case "Archive": icon = "fa-file-archive"; break;
-					default: icon = "fa-star"; break;
-					*/
 				}
 
 				code += `
@@ -65,18 +59,18 @@ function MyDocument() {
 	});
 }
 
-$(`[data-action="newDocument"]`).on('click', (k, v) => {
-	return;
-	$.ajax({
-		type: "GET",
-		url: "/NewDocument",
-		data: null,
-		cache: false,
-		contentType: false,
-		processData: false,
-		async: true,
-		Error: function (x, e) {
-			alert("Some error");
-		}
-	});
-});
+//$(`[data-action="newDocument"]`).on('click', (k, v) => {
+//	return;
+//	$.ajax({
+//		type: "GET",
+//		url: "/NewDocument",
+//		data: null,
+//		cache: false,
+//		contentType: false,
+//		processData: false,
+//		async: true,
+//		Error: function (x, e) {
+//			alert("Some error");
+//		}
+//	});
+//});
