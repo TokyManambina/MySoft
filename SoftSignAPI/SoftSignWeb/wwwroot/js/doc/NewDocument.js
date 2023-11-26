@@ -2,7 +2,7 @@
 	$("#ISign").hide();
 });
 
-$('input[name="radioSign"]').on('change', (e) => { 
+$('input[name="radioSign"]').on('change', (e) => {
 	console.log(e.target);
 	if (e.target.id == "isign") {
 		$("#ISign").show();
@@ -61,7 +61,7 @@ $(window).on('resize', (e) => {
 })
 //#endregion
 
-$(`[data-action="sendDocument"]`).on('click', (e) => {
+$(`[data-action="sendDocumen"]`).on('click', (e) => {
 	if ($(e.target).hasClass("disabled"))
 		return;
 
@@ -78,7 +78,7 @@ $(`[data-action="sendDocument"]`).on('click', (e) => {
 		alert("Veuillez vérifier le(s) Déstinataire(s).");
 		return;
 	}
-		
+
 
 	let formData = new FormData();
 	formData.append("upload", files[0]);
@@ -93,10 +93,10 @@ $(`[data-action="sendDocument"]`).on('click', (e) => {
 	//get list Cc
 	if ($("#ccCheck").is(":checked")) {
 		$(mailCc.getValue()).each((k, v) => {
-			formData.append(`Cc[${k}]`,v);
+			formData.append(`Cc[${k}]`, v);
 		});
 	}
-		
+
 
 	//#endregion
 
@@ -105,7 +105,7 @@ $(`[data-action="sendDocument"]`).on('click', (e) => {
 		var validList = $("#listValidator").find("span");
 		var countValid = validList.length;
 		if (countValid != 0) {
-			validList.each(function (k,v) {
+			validList.each(function (k, v) {
 				formData.append(`Validator[${k}]`, $(this).text());
 			});
 		}
@@ -115,7 +115,7 @@ $(`[data-action="sendDocument"]`).on('click', (e) => {
 	//#region PDF
 	let pdfContainer = $('#pdfViewer').offset();
 	let posSign = { top: null, left: null };
-	
+
 	//#region PDF pdfDetail.pdfInfo
 	formData.append("pdfDetail.pdfInfo", parseFloat($("#pdfViewer").width()).toString().replace('.', ',') +
 		"|" + parseFloat($("#pdfViewer").height()).toString().replace('.', ','));
@@ -144,7 +144,7 @@ $(`[data-action="sendDocument"]`).on('click', (e) => {
 		//formData.append("pdfDetail._SignInfo", JSON.stringify(list));
 	}
 	//#endregion
-	
+
 	//#region Paraphe pdfDetail._ParapheInfo
 	if (!$("#paraphe").hasClass("hidden")) {
 		var offsetSign = $("#paraphe").offset();
@@ -158,7 +158,7 @@ $(`[data-action="sendDocument"]`).on('click', (e) => {
 		let page = "";
 		var countparapheList = parapheList.length;
 		if (countparapheList != 0) {
-			parapheList.each(function (k,v) {
+			parapheList.each(function (k, v) {
 
 				page = $(this).attr("data-value").split("|");
 
@@ -173,7 +173,7 @@ $(`[data-action="sendDocument"]`).on('click', (e) => {
 		}
 	}
 	//#endregion
-	
+
 	$.ajax({
 		type: "POST",
 		url: "/Document/SendDocument",

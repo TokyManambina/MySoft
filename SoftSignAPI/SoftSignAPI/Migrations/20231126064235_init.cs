@@ -42,6 +42,8 @@ namespace SoftSignAPI.Migrations
                     Day = table.Column<int>(type: "int", nullable: false),
                     Month = table.Column<int>(type: "int", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
+                    Capacity = table.Column<int>(type: "int", nullable: false),
+                    CapacityUnit = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Price = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
@@ -104,7 +106,10 @@ namespace SoftSignAPI.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Role = table.Column<int>(type: "int", nullable: false),
                     TransfertMail = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SocietyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    SocietyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TokenCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TokenExpires = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -126,6 +131,10 @@ namespace SoftSignAPI.Migrations
                     DocumentCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Step = table.Column<int>(type: "int", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Cc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MyTurn = table.Column<bool>(type: "bit", nullable: false),
                     IsFinished = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

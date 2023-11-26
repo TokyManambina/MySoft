@@ -57,47 +57,47 @@ namespace SoftSignAPI.Controllers
             {
                 return StatusCode(500, "Internal Server Error");
             }
-		}
-		// GET: api/<DocumentController>/filter/posted?userId=
-		[HttpGet("filter/posted")]
-		public async Task<ActionResult<List<ShowDocument>>> GetSenderDocument([FromQuery] Guid? userId, [FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
-		{
-			try
-			{
-				return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetSenderDocument(userId: userId, search: search, count: count, page: page)));
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, "Internal Server Error");
-			}
-		}
-		// GET: api/<DocumentController>/filter/received?userId=
-		[HttpGet("filter/received")]
-		public async Task<ActionResult<List<ShowDocument>>> GetRecipientDocument([FromQuery] Guid? userId, [FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
-		{
-			try
-			{
-				return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetRecipientDocument(userId: userId, search: search, count: count, page: page)));
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, "Internal Server Error");
-			}
-		}
-		[HttpGet("u/info")]
-		public async Task<ActionResult<List<DocInfo>>> GetInfo([FromQuery] Guid userId)
-		{
-			try
-			{
-				return Ok(await _documentRepository.GetDocumentInfo(userId));
-			}
-			catch (Exception ex)
-			{
-				return StatusCode(500, "Internal Server Error");
-			}
-		}
-		// GET api/<DocumentController>/5
-		[HttpGet("{code}")]
+        }
+        // GET: api/<DocumentController>/filter/posted?userId=
+        [HttpGet("filter/posted")]
+        public async Task<ActionResult<List<ShowDocument>>> GetSenderDocument([FromQuery] Guid? userId, [FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+        {
+            try
+            {
+                return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetSenderDocument(userId: userId, search: search, count: count, page: page)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+        // GET: api/<DocumentController>/filter/received?userId=
+        [HttpGet("filter/received")]
+        public async Task<ActionResult<List<ShowDocument>>> GetRecipientDocument([FromQuery] Guid? userId, [FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+        {
+            try
+            {
+                return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetRecipientDocument(userId: userId, search: search, count: count, page: page)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+        [HttpGet("u/info")]
+        public async Task<ActionResult<List<DocInfo>>> GetInfo([FromQuery] Guid userId)
+        {
+            try
+            {
+                return Ok(await _documentRepository.GetDocumentInfo(userId));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+        // GET api/<DocumentController>/5
+        [HttpGet("{code}")]
         public async Task<ActionResult<Document>> Get(string code)
         {
             try
@@ -111,21 +111,45 @@ namespace SoftSignAPI.Controllers
         }
 
         // POST api/<DocumentController>
-        [HttpPost]
-        public ActionResult<string> Post([FromBody] UploadFileDto upload)
+        //[HttpPost]
+        //public async Task<ActionResult<string>> Post(IFormFile upload)
+        //{
+        //    try
+        //    {
+        //        var document = await _documentService.CreateDocument(upload, "test");
+
+        //        return Ok(document.Code);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, "Internal Server Error");
+        //    }
+        //}
+
+		[HttpPost]
+		public async Task<ActionResult<string>> Post([FromForm] AllUserDocument aeaz)
+		{
+			try
+			{
+
+                return Ok();
+				//var document = await _documentService.CreateDocument(upload, "test");
+
+				//return Ok(document.Code);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+
+		[HttpPost("{code}")]
+        public ActionResult<string> Posts(string code, [FromBody] AllUserDocument list)
         {
             try
             {
-                if (Path.GetExtension(upload.File.FileName) != ".pdf")
-                    return StatusCode(415, "Unsupported Media Type - Incorrect File Format");
 
-                //var document = _documentService.BuildDocument(upload, _userService.GetMail()).Result;
-                var document = _documentService.BuildDocument(upload, "test").Result;
-                
-                if(document == null)
-                    return StatusCode(500, "Internal Server Error");
-
-                return Ok(document.Code);
+                return Ok();
             }
             catch (Exception ex)
             {

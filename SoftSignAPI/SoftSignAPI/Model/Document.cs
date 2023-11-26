@@ -16,7 +16,6 @@ namespace SoftSignAPI.Model
         public DateTime DateSend { get; set; }
         public DocumentStat Status { get; set; }
 
-
         public virtual List<UserDocument> UserDocuments { get; set; }
     }
     public enum DocumentStat

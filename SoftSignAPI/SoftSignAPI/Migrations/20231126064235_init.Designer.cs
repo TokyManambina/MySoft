@@ -12,8 +12,8 @@ using SoftSignAPI.Context;
 namespace SoftSignAPI.Migrations
 {
     [DbContext(typeof(dbContext))]
-    [Migration("20231101100947_init4")]
-    partial class init4
+    [Migration("20231126064235_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

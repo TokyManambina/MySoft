@@ -16,6 +16,7 @@ $(`[data-action="addField"]`).on("click", (e) => {
         return alert("Veuillez uploader d'abord un document");
 
     let header = $(e.target).closest("[data-type]");
+    console.log(header);
     let firstPage = parseInt(header.find(`[data-id="firstPage"]`).val());
     let lastPage = parseInt(header.find(`[data-id="lastPage"]`).val());
 
@@ -26,14 +27,14 @@ $(`[data-action="addField"]`).on("click", (e) => {
 
 
     let page = `${firstPage}`;
-    
+
     if (!Number.isNaN(lastPage) && lastPage !== 0) {
         if (firstPage > lastPage)
             page = `${lastPage} - ${firstPage}`;
         else
             page += ` - ${lastPage}`;
     }
-        
+
 
     let type = `${header.attr("data-type")}`;
     let id = `${type}${count++}`;
@@ -47,7 +48,9 @@ $(`[data-action="addField"]`).on("click", (e) => {
     let newfield = {
         x: 0,
         y: 0,
-        type: header.attr("[data-id]"),
+        width: 0,
+        height: 0,
+        type: parseInt($(header).attr("data-id")),
         page: page
     };
 
@@ -67,7 +70,7 @@ function activeField(id, recipient) {
         $(`[page-id="${id}"]`).find('span').css("color", "white");
     }, (e) => {
         if ($(`[recipient-id="${recipient}"]`).css("background-color"))
-            $(`[recipient-id="${recipient}"]`).css("background-color","");
+            $(`[recipient-id="${recipient}"]`).css("background-color", "");
         if ($(`[page-id="${id}"]`).css("background-color"))
             $(`[page-id="${id}"]`).css("background-color", "");
 
@@ -91,6 +94,8 @@ function activeField(id, recipient) {
         };
         ListUserDocument[recipient].fields[id].x = parseFloat(posSign.left);
         ListUserDocument[recipient].fields[id].y = parseFloat(posSign.top);
+        ListUserDocument[recipient].fields[id].width = parseFloat($(e.target).width());
+        ListUserDocument[recipient].fields[id].height = parseFloat($(e.target).height());
 
         $(`[field-id="${id}"]`).draggable(dragOption);
     });
