@@ -22,7 +22,7 @@ namespace SoftSignAPI.Model
 
 		public Guid? SubscriptionId { get; set; }
 		[ForeignKey(nameof(SubscriptionId))]
-		public virtual Subscription Subscription { get; set; }
+		public virtual Subscription? Subscription { get; set; }
 
         public virtual List<UserDocument> UserDocuments { get; set; }
 
