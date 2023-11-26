@@ -9,13 +9,16 @@ namespace SoftSignAPI.Helpers
         public MappingProfiles() 
         {
             CreateMap<User, User>();
+
             CreateMap<Society, SocietyDto>();
             CreateMap<SocietyDto, Society>();
+
             CreateMap<User, UserDto>();
             CreateMap<AuthenticationDto, User>();
             CreateMap<UserDto, User>();
             CreateMap<User, string>();
             CreateMap<string, User>();
+
             CreateMap<Offer, OfferDto>();
             CreateMap<OfferDto, Offer>();
 
@@ -26,6 +29,14 @@ namespace SoftSignAPI.Helpers
 
             CreateMap<DocumentByUserDto, UserDocument>();
             CreateMap<UserDocument, DocumentByUserDto>();
+
+            CreateMap<UserDocument, DocumentRecipientsDto>();
+            CreateMap<DocumentRecipientsDto, UserDocument>();
+
+            CreateMap<Field, FieldDto>();
+            CreateMap<FieldDto, Field>();
+
+
 
         }
     }

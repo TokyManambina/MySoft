@@ -15,8 +15,8 @@ namespace SoftSignAPI.Model
         public virtual Document Document { get; set; }
 
         public int Step { get; set; } = 0;
-        public string Role { get; set; }
-        public string Color { get; set; }
+        public string? Role { get; set; }
+        public string? Color { get; set; }
         public string? Message { get; set; }
         public string? Cc { get; set; }
 

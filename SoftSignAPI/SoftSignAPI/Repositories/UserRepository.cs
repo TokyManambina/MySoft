@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using SoftSignAPI.Context;
 using SoftSignAPI.Helpers;
 using SoftSignAPI.Interfaces;
@@ -19,6 +20,7 @@ namespace SoftSignAPI.Repositories
         {
             try
             {
+                user.Email = user.Email.ToLower();
                 var u = await _db.Users.AddAsync(user);
                 Save();
                 return u.Entity;
@@ -28,7 +30,39 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<bool> Update(Guid id, User updateUser)
+		public async Task<User?> Insert(string mail, string password)
+		{
+			try
+			{
+                mail = mail.ToLower();
+				if (await IsExist(mail))
+					return null;
+
+				bool noPassword = false;
+
+				if (string.IsNullOrEmpty(password))
+				{
+					noPassword = true;
+					password = Tools.RandomPassword(mail);
+				}
+
+				var newuser = _db.Users.Add(new User()
+				{
+					Email = mail,
+					Password = BCrypt.Net.BCrypt.HashPassword(password)
+				});
+                				
+				//await _db.SaveChangesAsync();
+
+				return newuser.Entity;
+			}
+			catch (Exception ex)
+			{
+				return null;
+			}
+
+		}
+		public async Task<bool> Update(Guid id, User updateUser)
         {
             try
             {
@@ -156,7 +190,7 @@ namespace SoftSignAPI.Repositories
         }
         public async Task<bool> IsExist(string mail)
         {
-            return await _db.Users.AnyAsync(x => x.Email == mail);
+            return await _db.Users.AnyAsync(x => x.Email == mail.ToLower());
         }
         public bool Save()
         {

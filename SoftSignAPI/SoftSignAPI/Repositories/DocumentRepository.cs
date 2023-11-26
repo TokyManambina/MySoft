@@ -47,8 +47,9 @@ namespace SoftSignAPI.Repositories
 				var query = _db.UserDocuments
 					.Include(x => x.User)
 					.Include(x => x.Document)
-					.Where(x => x.UserId == userId && x.Step == 0)
+					.Where(x => x.UserId == userId && ( x.MyTurn || x.IsFinished))
 					.Select(x => x.Document)
+                    .OrderByDescending(x=>x.DateSend)
 					.AsQueryable();
 
 				if (!string.IsNullOrEmpty(search))

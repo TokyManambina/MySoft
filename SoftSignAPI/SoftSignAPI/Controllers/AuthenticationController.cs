@@ -110,7 +110,7 @@ namespace SoftSignAPI.Controllers
                 return Unauthorized("Token Expired");
 
             string token = _tokenService.CreateToken(user);
-            _tokenService.SetRefreshToken(user, Response);
+            await _tokenService.SetRefreshToken(user, Response);
 
             return Ok(token);
         }

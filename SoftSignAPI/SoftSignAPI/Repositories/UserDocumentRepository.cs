@@ -89,21 +89,18 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-		public async Task<UserDocument?> CreateRange(UserDocument newUserDocument)
+		public async Task<bool> CreateRange(List<UserDocument> newUserDocuments)
 		{
 			try
 			{
-				if (await IsExist(newUserDocument.Id))
-					return null;
+                await _db.UserDocuments.AddRangeAsync(newUserDocuments);
 
-				newUserDocument = _db.UserDocuments.Add(newUserDocument).Entity;
-				Save();
-
-				return newUserDocument;
-
+                await _db.SaveChangesAsync();
+                return true;
 			}
 			catch (Exception ex)
 			{
+                return false;
 				throw new Exception(ex.Message);
 			}
 		}

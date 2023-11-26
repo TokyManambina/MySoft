@@ -7,7 +7,6 @@ namespace SoftSignAPI.Dto
     {
         public string Role { get; set; }
         public string Mail { get; set; }
-        public string? Cc { get; set; }
         public string? Message { get; set; }
         public string Color { get; set; }
         public List<FieldDto>? Fields { get; set; }

@@ -19,12 +19,22 @@ namespace SoftSignAPI.Controllers
     {
         private readonly IDocumentRepository _documentRepository;
         private readonly IDocumentService _documentService;
+        private readonly IUserDocumentService _userDocumentService;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IUserService _userService;
         private readonly IUserRepository _userRepository;
+        private readonly IUserDocumentRepository _userDocumentRepository;
 
-        public DocumentController(IDocumentRepository documentRepository, IMapper mapper, IWebHostEnvironment hostingEnvironment, IDocumentService documentService, IUserService userService, IUserRepository userRepository)
+        public DocumentController(
+            IDocumentRepository documentRepository, 
+            IMapper mapper, 
+            IWebHostEnvironment hostingEnvironment, 
+            IDocumentService documentService, 
+            IUserService userService, 
+            IUserRepository userRepository,
+            IUserDocumentService userDocumentService,
+            IUserDocumentRepository userDocumentRepository)
         {
             _documentRepository = documentRepository;
             _mapper = mapper;
@@ -32,6 +42,8 @@ namespace SoftSignAPI.Controllers
             _documentService = documentService;
             _userService = userService;
             _userRepository = userRepository;
+            _userDocumentService = userDocumentService;
+            _userDocumentRepository = userDocumentRepository;
         }
 
 
@@ -136,17 +148,22 @@ namespace SoftSignAPI.Controllers
 				if (doc.Files == null || string.IsNullOrEmpty(doc.Recipients))
                     return BadRequest("File not exist");
 
-				var recipients = JsonConvert.DeserializeObject<List<UserDocument>>(doc.Recipients);
+				var recipients = JsonConvert.DeserializeObject<List<DocumentRecipientsDto>>(doc.Recipients);
 
+                if(recipients == null || recipients.Count == 0)
+					return BadRequest("No Recipient");
 
 				var document = _documentService.CreateDocument(doc.Files, user);
 
                 if(document == null)
 					return BadRequest("error on document");
 
-                
+                var userDocuments = await _userDocumentService.CreateUserDocument(document, user, recipients);
+
+                var a = await _userDocumentRepository.CreateRange(userDocuments);
 
 				return Ok();
+
 
 				//return Ok(document.Code);
 			}

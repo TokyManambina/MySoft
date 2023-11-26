@@ -32,8 +32,8 @@ namespace SoftSignAPI.Services
                 document.DateSend = date;
                 document.Code = $"{Convert.ToHexString(BitConverter.GetBytes(date.Ticks))}-{date.ToString("yyyyMM")}";
 
-                var Location = user.Subscription.Location!;
-                if (string.IsNullOrEmpty(Location))
+                var Location = user.Subscription!.Location!;
+                if (Location == null)
                     return null;
 
                 document.Filename = $"{date.ToString("yyyyMMddhhmmss-")}{filename}{Path.GetExtension(uploadFile)}";
@@ -43,7 +43,7 @@ namespace SoftSignAPI.Services
             
 
                 CreateFile(upload, document.Url);
-                CreateFile(upload, "(_original_)" + document.Filename);
+                CreateFile(upload, Path.Combine(Location, "(_original_)" + document.Filename));
 
                 //document = await _documentRepository.Create(document);
                 return document;

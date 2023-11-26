@@ -1,4 +1,5 @@
-﻿using SoftSignAPI.Dto;
+﻿using AutoMapper;
+using SoftSignAPI.Dto;
 using SoftSignAPI.Helpers;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
@@ -10,12 +11,67 @@ namespace SoftSignAPI.Services
         private readonly IUserRepository _userRepository;
         private readonly IUserDocumentRepository _userDocumentRepository;
         private readonly IDocumentRepository _documentRepository;
+        private readonly IMapper _mapper;
 
-        public UserDocumentService(IUserRepository userRepository, IUserDocumentRepository userDocumentRepository, IDocumentRepository documentRepository)
+        public UserDocumentService(IUserRepository userRepository, IUserDocumentRepository userDocumentRepository, IDocumentRepository documentRepository, IMapper mapper)
         {
             _userRepository = userRepository;
             _userDocumentRepository = userDocumentRepository;
             _documentRepository = documentRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<List<UserDocument>> CreateUserDocument(Document document, User user, List<DocumentRecipientsDto> ListRecipient)
+        {
+            try
+            {
+				int step = 1;
+
+				List<UserDocument> recipients = new List<UserDocument>();
+
+				UserDocument recipient;
+				User userDoc;
+				foreach (var item in ListRecipient)
+				{
+					recipient = new UserDocument();
+                    recipient.Color = item.Color;
+                    recipient.Message = item.Message;
+					recipient.Document = document;
+					recipient.MyTurn = step == 1;
+					recipient.Step = step++;
+                    recipient.Fields = _mapper.Map<List<Field>>(item.Fields);
+
+					userDoc = new User();
+
+					if (!await _userRepository.IsExist(item.Mail))
+						userDoc = (await _userRepository.Insert(item.Mail, "123"))!;
+					else
+						userDoc = (await _userRepository.GetByMail(item.Mail))!;
+
+					if (userDoc == null)
+						return null;
+
+                    recipient.User = userDoc;
+
+                    recipients.Add(recipient);
+				}
+
+                recipient = new UserDocument()
+                {
+                    Document = document,
+                    Step = 0,
+                    User = user,
+                    MyTurn = false,
+                    IsFinished = true
+                };
+                recipients.Add(recipient);
+
+				return recipients;
+			}
+			catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task LinkUserWithDocument(string code, List<UserRoleDocumentDto> users)

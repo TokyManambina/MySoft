@@ -27,9 +27,9 @@ namespace SoftSignAPI.Model
         public virtual List<UserDocument> UserDocuments { get; set; }
 
 
-        public string RefreshToken { get; set; } = string.Empty;
-        public DateTime TokenCreated { get; set; }
-        public DateTime TokenExpires { get; set; }
+        public string? RefreshToken { get; set; } = string.Empty;
+        public Nullable<DateTime> TokenCreated { get; set; }
+        public Nullable<DateTime> TokenExpires { get; set; }
 
 
     }
