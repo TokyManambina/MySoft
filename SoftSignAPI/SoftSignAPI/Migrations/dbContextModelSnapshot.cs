@@ -187,11 +187,9 @@ namespace SoftSignAPI.Migrations
 
             modelBuilder.Entity("SoftSignAPI.Model.Subscription", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("BeginDate")
                         .HasColumnType("datetime2");
@@ -203,17 +201,15 @@ namespace SoftSignAPI.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("OfferId")
                         .HasColumnType("int");
-
-                    b.Property<Guid>("SocietyId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OfferId");
-
-                    b.HasIndex("SocietyId");
 
                     b.ToTable("Subscriptions");
                 });
@@ -249,6 +245,10 @@ namespace SoftSignAPI.Migrations
                     b.Property<Guid?>("SocietyId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("SubscriptionId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("TokenCreated")
                         .HasColumnType("datetime2");
 
@@ -264,6 +264,8 @@ namespace SoftSignAPI.Migrations
                         .IsUnique();
 
                     b.HasIndex("SocietyId");
+
+                    b.HasIndex("SubscriptionId");
 
                     b.ToTable("Users");
                 });
@@ -334,15 +336,7 @@ namespace SoftSignAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SoftSignAPI.Model.Society", "Society")
-                        .WithMany("Subscriptions")
-                        .HasForeignKey("SocietyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Offer");
-
-                    b.Navigation("Society");
                 });
 
             modelBuilder.Entity("SoftSignAPI.Model.User", b =>
@@ -351,7 +345,15 @@ namespace SoftSignAPI.Migrations
                         .WithMany("Users")
                         .HasForeignKey("SocietyId");
 
+                    b.HasOne("SoftSignAPI.Model.Subscription", "Subscription")
+                        .WithMany("Users")
+                        .HasForeignKey("SubscriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Society");
+
+                    b.Navigation("Subscription");
                 });
 
             modelBuilder.Entity("SoftSignAPI.Model.UserDocument", b =>
@@ -385,8 +387,11 @@ namespace SoftSignAPI.Migrations
 
             modelBuilder.Entity("SoftSignAPI.Model.Society", b =>
                 {
-                    b.Navigation("Subscriptions");
+                    b.Navigation("Users");
+                });
 
+            modelBuilder.Entity("SoftSignAPI.Model.Subscription", b =>
+                {
                     b.Navigation("Users");
                 });
 

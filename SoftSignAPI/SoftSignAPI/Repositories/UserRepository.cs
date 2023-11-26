@@ -166,6 +166,7 @@ namespace SoftSignAPI.Repositories
             }
             catch (Exception ex)
             {
+                return false;
                 throw new Exception(ex.Message);
             }
 

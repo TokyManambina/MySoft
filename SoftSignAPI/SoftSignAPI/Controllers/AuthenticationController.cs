@@ -46,7 +46,7 @@ namespace SoftSignAPI.Controllers
 
                 request.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
-                if (_userRepository.Create(_mapper.Map<User>(request)) == null)
+                if (await _userRepository.Create(_mapper.Map<User>(request)) == null)
                     return StatusCode(500, "Internal Server Error");
 
                 return Ok("User created successfully.");

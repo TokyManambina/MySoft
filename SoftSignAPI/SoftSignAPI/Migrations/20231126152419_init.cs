@@ -70,12 +70,11 @@ namespace SoftSignAPI.Migrations
                 name: "Subscriptions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BeginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SocietyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OfferId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -85,12 +84,6 @@ namespace SoftSignAPI.Migrations
                         name: "FK_Subscriptions_Offers_OfferId",
                         column: x => x.OfferId,
                         principalTable: "Offers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Subscriptions_Societies_SocietyId",
-                        column: x => x.SocietyId,
-                        principalTable: "Societies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -107,6 +100,7 @@ namespace SoftSignAPI.Migrations
                     Role = table.Column<int>(type: "int", nullable: false),
                     TransfertMail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SocietyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    SubscriptionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TokenCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TokenExpires = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -119,6 +113,12 @@ namespace SoftSignAPI.Migrations
                         column: x => x.SocietyId,
                         principalTable: "Societies",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Users_Subscriptions_SubscriptionId",
+                        column: x => x.SubscriptionId,
+                        principalTable: "Subscriptions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -201,11 +201,6 @@ namespace SoftSignAPI.Migrations
                 column: "OfferId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Subscriptions_SocietyId",
-                table: "Subscriptions",
-                column: "SocietyId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_UserDocuments_DocumentCode",
                 table: "UserDocuments",
                 column: "DocumentCode");
@@ -225,6 +220,11 @@ namespace SoftSignAPI.Migrations
                 name: "IX_Users_SocietyId",
                 table: "Users",
                 column: "SocietyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_SubscriptionId",
+                table: "Users",
+                column: "SubscriptionId");
         }
 
         /// <inheritdoc />
@@ -234,13 +234,7 @@ namespace SoftSignAPI.Migrations
                 name: "Fields");
 
             migrationBuilder.DropTable(
-                name: "Subscriptions");
-
-            migrationBuilder.DropTable(
                 name: "UserDocuments");
-
-            migrationBuilder.DropTable(
-                name: "Offers");
 
             migrationBuilder.DropTable(
                 name: "Documents");
@@ -250,6 +244,12 @@ namespace SoftSignAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Societies");
+
+            migrationBuilder.DropTable(
+                name: "Subscriptions");
+
+            migrationBuilder.DropTable(
+                name: "Offers");
         }
     }
 }
