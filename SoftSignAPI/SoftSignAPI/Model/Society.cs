@@ -10,6 +10,5 @@ namespace SoftSignAPI.Model
         public string Name { get; set; }
         public string Storage { get; set; }
         public virtual List<User> Users { get; set; }
-        public virtual List<Subscription> Subscriptions { get; set; }
     }
 }

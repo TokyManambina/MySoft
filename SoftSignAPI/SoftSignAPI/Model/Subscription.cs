@@ -11,10 +11,11 @@ namespace SoftSignAPI.Model
 
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
+        public string? Location { get; set; }
 
-        [ForeignKey(nameof(SocietyId))]
-        public Guid SocietyId { get; set; }
-        public virtual Society Society { get; set; }
+        public Guid UserId { get; set; }
+		[ForeignKey(nameof(UserId))]
+		public virtual User User { get; set; }
 
         [ForeignKey(nameof(OfferId))]
         public int OfferId { get; set; }

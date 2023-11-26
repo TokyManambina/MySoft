@@ -15,7 +15,8 @@ namespace SoftSignAPI.Dto
 		public double PDF_Width { get; set; }
 		public double PDF_Height { get; set; }
 		public string? Recipients { get; set; }
-		public List<IFormFile>? Files { get; set; }
+		public IFormFile? Files { get; set; }
+		public List<IFormFile>? PJ { get; set; }
 	}
 
 

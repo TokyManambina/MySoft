@@ -124,14 +124,22 @@ namespace SoftSignAPI.Controllers
         }
 
 		[HttpPost]
+        [Authorize]
 		public async Task<ActionResult<string>> Post([FromForm] AllUserDocumentDto doc)
 		{
 			try
 			{
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+				if (doc.Files == null || string.IsNullOrEmpty(doc.Recipients))
+                    return BadRequest("File not exist");
+
 				var recipients = JsonConvert.DeserializeObject<List<DocumentRecipientsDto>>(doc.Recipients);
 
 
-				//var document = await _documentService.CreateDocument(upload, "test");
+				//var document = await _documentService.CreateDocument(doc.Files);
 
 				return Ok();
 

@@ -109,7 +109,7 @@ namespace SoftSignAPI.Repositories
         {
             try
             {
-                return await _db.Users.FirstOrDefaultAsync(x => x.Email == mail);
+                return await _db.Users.Include(x=>x.Society).FirstOrDefaultAsync(x => x.Email == mail);
             }
             catch (Exception ex)
             {
