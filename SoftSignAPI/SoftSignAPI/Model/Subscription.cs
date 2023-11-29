@@ -11,6 +11,7 @@ namespace SoftSignAPI.Model
 
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
+        public Nullable<DateTime> DateUpdate { get; set; }
         public string? Location { get; set; }
 
 

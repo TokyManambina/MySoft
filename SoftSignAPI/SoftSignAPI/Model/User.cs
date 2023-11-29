@@ -13,7 +13,7 @@ namespace SoftSignAPI.Model
         public string Password { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public Role Role{ get; set; }
+        public Role Role { get; set; } = Role.Reader;
         public string? TransfertMail{ get; set; }
 
         public Guid? SocietyId{ get; set; }
@@ -36,6 +36,6 @@ namespace SoftSignAPI.Model
 
     public enum Role
     {
-        User, Admin, sa, Commercial, Controller
+		Reader, Writer, Admin
     }
 }

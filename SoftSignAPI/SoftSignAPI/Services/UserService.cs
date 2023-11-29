@@ -15,7 +15,7 @@ namespace SoftSignAPI.Services
             if (_httpContextAccessor.HttpContext == null)
                 return string.Empty;
 
-            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email)!;
         }
 
         public string GetRole()
@@ -23,7 +23,7 @@ namespace SoftSignAPI.Services
             if (_httpContextAccessor.HttpContext == null)
                 return string.Empty;
 
-            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+            return _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role)!;
         }
     }
 }

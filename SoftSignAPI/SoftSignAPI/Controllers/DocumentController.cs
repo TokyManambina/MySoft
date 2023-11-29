@@ -163,8 +163,6 @@ namespace SoftSignAPI.Controllers
                 var a = await _userDocumentRepository.CreateRange(userDocuments);
 
 				return Ok();
-
-
 				//return Ok(document.Code);
 			}
 			catch (Exception ex)

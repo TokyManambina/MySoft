@@ -20,7 +20,6 @@ namespace SoftSignAPI.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        const Role e = Role.User;
         private readonly ILogger<AuthenticationController> _logger;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
