@@ -74,6 +74,8 @@ function renderCurrentPage() {
 		viewer.height = viewport.height;
 		viewer.width = viewport.width;
 
+		console.log(viewer.height, viewer.width)
+
 		var renderContext = {
 			canvasContext: context,
 			viewport: viewport

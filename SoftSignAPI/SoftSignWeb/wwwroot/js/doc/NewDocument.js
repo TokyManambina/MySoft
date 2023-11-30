@@ -101,7 +101,6 @@ $("#YouSign").on("click", (e) => {
 });
 
 function dicoToList1(obj) {
-
 	var list = Object.values(obj);
 	for (var i = 0; i < list.length; i++) {
 		list[i].fields = Object.values(list[i].fields);
@@ -118,7 +117,7 @@ function SendDocument(id) {
 
 	$.ajax({
 		type: "POST",
-		url: "https://localhost:7250/api/Document/" + id,
+		url: apiUrl + "/api/Document/" + id,
 		data: JSON.stringify(list),
 		contentType: "application/json",
 		datatype: 'json',
