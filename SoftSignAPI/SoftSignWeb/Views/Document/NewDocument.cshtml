@@ -32,7 +32,7 @@
 					<h3>Nouveau Document</h3>
 				</div>
 				<hr />
-				<div class="btn btn-primary btn-block mb-3 p-3" data-action="openPDF">
+				<div class="btn btn-info btn-block mb-3 p-3" data-action="openPDF">
 					<i class="fa fa-upload"></i> Importer un document
 				</div>
 				<hr />
@@ -52,30 +52,9 @@
 						</div>
 						<div class="card-body p-0">
 							<ul class="nav nav-pills flex-column" id="actionmenu">
-								<li class="nav-item form-inline justify-content-between">
-									<label for="usign" class="col-6"><input type="radio" class="col-2" id="usign" name="radioSign" checked /> Invité à signer</label>
-									<label for="isign" class="col-6"><input type="radio" class="col-2" id="isign" name="radioSign" /> Signer moi même</label>
-								</li>
-							</ul>
-						</div>
-					</div>
-
-					<!-- Card Action -->
-					<div class="card" card-id="action">
-						<div class="card-header bg-teal">
-							<h3 class="card-title text-bold">Action</h3>
-
-							<div class="card-tools">
-								<button type="button" class="btn btn-tool" data-card-widget="collapse">
-									<i class="fas fa-minus text-white"></i>
-								</button>
-							</div>
-						</div>
-						<div class="card-body p-0">
-							<ul class="nav nav-pills flex-column" id="actionmenu">
 								<li class="nav-item form-inline justify-content-between btn-group btn-group-toggle" data-toggle="buttons">
-									<label usign class="btn btn-secondary active col-6"><input type="radio" class="col-2" id="usign1" name="radioSign1" autocomplete="off" checked /> Invité à signer</label>
-									<label isign class="btn btn-secondary col-6"><input type="radio" class="col-2" id="isign1" name="radioSign1" autocomplete="off" /> Signer moi même</label>
+									<label usign class="btn btn-outline-info active col-6"><input type="radio" class="col-2" id="usign" name="radioSign" autocomplete="off" checked /> Invité à signer</label>
+									<label isign class="btn btn-outline-info col-6"><input type="radio" class="col-2" id="isign" name="radioSign" autocomplete="off" /> Signer moi même</label>
 								</li>
 							</ul>
 						</div>
@@ -272,10 +251,10 @@
 				</div>
 				<hr />
 				<div id="sendorsign">
-					<div class="btn btn-primary btn-block p-3 disabled" data-action="sendDocument" id="YouSign" title="verifier les champs dans déstinataire et/ou les differents mails">
+					<div class="btn btn-info btn-block p-3 disabled" data-action="sendDocument" id="YouSign" title="verifier les champs dans déstinataire et/ou les differents mails">
 						<i class="fa fa-paper-plane"></i> Envoyer
 					</div>
-					<div class="btn btn-primary btn-block p-3 hide" data-bs-toggle="modal" data-bs-target="#signature_tab" id="ISign" onclick="resizeCanvas()">
+					<div class="btn btn-info btn-block p-3 hide" data-bs-toggle="modal" data-bs-target="#signature_tab" id="ISign" onclick="resizeCanvas()">
 						<i class="fas fa-signature"></i> Signer
 					</div>
 				</div>

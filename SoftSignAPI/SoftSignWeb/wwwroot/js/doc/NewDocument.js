@@ -25,6 +25,9 @@ $('input[name="radioSign"]').on('change', (e) => {
 	}
 
 	if (e.target.id == "isign") {
+		$("[usign]").removeClass('active');
+		$("[isign]").addClass('active');
+
 		$("#ISign").show();
 		$("#YouSign").hide();
 		$(`[card-id="field"]`).show();
@@ -40,6 +43,9 @@ $('input[name="radioSign"]').on('change', (e) => {
 			fields: []
 		};
 	} else {
+		$("[isign]").removeClass('active');
+		$("[usign]").addClass('active');
+
 		$("#ISign").hide();
 		$("#YouSign").show();
 		$(`[card-id="field"]`).hide();
