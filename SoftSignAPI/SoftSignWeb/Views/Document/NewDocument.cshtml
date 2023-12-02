@@ -38,6 +38,7 @@
 				<hr />
 				<div class="BoxSettingInfo">
 					<!-- Card -->
+
 					<!-- Card Action -->
 					<div class="card" card-id="action">
 						<div class="card-header bg-teal">
@@ -55,6 +56,52 @@
 									<label for="usign" class="col-6"><input type="radio" class="col-2" id="usign" name="radioSign" checked /> Invité à signer</label>
 									<label for="isign" class="col-6"><input type="radio" class="col-2" id="isign" name="radioSign" /> Signer moi même</label>
 								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- Card Action -->
+					<div class="card" card-id="action">
+						<div class="card-header bg-teal">
+							<h3 class="card-title text-bold">Action</h3>
+
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus text-white"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body p-0">
+							<ul class="nav nav-pills flex-column" id="actionmenu">
+								<li class="nav-item form-inline justify-content-between btn-group btn-group-toggle" data-toggle="buttons">
+									<label usign class="btn btn-secondary active col-6"><input type="radio" class="col-2" id="usign1" name="radioSign1" autocomplete="off" checked /> Invité à signer</label>
+									<label isign class="btn btn-secondary col-6"><input type="radio" class="col-2" id="isign1" name="radioSign1" autocomplete="off" /> Signer moi même</label>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					
+					<!-- Card Attachement -->
+					<div class="card" card-id="attachement">
+						<div class="card-header bg-teal">
+							<h3 class="card-title text-bold"><i class="fa fa-paperclip"></i> Pièce jointe</h3>
+
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus text-white"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body p-0">
+							<ul class="nav nav-pills flex-column" id="documentmenu">
+								<li class="nav-item active" id="attachement">
+									<div class="nav-link">
+										<i class="fa fa-plus"></i> Ajouter une pièce jointe
+									</div>
+								</li>
+
+								<li id="attachementListTab"></li>
 							</ul>
 						</div>
 					</div>
@@ -105,9 +152,9 @@
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
 											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" data-id="firstPage" placeholder="0" min="0" max="0" />
+											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
 											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" data-id="lastPage" placeholder="0" min="0" max="0" />
+											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
 											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listSignature"></i>
 										</div>
 									</div>
@@ -123,9 +170,9 @@
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
 											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" data-id="firstPage" placeholder="0" min="0" max="0" />
+											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
 											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" data-id="lastPage" placeholder="0" min="0" max="0" />
+											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
 											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listParaphe"></i>
 										</div>
 									</div>
@@ -141,9 +188,9 @@
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
 											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" data-id="firstPage" placeholder="0" min="0" max="0" />
+											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
 											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" data-id="lastPage" placeholder="0" min="0" max="0" />
+											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
 											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listStamp"></i>
 										</div>
 									</div>
@@ -159,9 +206,9 @@
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
 											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" data-id="firstPage" placeholder="0" min="0" max="0" />
+											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
 											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" data-id="lastPage" placeholder="0" min="0" max="0" />
+											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
 											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listDateSign"></i>
 										</div>
 									</div>
@@ -177,9 +224,9 @@
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
 											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" data-id="firstPage" placeholder="0" min="0" max="0" />
+											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
 											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" data-id="lastPage" placeholder="0" min="0" max="0" />
+											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
 											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listText"></i>
 										</div>
 									</div>
@@ -319,7 +366,7 @@
 <script src="~/js/pdf/jquery-ui.js"></script>
 
 @* <script src="~/js/doc/newDocument/script.js" asp-append-version="true"></script> *@
-
+<script src="~/js/doc/newdocumentmanager.js" asp-append-version="true"></script>
 <script src="~/js/doc/newDocument.js" asp-append-version="true" type="module"></script>
 @* <script src="~/js/doc/NewDocument.js" asp-append-version="true"></script> *@
 

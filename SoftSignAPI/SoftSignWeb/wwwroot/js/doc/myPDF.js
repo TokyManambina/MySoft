@@ -1,5 +1,4 @@
 ﻿//#region PDF
-
 let currentPDF = {}
 let test = false;
 var lastFile;
@@ -65,6 +64,34 @@ function loadPDF(data) {
 	});
 }
 
+function getPageSize(p) {
+	return new Promise((resolve, reject) => {
+		try {
+			currentPDF.file.getPage(p).then((page) => {
+				var viewport = page.getViewport({ scale: currentPDF.zoom })
+
+				resolve({
+					width: viewport.width,
+					height: viewport.height
+				});
+			}, (e) => {
+				reject("Page out of range");
+			});
+		} catch (error) {
+			console.error(error);
+			reject("An error occurred");
+		}
+	});
+}
+//appel de la fonction
+//getPageSize(9)
+//	.then((pageSize) => {
+//		console.log("Page size:", pageSize);
+//	})
+//	.catch((error) => {
+//		console.error("Error:", error);
+//	});
+
 function renderCurrentPage() {
 	currentPDF.file.getPage(currentPDF.currentPage).then((page) => {
 		let viewer = $("#pdfViewer")[0];
@@ -73,8 +100,6 @@ function renderCurrentPage() {
 
 		viewer.height = viewport.height;
 		viewer.width = viewport.width;
-
-		console.log(viewer.height, viewer.width)
 
 		var renderContext = {
 			canvasContext: context,
@@ -90,20 +115,25 @@ function changePage() {
 	if (!test || lastFile != currentPDF.file) {
 		lastFile = currentPDF.file;
 		$("#signpage").val("1");
-		$("#firstPage").val("1");
-		$("#LastPage").val(currentPDF.countOfPages);
-		$("#LastPage").attr("max", currentPDF.countOfPages);
-		$("#firstPage").attr("max", currentPDF.countOfPages);
 		$("#signpage").attr("max", currentPDF.countOfPages);
-		$("#LastPage").attr("min", 1);
-		$("#firstPage").attr("min", 1);
 		$("#signpage").attr("min", 1);
+
+		$("[firstPage]").val("1");
+		$("[firstPage]").attr("max", currentPDF.countOfPages);
+		$("[firstPage]").attr("min", 1);
+
+		//$("[LastPage]").val(currentPDF.countOfPages);
+		$("[LastPage]").val(1);
+		$("[LastPage]").attr("max", currentPDF.countOfPages);
+		$("[LastPage]").attr("min", 1);
 		test = !test;
 	}
 }
+
+
 //#endregion
 
-$("#firstPage, #LastPage, #signpage").on('change', (e) => {
+$("[firstPage], [LastPage], #signpage").on('change', (e) => {
 	var max = parseInt($( e.target).attr("max"));
 	var val = parseInt($(e.target).val());
 	var min = parseInt($(e.target).attr("min"));

@@ -11,7 +11,6 @@ $(document).ready(() => {
 		},
 		xhrFields: { withCredentials: true },
 		success: function (result) {
-			console.log(result)
 
 			let count = 0;
 			$.each(result, (k, v) => {

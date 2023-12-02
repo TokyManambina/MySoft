@@ -19,5 +19,5 @@ namespace SoftSignWeb.Controllers
         {
             return View();
         }
-    }
+	}
 }

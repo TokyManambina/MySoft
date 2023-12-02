@@ -159,11 +159,14 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-        public async Task<List<User>?> GetAll(string? search = null, int? count = null, int? page = null)
+        public async Task<List<User>?> GetAll(Guid? subscriptionId = null, string? search = null, int? count = null, int? page = null)
         {
             try
             {
                 var query = _db.Users.AsQueryable();
+
+                if(subscriptionId != null)
+                    query = query.Where(x=>x.SubscriptionId ==  subscriptionId);
 
                 if (!string.IsNullOrEmpty(search))
                     query = query.Where(x => x.FirstName.ToLower().Contains(search.ToLower()) || x.LastName.ToLower().Contains(search.ToLower()) || x.Email.ToLower().Contains(search.ToLower()));

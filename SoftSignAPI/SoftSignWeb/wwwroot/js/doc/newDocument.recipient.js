@@ -1,21 +1,5 @@
 ﻿import { apiUrl, webUrl } from "../apiConfig.js";
 
-let ListUserDocument = [];
-let selectedRecipient = "";
-
-export function SetSelectedRecipient(value) {
-    selectedRecipient = value;
-}
-export function GetSelectedRecipient() {
-    return selectedRecipient;
-}
-
-export function SetListUserDocument(value) {
-    ListUserDocument = value;
-}
-export function GetListUserDocument() {
-    return ListUserDocument;
-}
 
 $(document).ready(function () {
     //$('[data-toggle="tooltip"]').tooltip();

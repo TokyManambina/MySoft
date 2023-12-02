@@ -20,8 +20,8 @@ $(`[data-action="addField"]`).on("click", (e) => {
 
     let header = $(e.target).closest("[data-type]");
     console.log(header);
-    let firstPage = parseInt(header.find(`[data-id="firstPage"]`).val());
-    let lastPage = parseInt(header.find(`[data-id="lastPage"]`).val());
+    let firstPage = parseInt(header.find(`[firstPage]`).val());
+    let lastPage = parseInt(header.find(`[lastPage]`).val());
 
     if (Number.isNaN(firstPage))
         return alert("Vérifier le numero de page");
@@ -56,8 +56,6 @@ $(`[data-action="addField"]`).on("click", (e) => {
         type: parseInt($(header).attr("data-id")),
         page: page
     };
-    let ListUserDocument = Recipient.GetListUserDocument();
-    let selectedRecipient = Recipient.GetSelectedRecipient();
 
     ListUserDocument[selectedRecipient].fields[id] = newfield;
 
@@ -66,8 +64,6 @@ $(`[data-action="addField"]`).on("click", (e) => {
 
 function activeField(id, recipient) {
     $(`[field-id="${id}"]`).hover((e, x) => {
-        let ListUserDocument = Recipient.GetListUserDocument();
-        let selectedRecipient = Recipient.GetSelectedRecipient();
 
         if ($(`[recipient-id="${recipient}"]`).css("background-color") !== ListUserDocument[recipient].color)
             $(`[recipient-id="${recipient}"]`).css("background-color", ListUserDocument[recipient].color);
@@ -87,9 +83,6 @@ function activeField(id, recipient) {
     });
 
     $(`[field-id="${id}"]`).mousemove((e) => {
-        let ListUserDocument = Recipient.GetListUserDocument();
-        let selectedRecipient = Recipient.GetSelectedRecipient();
-
         let divPos = {
             left: e.pageX - $(e.target).offset().left,
             top: e.pageY - $(e.target).offset().top,
@@ -108,6 +101,19 @@ function activeField(id, recipient) {
         ListUserDocument[recipient].fields[id].width = parseFloat($(e.target).width());
         ListUserDocument[recipient].fields[id].height = parseFloat($(e.target).height());
 
+
+        getPageSize(1)
+            .then((pageSize) => {
+                ListUserDocument[recipient].fields[id].pdfWidth = pageSize.width;
+                ListUserDocument[recipient].fields[id].pdfHeight = pageSize.height;
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+
+       
+
+        console.log(ListUserDocument)
         $(`[field-id="${id}"]`).draggable(dragOption);
     });
     $(`[field-id="${id}"]`).hover();
@@ -117,20 +123,16 @@ function activeField(id, recipient) {
     $(`[field-id="${id}"]`).css({ "top": (canvasOffset.top + 125) + "px", "left": (canvasOffset.left + 25) + "px" });
 }
 function listField(type, page, id) {
-    let ListUserDocument = Recipient.GetListUserDocument();
-    let selectedRecipient = Recipient.GetSelectedRecipient();
     return `
         <li class="nav-item" page-id="${id}" by="${selectedRecipient}" data-type="${type}" data-value="${page}">
             <div class="nav-link float-right">
                 <span id="${id}">Page : ${page}</span>
-                <i class="fa fa-times text-danger" onclick="return removeField('${id}')"></i>
+                <i class="fa fa-times text-danger" removeField></i>
             </div>
         </li>
     `;
 }
 function field(type, page, id, title) {
-    let ListUserDocument = Recipient.GetListUserDocument();
-    let selectedRecipient = Recipient.GetSelectedRecipient();
     return `
         <div class="boxSign" data-type="${type}" by="${selectedRecipient}" field-id="${id}" data-page="${page}" style="border: 5px dashed ${ListUserDocument[selectedRecipient].color}">
 	        <div class="ribbon-wrapper">
@@ -142,17 +144,21 @@ function field(type, page, id, title) {
     `;
 }
 
+$(document).on('click', '[removeField]', (e) => {
+    console.log(e);
+    let id = $(e.target).closest("[page-id]").attr('page-id');
+    console.log($(e.target).closest("[page-id]"))
+    removeField(id);
+});
+
 function removeField(id) {
     let field = $(`[field-id="${id}"]`);
     let recipient = field.attr("by");
     let pageLine = $(`[page-id="${id}"]`);
 
+    delete ListUserDocument[recipient].fields[id];
+
     field.remove();
     pageLine.remove();
-
-    let ListUserDocument = Recipient.GetListUserDocument();
-    let selectedRecipient = Recipient.GetSelectedRecipient();
-
-    delete ListUserDocument[recipient].fields[id];
 
 }

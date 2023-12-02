@@ -47,8 +47,8 @@ namespace SoftSignAPI.Controllers
         }
 
 
-        // GET: api/<DocumentController>
-        [HttpGet]
+		// GET: api/<DocumentController>
+		[HttpGet]
         public async Task<ActionResult<List<DocumentDto>>> Get([FromQuery] int? count, [FromQuery] int? page)
         {
             try

@@ -1,7 +1,11 @@
 ﻿import { apiUrl, webUrl } from "../apiConfig.js";
+import * as Action from './NewDocument.action.js?v=0.1.0';
+import * as Attachement from './NewDocument.attachement.js?v=0.1.0';
 import * as Field from './NewDocument.field.js?v=0.1.0';
 import * as Recipient from './NewDocument.recipient.js?v=0.1.0';
 
+
+$(`[card-id="attachement"]`).remove();
 $(document).ready(() => {
 	$("#ISign").hide();
 	$(`[card-id="field"]`).hide();
@@ -45,14 +49,13 @@ $('input[name="radioSign"]').on('change', (e) => {
 });
 
 $("#YouSign").on("click", (e) => {
-	let ListUserDocument = Recipient.GetListUserDocument()
 	console.log(ListUserDocument)
 	console.log(Object.keys(ListUserDocument).length)
 	if (Object.keys(ListUserDocument).length === 0) {
 		alert("Veuillez ajouter un déstinataire au minimum.")
 		return;
 	}
-
+	return;
 
 	var files = $("#inputFile").get(0).files;
 

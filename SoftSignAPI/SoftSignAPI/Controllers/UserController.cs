@@ -37,11 +37,11 @@ namespace SoftSignAPI.Controllers
 
         // GET: api/<userController>/text
         [HttpGet("find")]
-        public async Task<ActionResult<List<UserDto>>> Get([FromQuery] string search, [FromQuery] int? count, [FromQuery] int? page)
+        public async Task<ActionResult<List<UserDto>>> Get([FromQuery] Guid subscriptionId,[FromQuery] string search, [FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<UserDto>?>(await _userRepository.GetAll(search, count: count, page: page)));
+                return Ok(_mapper.Map<List<UserDto>?>(await _userRepository.GetAll(search: search, count: count, page: page)));
             }
             catch (Exception ex)
             {
