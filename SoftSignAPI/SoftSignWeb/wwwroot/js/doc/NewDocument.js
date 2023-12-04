@@ -6,6 +6,7 @@ import * as Recipient from './NewDocument.recipient.js?v=0.1.0';
 
 
 $(`[card-id="attachement"]`).remove();
+
 $(document).ready(() => {
 	$("#ISign").hide();
 	$(`[card-id="field"]`).hide();

@@ -13,16 +13,6 @@ function resetCurrentPDF() {
 	}
 }
 
-$(`.toggleBoxSetting`).on('click', (e) => {
-	let width = $("#BoxSettingMenu").css("width");
-	if ($('#BoxSettingMenu').offset().left < 0)
-		$("#BoxSettingMenu").css("left", `5px`);
-	else
-		$("#BoxSettingMenu").css("left", `-${width}`);
-
-})
-
-
 $('#inputFile').on('change', (e) => {
 	const inputFile = e.target.files[0];
 
@@ -44,14 +34,7 @@ $('#inputFile').on('change', (e) => {
 	}
 })
 
-$(`#pdftext`).on('click', (e) => {
-	if ($(`#inputFile`).val() == "")
-		$('#inputFile').click();
-})
 
-$(`[data-action="openPDF"]`).on('click', (e) => {
-	$('#inputFile').click();
-})
 
 function loadPDF(data) {
 	const pdfFile = pdfjsLib.getDocument(data);
@@ -59,7 +42,7 @@ function loadPDF(data) {
 	pdfFile.promise.then((doc) => {
 		currentPDF.file = doc;
 		currentPDF.countOfPages = doc.numPages;
-		$("#pdftext").addClass("hidden");
+		$("#pdfImg").addClass("hidden");
 		renderCurrentPage();
 	});
 }
@@ -146,18 +129,20 @@ $("[firstPage], [LastPage], #signpage").on('change', (e) => {
 //#region next/previous Page
 $('#next').on('click', (e) => {
 	const isValidPage = currentPDF.currentPage < currentPDF.countOfPages;
-	if (isValidPage) {
-		currentPDF.currentPage += 1;
-		renderCurrentPage();
-	}
+	if (!isValidPage) return;
+			
+	currentPDF.currentPage += 1;
+	renderCurrentPage();
+	$(document).trigger("refreshField");
 });
 
 $('#previous').on('click', (e) => {
 	const isValidPage = currentPDF.currentPage - 1 > 0;
-	if (isValidPage) {
-		currentPDF.currentPage -= 1;
-		renderCurrentPage();
-	}
+	if (!isValidPage) return;
+
+	currentPDF.currentPage -= 1;
+	renderCurrentPage();
+	$(document).trigger("refreshField");
 });
 
 //#endregion

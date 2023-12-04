@@ -14,6 +14,17 @@ function existDocument() {
     return $("#inputFile").val() != "";
 }
 
+$("[showAll]").on('click', (e) => {
+    let icon = $(e.target).find("i");
+
+    icon.removeClass("fa-square");
+    icon.removeClass("fa-square-check");
+
+    if (icon.hasClass("fa-square")) icon.addClass("fa-square-check");
+    else icon.addClass("fa-square");
+        
+})
+
 $(`[data-action="addField"]`).on("click", (e) => {
     if (!existDocument())
         return alert("Veuillez uploader d'abord un document");
@@ -119,12 +130,13 @@ function activeField(id, recipient) {
     $(`[field-id="${id}"]`).hover();
     $(`[field-id="${id}"]`).mousemove();
 
-    var canvasOffset = $('#pdfViewer').offset();
-    $(`[field-id="${id}"]`).css({ "top": (canvasOffset.top + 125) + "px", "left": (canvasOffset.left + 25) + "px" });
+    $(`[field-id="${id}"]`).css({ "top": (posY + 25) + "px", "left": (posX + 25) + "px" });
 }
 function listField(type, page, id) {
+    let fpage = page.split("-")[0].trim();
+    let lpage = page.split("-")[1].trim();
     return `
-        <li class="nav-item" page-id="${id}" by="${selectedRecipient}" data-type="${type}" data-value="${page}">
+        <li class="nav-item" page-id="${id}" by="${selectedRecipient}" data-type="${type}" data-value="${page}" field-firstPage="${fpage}" field-lastPage="${lpage}">
             <div class="nav-link float-right">
                 <span id="${id}">Page : ${page}</span>
                 <i class="fa fa-times text-danger" removeField></i>
@@ -133,8 +145,10 @@ function listField(type, page, id) {
     `;
 }
 function field(type, page, id, title) {
+    let fpage = page.split("-")[0].trim();
+    let lpage = page.split("-")[1].trim();
     return `
-        <div class="boxSign" data-type="${type}" by="${selectedRecipient}" field-id="${id}" data-page="${page}" style="border: 5px dashed ${ListUserDocument[selectedRecipient].color}">
+        <div class="boxSign" data-type="${type}" by="${selectedRecipient}" field-id="${id}" data-page="${page}" field-firstPage="${fpage}" field-lastPage="${lpage}" style="border: 5px dashed ${ListUserDocument[selectedRecipient].color}">
 	        <div class="ribbon-wrapper">
 		        <div class="ribbon text-white" style="background-color:${ListUserDocument[selectedRecipient].color}">
 			        ${title}
@@ -162,3 +176,20 @@ function removeField(id) {
     pageLine.remove();
 
 }
+
+$(document).on('refreshField', (e) => {
+    console.log(e)
+    let page = currentPDF.currentPage;
+    let fpage;
+    let lpage;
+
+    $('[by]').show();
+
+    $(`[by]`).each((k, v) => {
+        fpage = Number.parseInt($(v).attr('field-firstPage'));
+        lpage = Number.parseInt($(v).attr('field-lastPage'));
+        
+        if (fpage > page || lpage < page)
+            $(v).hide();
+    });
+});

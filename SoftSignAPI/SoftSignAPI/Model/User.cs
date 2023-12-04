@@ -24,7 +24,7 @@ namespace SoftSignAPI.Model
 		[ForeignKey(nameof(SubscriptionId))]
 		public virtual Subscription? Subscription { get; set; }
 
-        public virtual List<UserDocument> UserDocuments { get; set; }
+        public virtual List<UserDocument>? UserDocuments { get; set; }
 
 
         public string? RefreshToken { get; set; } = string.Empty;

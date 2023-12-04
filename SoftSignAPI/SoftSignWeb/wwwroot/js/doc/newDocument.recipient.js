@@ -95,7 +95,9 @@ function RecipientAdd(mail, color) {
                     <div class="recipientRoundBox hidden" style="background-color: ${color}"></div>
                     <span style="padding-left: 10px">${mail}</span>
                 </div>
-                <i class="fa fa-times text-danger float-right" onclick="return removeRecipient('${mail}')"></i>
+                <div class="btn" removeRecipient>
+                    <i class="fa fa-times text-danger float-right"></i>
+                </div>
             </div>
         </li>
     `;
@@ -105,10 +107,19 @@ $(document).on('click', `[data-action="checkRadio"]`, (e) => {
     let header = $(e.target).closest("[recipient-id]");
     let input = header.find("input");
     $(input).click();
+
+    if (lastSelectedRecipient == "")
+        return;
+
+    //$(`[by="${lastSelectedRecipient}"]`).hide();
+    //$(`[by="${selectedRecipient}"]`).show();
+
 });
 
 $(document).on('change', `[name=recipient-radio]`, (e) => {
     let header = $(e.target).closest("[recipient-id]");
+    if (lastSelectedRecipient != selectedRecipient)
+        lastSelectedRecipient = selectedRecipient;
     selectedRecipient = header.attr("recipient-id");
 
     $(".recipientRoundBox").each(function (i, obj) {
@@ -122,16 +133,21 @@ $(document).on('change', `[name=recipient-radio]`, (e) => {
     $(`[card-id="field"]`).show();
 });
 
-function removeRecipient(id) {
+
+$(document).on('click', '[removeRecipient]', (e) => {
+    let recipient = $(e.target).closest('[recipient-id]');
+    let id = recipient.attr('recipient-id');
+
     if (!ListUserDocument.hasOwnProperty(id))
         return;
 
     delete ListUserDocument[id];
-    $(`[recipient-id="${id}"]`).remove();
 
-    if (ListUserDocument.length == 0)
+    recipient.remove();
+
+    if (Object.keys(ListUserDocument).length === 0)
         $(`[card-id="field"]`).hide();
 
     $(`[by="${id}"]`).remove();
-}
+});
 

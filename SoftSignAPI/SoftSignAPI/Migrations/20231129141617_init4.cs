@@ -16,7 +16,7 @@ namespace SoftSignAPI.Migrations
                 table: "Subscriptions",
                 type: "datetime2",
                 nullable: true);
-        }
+		}
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
