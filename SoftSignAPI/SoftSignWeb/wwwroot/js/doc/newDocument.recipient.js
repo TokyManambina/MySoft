@@ -1,16 +1,6 @@
 ﻿import { apiUrl, webUrl } from "../apiConfig.js";
 
 
-$(document).ready(function () {
-    //$('[data-toggle="tooltip"]').tooltip();
-    $('#message').summernote({
-        lang: 'fr-FR',
-        height: 200,
-        toolbar: [
-        ]
-    });
-
-});
 
 $("#ccContainer").hide();
 $("#ccCheck").on("change", (k, v) => {

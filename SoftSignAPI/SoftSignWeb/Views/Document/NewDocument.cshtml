@@ -265,7 +265,7 @@
 				</div>
 				<hr />
 				<div id="sendorsign">
-					<div class="btn btn-info btn-block p-3 disabled" data-action="sendDocument" id="YouSign" title="verifier les champs dans déstinataire et/ou les differents mails">
+					<div class="btn btn-info btn-block p-3 disabled" data-bs-toggle="modal" data-bs-target="#mailing" id="YouSign" title="verifier les champs dans déstinataire et/ou les differents mails">
 						<i class="fa fa-paper-plane"></i> Envoyer
 					</div>
 					<div class="btn btn-info btn-block p-3 hide" data-bs-toggle="modal" data-bs-target="#signature_tab" id="ISign" onclick="resizeCanvas()">
@@ -351,6 +351,39 @@
 				<button type="button" class="btn btn-danger" data-action="resetRecipient">Réinitialiser</button>
 				@*<button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveMail">Enregistrer</button>*@
 				<button type="button" class="btn btn-primary" data-action="saveRecipient">Ajouter</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Fin Modal Recipient -->
+
+<!-- Modal Mail -->
+<div class="modal fade" id="mailing">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header bg-gray-dark">
+				<h4 class="modal-title"><i class="fa fa-user-alt"></i> Mail</h4>
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<label class="input-group-text" for="objectId">Objet</Label>
+						</div>
+						<input type="text" class="form-control" id="objectId" placeholder="Objet" aria-label="Username" aria-describedby="basic-addon1">
+					</div>
+
+					<div class="">
+						<textarea id="mailMessage"></textarea>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer justify-content-between">
+				<button type="button" class="btn btn-danger" data-action="resetMail">Réinitialiser</button>
+				<button type="button" class="btn btn-primary" data-action="sendDocument">Envoyé</button>
 			</div>
 		</div>
 	</div>

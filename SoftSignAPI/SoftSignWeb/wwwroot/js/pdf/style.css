@@ -44,7 +44,7 @@ canvas{
 	top: 100px;
 	z-index: 10;
 	background: white;
-	transition: 2.0s cubic-bezier(.36,-0.01,0,.77);
+	transition: 1.0s cubic-bezier(.36,-0.01,0,.77);
 }
 
 @media screen and (max-width: 576px) {

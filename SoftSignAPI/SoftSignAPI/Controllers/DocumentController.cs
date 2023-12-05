@@ -134,6 +134,26 @@ namespace SoftSignAPI.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+		// GET api/<DocumentController>/5
+		[HttpGet("d/{code}")]
+		public async Task<ActionResult> GetPdf(string code)
+		{
+			try
+			{
+                var document = await _documentRepository.Get(code);
+
+                string url = document.Url;
+
+                //FileStream fileStream = new FileStream()
+
+
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
 
 		[HttpPost]
         [Authorize]

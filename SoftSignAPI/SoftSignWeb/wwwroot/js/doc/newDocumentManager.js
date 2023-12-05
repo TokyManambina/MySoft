@@ -36,3 +36,34 @@ $(`#pdfImg`).on('click', (e) => {
 $(`[data-action="openPDF"]`).on('click', (e) => {
 	$('#inputFile').click();
 })
+
+
+$(document).ready(function () {
+    //$('[data-toggle="tooltip"]').tooltip();
+    $('#message').summernote({
+        lang: 'fr-FR',
+        height: 200,
+        toolbar: [
+        ]
+    });
+    $('#mailMessage').summernote({
+        lang: 'fr-FR',
+        height: 300,
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            //['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol']],//, 'paragraph']],
+            //['height', ['height']]
+        ]
+    });
+});
+
+function resetMail() {
+    $("#objectId").val("");
+    $("#mailMessage").summernote('code', "");
+}
+$(`[data-action="resetMail"]`).on("click", (e) => {
+    resetMail();
+});

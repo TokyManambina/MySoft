@@ -55,7 +55,7 @@ $('input[name="radioSign"]').on('change', (e) => {
 	}
 });
 
-$("#YouSign").on("click", (e) => {
+$(`data-action="sendDocument"`).on("click", (e) => {
 	console.log(ListUserDocument)
 	console.log(Object.keys(ListUserDocument).length)
 	if (Object.keys(ListUserDocument).length === 0) {

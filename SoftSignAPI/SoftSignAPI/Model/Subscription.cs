@@ -11,8 +11,15 @@ namespace SoftSignAPI.Model
 
         public DateTime BeginDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Nullable<DateTime> DateUpdate { get; set; }
+        public Nullable<DateTime> UpdatedDate { get; set; }
         public string? Location { get; set; }
+        public int Capacity { get; set; }
+        public int MaxUser { get; set; }
+        public bool HasClientSpace { get; set; }
+        public bool HasFlowManager { get; set; }
+        public bool HasFlow { get; set; }
+        public bool HasDynamicFieldManager { get; set; }
+        
 
 
         [ForeignKey(nameof(OfferId))]

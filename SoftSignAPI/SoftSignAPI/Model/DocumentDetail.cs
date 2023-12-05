@@ -9,6 +9,7 @@ namespace SoftSignAPI.Model
 		public string Label{ get; set; }
 		public DetailType Type { get; set; }
 
+		public virtual List<DocumentDetailItem>? Items{ get; set; }
 		public virtual List<DocumentDetailValue>? Values { get; set; }
 	}
 
