@@ -28,6 +28,6 @@ namespace SoftSignAPI.Model
 
     public enum DocumentRole
     {
-        Sender, Recipient, Receiver, Validator, Signatory
+        Sender, Recipient, Receiver, Validator, Signatory, 
     }
 }

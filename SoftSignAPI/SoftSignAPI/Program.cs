@@ -36,6 +36,7 @@ builder.Services.AddTransient<IDocumentService, DocumentService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ITokenService, TokenService>();
 builder.Services.AddTransient<IUserDocumentService, UserDocumentService>();
+builder.Services.AddTransient<IPdfService, PdfService>();
 
 #endregion
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -15,8 +15,10 @@ namespace SoftSignAPI.Model
         public DateTime DateSend { get; set; } = DateTime.Now;
         public DocumentStat Status { get; set; } = DocumentStat.Remaining;
 
+        public virtual List<Attachement> Attachements { get; set; }
         public virtual List<UserDocument> UserDocuments { get; set; }
-        public virtual List<DocumentDetailValue> DocumentDetailValues { get; set; }
+        public virtual List<DocumentDynamicField> DocumentDetailValues { get; set; }
+        public virtual List<DocumentLink> DocumentLinks { get; set; }
     }
     public enum DocumentStat
     {

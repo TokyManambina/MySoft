@@ -73,5 +73,27 @@ namespace SoftSignAPI.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task GetDocumentFile(string code)
+        {
+            var document = await _documentRepository.Get(code);
+
+            if (document == null) return;
+
+            var url = document.Url;
+			if (!File.Exists(document.Url))
+			{
+				return ;
+			}
+
+			byte[] fileBytes = System.IO.File.ReadAllBytes(url);
+
+
+            string contentType = "application/octet-stream";
+			if (Path.GetExtension(url).Equals(".pdf", StringComparison.OrdinalIgnoreCase))
+				contentType = "application/pdf";
+            return;
+            //return File(fileBytes, contentType, Path.GetFileName(url));
+		}
     }
 }

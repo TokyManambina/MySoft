@@ -5,8 +5,10 @@ namespace SoftSignAPI.Model
 	public class Flow
 	{
 		[Key]
-		public int Id { get; set; }
+		public Guid Id { get; set; }
 		public string Name { get; set; }
+
+		public virtual List<UserFlow> Users { get; set; }
 
 	}
 }

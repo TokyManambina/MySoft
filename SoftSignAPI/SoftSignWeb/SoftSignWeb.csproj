@@ -7,20 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\dossier\20231126081603-facture.pdf" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="110.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\js\client\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\dossier\20231126081603-facture.pdf" />
   </ItemGroup>
 
 </Project>

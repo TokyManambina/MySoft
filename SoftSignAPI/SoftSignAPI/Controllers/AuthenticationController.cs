@@ -43,9 +43,9 @@ namespace SoftSignAPI.Controllers
                 if (await _userRepository.IsExist(request.Email))
                     return Conflict("User already exist.");
 
-                request.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+                //request.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
-                if (await _userRepository.Create(_mapper.Map<User>(request)) == null)
+                if (await _userRepository.Insert(request.Email, request.Password) == null)
                     return StatusCode(500, "Internal Server Error");
 
                 return Ok("User created successfully.");

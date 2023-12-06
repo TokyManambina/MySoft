@@ -20,7 +20,6 @@ namespace SoftSignAPI.Model
         public string? Price { get; set; } = "0";
         public bool IsActive { get; set; }
 
-        public virtual List<Subscription> Subscriptions { get; set;}
     }
 
     public enum CapacityUnit

@@ -140,14 +140,28 @@ namespace SoftSignAPI.Controllers
 		{
 			try
 			{
-                var document = await _documentRepository.Get(code);
+				string filePath = @"C:\facture.pdf";
 
-                string url = document.Url;
+				// Check if the file exists
+				if (!System.IO.File.Exists(filePath))
+				{
+					return NotFound(); // Or any other appropriate status code
+				}
 
-                //FileStream fileStream = new FileStream()
+				// Read the file contents into a byte array
+				byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
 
+				// Determine the file's content type based on its extension
+				string contentType = "application/octet-stream"; // Default content type
 
-				return Ok();
+				// You can add more content type mappings based on file extensions
+				if (Path.GetExtension(filePath).Equals(".pdf", System.StringComparison.OrdinalIgnoreCase))
+				{
+					contentType = "application/pdf";
+				}
+
+				// Return the file as a response
+				return File(fileBytes, contentType, Path.GetFileName(filePath));
 			}
 			catch (Exception ex)
 			{

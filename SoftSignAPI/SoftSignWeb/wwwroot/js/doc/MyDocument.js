@@ -2,6 +2,11 @@
 
 $(document).ready(() => {
 	$("#sign").text("");
+	history.pushState(null, null, document.URL);
+	$(window).on('popstate', function () {
+		history.pushState(null, null, document.URL);
+		console.log("Back navigation blocked");
+	});
 	MyDocument();
 })
 
@@ -95,17 +100,25 @@ $(document).on('click', '[ViewDocument]', (e) => {
 			//signaturePad.clear();
 			//loading(false);
 
+
+
 			$.ajax({
 				type: "GET",
-				url: apiUrl + "api/Document/" + id,
+				url: apiUrl + "api/Document/d/" + id,
 				contentType: "application/json",
 				datatype: 'json',
 				headers: {
 					'Authorization': sessionStorage.getItem("Authentication")
 				},
-				xhrFields: { withCredentials: true },
+				xhrFields: {
+					withCredentials: true,
+					responseType: 'blob'
+				},
 				success: function (result) {
+					var blobUrl = URL.createObjectURL(result);
 
+					// Set the Blob URL as the source for the <embed> element
+					$("[pdf_Viewer]").attr("src", blobUrl);
 				},
 				Error: function (x, e) {
 					alert("Some error");
@@ -140,7 +153,7 @@ function documentUI(document) {
 					<div class="mailbox-controls with-border text-center">${convertToPlain(document.message)}</div>
 
 					<div class="mailbox-read-message text-center flex-column">
-						<embed type="application/pdf" src="/dossier/20231126081603-facture.pdf" width="80%" height="800">
+						<embed pdf_Viewer type="application/pdf" src="" width="80%" height="800">
 					</div>
 				</div>
 			</div>

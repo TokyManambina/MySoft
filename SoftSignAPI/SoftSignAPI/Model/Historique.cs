@@ -5,7 +5,7 @@ namespace SoftSignAPI.Model
 	public class Historique
 	{
 		[Key]
-		public int Id { get; set; }
+		public Guid Id { get; set; }
 		public DateTime Date { get; set; }
 		public ActionList Action { get; set; }
 		public string? Table { get; set; }

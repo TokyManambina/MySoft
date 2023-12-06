@@ -19,13 +19,12 @@ namespace SoftSignAPI.Model
         public bool HasFlowManager { get; set; }
         public bool HasFlow { get; set; }
         public bool HasDynamicFieldManager { get; set; }
+        public bool HasLibrary { get; set; }
+        public bool HasPhysicalLibrary { get; set; }
         
 
-
-        [ForeignKey(nameof(OfferId))]
-        public int? OfferId { get; set; }
-        public virtual Offer? Offer { get; set; }
-
 		public virtual List<User> Users { get; set; }
+        public virtual List<Flow> Flows { get; set; }
+        public virtual List<DynamicField> DynamicFields { get; set; }
 	}
 }
