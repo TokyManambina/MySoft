@@ -27,7 +27,7 @@ function RemoveAllField() {
 function fullHide() {
     RemoveAllField();
     $(".BoxSettingInfo").hide();
-    $(`[card-id="detail"]`).hide();
+    $(`[card-id="dynamic-required-field"]`).hide();
     $(`[card-id="recipient"]`).hide();
     $(`[card-id="field"]`).hide();
     $(`[card-id="type"]`).hide();

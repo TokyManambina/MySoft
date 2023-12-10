@@ -91,7 +91,7 @@
 					<!-- Card detail -->
 					<div class="card" card-id="detail">
 						<div class="card-header bg-teal">
-							<h3 class="card-title text-bold"><i class="fa fa-circle-info"></i> Détail</h3>
+							<h3 class="card-title text-bold"><i class="fa fa-circle-exclamation"></i> Champs obligatoires</h3>
 
 							<div class="card-tools">
 								<button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -99,12 +99,12 @@
 								</button>
 							</div>
 						</div>
-						<div class="card-body p-2">
-							<div class="input-group mb-3">
+						<div class="card-body p-2" listRequiredField>
+							<div class="input-group mb-2">
 								<div class="input-group-prepend">
 									<span class="input-group-text" id="basic-addon1">Titre du document</span>
 								</div>
-								<input type="text" class="form-control" id="detail">
+								<input type="text" class="form-control" detail-id="title">
 							</div>
 						</div>
 					</div>
@@ -154,11 +154,11 @@
 										</div>
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
-											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
-											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
-											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listSignature"></i>
+											<i class="small text-gray col-md-2">De : </i>
+											<input type="number" class="form-control col-md-3" firstPage placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-md-2"> à </i>
+											<input type="number" class="form-control col-md-3" lastPage placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-md-2 text-success" data-action="addField" data-target="listSignature"></i>
 										</div>
 									</div>
 								</li>
@@ -172,11 +172,11 @@
 										</div>
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
-											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
-											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
-											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listParaphe"></i>
+											<i class="small text-gray col-md-2">De : </i>
+											<input type="number" class="form-control col-md-3" firstPage placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-md-2"> à </i>
+											<input type="number" class="form-control col-md-3" lastPage placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-md-2 text-success" data-action="addField" data-target="listParaphe"></i>
 										</div>
 									</div>
 								</li>
@@ -190,11 +190,11 @@
 										</div>
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
-											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
-											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
-											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listStamp"></i>
+											<i class="small text-gray col-md-2">De : </i>
+											<input type="number" class="form-control col-md-3" firstPage placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-md-2"> à </i>
+											<input type="number" class="form-control col-md-3" lastPage placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-md-2 text-success" data-action="addField" data-target="listStamp"></i>
 										</div>
 									</div>
 								</li>
@@ -208,11 +208,11 @@
 										</div>
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
-											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
-											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
-											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listDateSign"></i>
+											<i class="small text-gray col-md-2">De : </i>
+											<input type="number" class="form-control col-md-3" firstPage placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-md-2"> à </i>
+											<input type="number" class="form-control col-md-3" lastPage placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-md-2 text-success" data-action="addField" data-target="listDateSign"></i>
 										</div>
 									</div>
 								</li>
@@ -226,14 +226,17 @@
 										</div>
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
-											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
-											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
-											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listText"></i>
+											<i class="small text-gray col-md-2">De : </i>
+											<input type="number" class="form-control col-md-3" firstPage placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-md-2"> à </i>
+											<input type="number" class="form-control col-md-3" lastPage placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-md-2 text-success" data-action="addField" data-target="listText"></i>
 										</div>
 									</div>
 								</li>
+								<li id="listText"></li>
+
+
 								<li class="">
 									<hr />
 								</li>
@@ -245,14 +248,13 @@
 										
 									</div>
 								</li>
-								<li id="listText"></li>
 
 							</ul>
 						</div>
 					</div>
 
 					<!-- Card dynamic Filed -->
-					<div class="card" card-id="dynamicField">
+					<div class="card" card-id="dynamic-Field">
 						<div class="card-header bg-teal">
 							<h3 class="card-title text-bold"><i class="fa fa-list"></i> Champ Dynamique</h3>
 
@@ -267,7 +269,7 @@
 								<div class="input-group-prepend">
 									<span class="input-group-text" id="basic-addon1">Titre du document</span>
 								</div>
-								<input type="text" class="form-control" id="detail">
+								<input type="text" class="form-control" dynamic-field-id="title">
 							</div>
 						</div>
 					</div>

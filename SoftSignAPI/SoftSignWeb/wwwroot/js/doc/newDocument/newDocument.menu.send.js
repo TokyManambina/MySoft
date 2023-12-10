@@ -1,6 +1,16 @@
 ﻿import { apiUrl, webUrl } from "../../apiConfig.js";
 
+let signExist = false;
+let parapheExist = false;
 
+//#region USign
+function dicoToList(obj) {
+	var list = Object.values(obj);
+	for (var i = 0; i < list.length; i++) {
+		list[i].fields = Object.values(list[i].fields);
+	}
+	return list;
+}
 
 $(`[data-action="sendDocument"]`).on("click", (e) => {
 	$(`[field-id]`).mousemove();
@@ -27,7 +37,7 @@ $(`[data-action="sendDocument"]`).on("click", (e) => {
 
 
 	formData.append("Files", files[0]);
-	formData.append("Recipients", JSON.stringify(dicoToList1(ListUserDocument)));
+	formData.append("Recipients", JSON.stringify(dicoToList(ListUserDocument)));
 	formData.append("Object", object);
 	formData.append("Message", message);
 
@@ -54,9 +64,41 @@ $(`[data-action="sendDocument"]`).on("click", (e) => {
 		}
 	});
 });
+//#endregion
+
+//#region ISign
+$("#signature_tab").on('show.bs.modal', function (e) {
+	signExist = false;
+	parapheExist = false;
+
+	$("[sign-modal-dialog]").removeClass("modal-sm").addClass("modal-xl");
+	$("#paraphe-pad").removeClass("col-12").addClass("col-4");
+
+	$("#signature-pad").hide();
+	$("#paraphe-pad").hide();
+
+	if ($(`[page-id][data-type="signature"]`).length > 0) {
+		$("#signature-pad").show();
+		signExist = true;
+	}
+	if ($(`[page-id][data-type="paraphe"]`).length > 0) {
+		$("#paraphe-pad").show();
+		parapheExist = true;
+		if (!signExist) {
+			$("#paraphe-pad").removeClass("col-4").addClass("col-12");
+			$("[sign-modal-dialog]").removeClass("modal-xl").addClass("modal-sm");
+		}
+	}
+
+	if (!signExist && !parapheExist) {
+		alert("Veuillez renseigner les signatures ou/et paraphes");
+		e.preventDefault();
+	}
+})
 
 $(`[sign-confirm]`).on("click", (e) => {
 	$(`[field-id]`).mousemove();
+	if (!VerifyAllRequiredDynamicField()) return;
 
 	var files = $("#inputFile").get(0).files;
 
@@ -64,43 +106,28 @@ $(`[sign-confirm]`).on("click", (e) => {
 		alert("Veuillez selectionner un document.");
 		return;
 	}
-
-	if (Object.keys(ListUserDocument).length === 0) {
-		alert("Veuillez ajouter un déstinataire au minimum.")
+	
+	if (signExist && !signaturePad.isSign) {
+		alert("Vous avez oublié le signature");
 		return;
 	}
-
-	if (!signTest) {
-		alert("Vous avez oublié de signer");
+	if (parapheExist && !paraphePad.isSign) {
+		alert("Vous avez oublié le paraphe");
 		return;
 	}
 
 	let signImage = signaturePad.toDataURL();
-
-	/*let object = $("#objectId").val();
-	let message = $("#mailMessage").summernote("code");
-	if ($("#mailMessage").summernote("code") == '<p><br></p>')
-		message = "";
-	if (object == "") {
-		alert("Veuillez renseigner l'objet du document.")
-	}*/
-
-
+	let parapheImage = paraphePad.toDataURL();
+	
 
 	let formData = new FormData();
-	//for (var i = 0; i < 5; i++) {
-	//	formData.append("Files", files[0]);
-	//}
-	let width = $("#pdfViewer").width();
-	let height = $("#pdfViewer").height();
-
-
 
 	formData.append("Files", files[0]);
 	formData.append("Fields", JSON.stringify(Object.values(ListUserDocument["me"].fields)));
-	formData.append("Object", object);
+	formData.append("Title", $("[data-]"));
 	formData.append("Message", message);
 	formData.append("Sign", signImage);
+	formData.append("Paraphe", parapheImage);
 
 	$.ajax({
 		type: "POST",
@@ -136,10 +163,16 @@ $(`[sign-confirm]`).on("click", (e) => {
 		}
 	});
 });
-function dicoToList1(obj) {
-	var list = Object.values(obj);
-	for (var i = 0; i < list.length; i++) {
-		list[i].fields = Object.values(list[i].fields);
-	}
-	return list;
+
+function VerifyAllRequiredDynamicField() {
+	let allOk = true;
+	$(`[detail-id]`).each((k, v) => {
+		if (!$(v).val()) {
+			allOk = false;
+			alert("Veuillez completer les champs obligatoires");
+			return false;
+		}
+	});
+	return allOk;
 }
+//#endregion		

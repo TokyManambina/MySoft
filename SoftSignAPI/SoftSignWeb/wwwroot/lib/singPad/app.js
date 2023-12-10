@@ -13,11 +13,17 @@ const saveSVGWithBackgroundButton = wrapper.querySelector("[data-action=save-svg
 //    // this option can be omitted if only saving as PNG or SVG
 //    backgroundColor: 'rgb(255, 255, 255)'
 //});
-var signTest = false;
 
-const container = $("#signaturePad-container");
-const canvas = container.find("canvas")[0];
-const signaturePad = new SignaturePad(canvas);
+//signature
+const containerSign = $("#signature-pad");
+const canvasSign = containerSign.find("canvas")[0];
+const signaturePad = new SignaturePad(canvasSign);
+
+//paraphe
+//signature
+const containerParaphe = $("#paraphe-pad");
+const canvasParaphe = containerParaphe.find("canvas")[0];
+const paraphePad = new SignaturePad(canvasParaphe);
 // Adjust canvas coordinate space taking into account pixel ratio,
 // to make it look crisp on mobile devices.
 // This also causes canvas to be cleared.
@@ -28,19 +34,25 @@ function resizeCanvas() {
     const ratio = Math.max(window.devicePixelRatio || 1, 1);
 
     // This part causes the canvas to be cleared
-    canvas.width = canvas.offsetWidth * ratio;
-    canvas.height = canvas.offsetHeight * ratio;
-    canvas.getContext("2d").scale(ratio, ratio);
+    canvasSign.width = canvasSign.offsetWidth * ratio;
+    canvasSign.height = canvasSign.offsetHeight * ratio;
+    canvasSign.getContext("2d").scale(ratio, ratio);
+
+
+    canvasParaphe.width = canvasParaphe.offsetWidth * ratio;
+    canvasParaphe.height = canvasParaphe.offsetHeight * ratio;
+    canvasParaphe.getContext("2d").scale(ratio, ratio);
 
     // This library does not listen for canvas changes, so after the canvas is automatically
     // cleared by the browser, SignaturePad#isEmpty might still return false, even though the
     // canvas looks empty, because the internal data of this library wasn't cleared. To make sure
     // that the state of this library is consistent with visual state of the canvas, you
     // have to clear it manually.
-    signaturePad.clear();
+
 
     // If you want to keep the drawing on resize instead of clearing it you can reset the data.
     signaturePad.fromData(signaturePad.toData());
+    paraphePad.fromData(paraphePad.toData());
 }
 
 // On mobile devices it might make more sense to listen to orientation change,
@@ -80,8 +92,12 @@ function dataURLToBlob(dataURL) {
     return new Blob([uInt8Array], { type: contentType });
 }
 
-$(document).on("click", `[sign-action="clear"]`, () => {
+$(document).on("click", `[pad-clear="signature"]`, () => {
     signaturePad.clear();
+    resizeCanvas();
+});
+$(document).on("click", `[pad-clear="paraphe"]`, () => {
+    paraphePad.clear();
     resizeCanvas();
 });
 /*

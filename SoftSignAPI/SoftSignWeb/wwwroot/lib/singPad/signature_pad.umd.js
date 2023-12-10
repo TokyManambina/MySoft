@@ -158,6 +158,7 @@
     class SignaturePad extends SignatureEventTarget {
         constructor(canvas, options = {}) {
             super();
+            this.isSign = false;
             this.canvas = canvas;
             this._drawingStroke = false;
             this._isEmpty = true;
@@ -234,7 +235,7 @@
             this.on();
         }
         clear() {
-            signTest = false;
+            this.isSign = false;
             const { _ctx: ctx, canvas } = this;
             ctx.fillStyle = this.backgroundColor;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -421,7 +422,7 @@
         }
         _createPoint(x, y, pressure) {
             const rect = this.canvas.getBoundingClientRect();
-            if (!signTest) signTest = true;
+            if (!this.isSign) this.isSign = true;
             return new Point((x / 0.8) - rect.left, (y / 0.8) - rect.top, pressure, new Date().getTime());
         }
         _addPoint(point, options) {

@@ -86,7 +86,7 @@ $(`[data-action="addField"]`).on("click", (e) => {
 
 function activeField(id, recipient) {
 
-    $(`[field-id="${id}"],[page-id="${id}"]`).hover((e, x) => {
+    $(`[field-id="${id}"],[page-id="${id}"],[recipient-id="${recipient}"]`).hover((e, x) => {
 
         if ($(`[recipient-id="${recipient}"]`).css("background-color") !== ListUserDocument[recipient].color)
             $(`[recipient-id="${recipient}"]`).css("background-color", ListUserDocument[recipient].color);
@@ -151,7 +151,9 @@ function listField(type, firstPage, lastPage, id) {
         <li class="nav-item" page-id="${id}" by="${selectedRecipient}" data-type="${type}" data-value="${firstPage == lastPage ? `${firstPage}` : `${firstPage} - ${lastPage}`}" field-firstPage="${firstPage}" field-lastPage="${lastPage}">
             <div class="nav-link float-right">
                 <span id="${id}">Page : ${firstPage == lastPage ? `${firstPage}` : `${firstPage} à ${lastPage}`} </span>
-                <i class="fa fa-times text-danger" removeField></i>
+                <div class="btn btn-sm" removeField>
+                    <i class="fa fa-times text-danger" style="font-size:1.1rem"></i>
+                </div>
             </div>
         </li>
     `;
