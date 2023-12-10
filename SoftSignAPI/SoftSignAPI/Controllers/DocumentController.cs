@@ -188,7 +188,7 @@ namespace SoftSignAPI.Controllers
 
                 var a = await _userDocumentRepository.CreateRange(userDocuments);
 
-				return Ok();
+				return Ok(document.Code);
 			}
 			catch (Exception ex)
 			{
@@ -198,7 +198,7 @@ namespace SoftSignAPI.Controllers
 
 		[HttpPost("me")]
 		[Authorize]
-		public async Task<ActionResult<string>> PostMe([FromForm] AllUserDocumentDto doc)
+		public async Task<ActionResult<string>> PostMe([FromForm] AutoSignDocumentDto doc)
 		{
 			try
 			{
@@ -206,24 +206,19 @@ namespace SoftSignAPI.Controllers
 				if (user == null)
 					return SignOut("Logout");
 
-				if (doc.Files == null || string.IsNullOrEmpty(doc.Recipients))
+				if (doc.Files == null)
 					return BadRequest("File not exist");
 
-				var recipients = JsonConvert.DeserializeObject<List<FieldDto>>(doc.Recipients);
-
-				if (recipients == null || recipients.Count == 0)
-					return BadRequest("No Recipient");
-
-				var document = _documentService.CreateDocument(doc.Files, doc.Object, doc.Message, user);
+				var document = _documentService.CreateDocument(doc.Files, doc.Title!, "", "", user);
 
 				if (document == null)
 					return BadRequest("error on document");
 
 				var userDocuments = await _userDocumentService.CreateUserDocument(document, user, new List<DocumentRecipientsDto>());
 
-				var a = await _userDocumentRepository.CreateRange(userDocuments);
+				await _userDocumentRepository.CreateRange(userDocuments);
 
-				return Ok();
+				return Ok(document.Code);
 			}
 			catch (Exception ex)
 			{

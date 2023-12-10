@@ -19,6 +19,8 @@ $(`[data-action="sendDocument"]`).on("click", (e) => {
 		return;
 	}
 
+	if (!VerifyAllRequiredDynamicField()) return;
+
 	let object = $("#objectId").val();
 	let message = $("#mailMessage").summernote("code");
 	if ($("#mailMessage").summernote("code") == '<p><br></p>')
@@ -38,6 +40,7 @@ $(`[data-action="sendDocument"]`).on("click", (e) => {
 
 	formData.append("Files", files[0]);
 	formData.append("Recipients", JSON.stringify(dicoToList(ListUserDocument)));
+	formData.append("Title", $(`[detail-id="title"]`).val());
 	formData.append("Object", object);
 	formData.append("Message", message);
 
@@ -55,6 +58,7 @@ $(`[data-action="sendDocument"]`).on("click", (e) => {
 
 
 		success: function (result) {
+			console.log(result);
 			alert("document envoyé");
 			window.location = webUrl + "documents";
 		},
@@ -124,10 +128,9 @@ $(`[sign-confirm]`).on("click", (e) => {
 
 	formData.append("Files", files[0]);
 	formData.append("Fields", JSON.stringify(Object.values(ListUserDocument["me"].fields)));
-	formData.append("Title", $("[data-]"));
-	formData.append("Message", message);
-	formData.append("Sign", signImage);
-	formData.append("Paraphe", parapheImage);
+	formData.append("Title", $(`[detail-id="title"]`).val());
+	formData.append("SignImage", signImage);
+	formData.append("ParapheImage", parapheImage);
 
 	$.ajax({
 		type: "POST",
@@ -144,15 +147,8 @@ $(`[sign-confirm]`).on("click", (e) => {
 
 		success: function (result) {
 			console.log(result);
-			alert(result);
-			if (result == "")
-				return;
-			if (result.type == "error") {
-				alert("Veuillez verifier votre mail!");
-				return;
-			}
 
-			alert("document envoyé");
+			alert("document Signé");
 
 			window.location = webUrl + "documents";
 			//SendDocument(result);

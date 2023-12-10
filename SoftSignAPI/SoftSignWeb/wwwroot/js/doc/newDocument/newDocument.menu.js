@@ -1,9 +1,9 @@
 ﻿import { apiUrl, webUrl } from "../../apiConfig.js";
-import * as Action from './NewDocument.menu.action.js?v=0.1.0';
-import * as Attachement from './NewDocument.menu.attachement.js?v=0.1.0';
-import * as Field from './NewDocument.menu.field.js?v=0.1.0';
-import * as Recipient from './NewDocument.menu.recipient.js?v=0.1.0';
-import * as Send from './NewDocument.menu.send.js?v=0.1.0';
+import * as Action from './newDocument.menu.action.js?v=0.1.0';
+import * as Attachement from './newDocument.menu.attachement.js?v=0.1.0';
+import * as Field from './newDocument.menu.field.js?v=0.1.0';
+import * as Recipient from './newDocument.menu.recipient.js?v=0.1.0';
+import * as Send from './newDocument.menu.send.js?v=0.1.0';
 
 $(`[card-id="attachement"]`).remove();
 $(`[card-id="dynamic-field"]`).remove();

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SoftSignAPI.Context;
 
@@ -11,9 +12,11 @@ using SoftSignAPI.Context;
 namespace SoftSignAPI.Migrations
 {
     [DbContext(typeof(dbContext))]
-    partial class dbContextModelSnapshot : ModelSnapshot
+    [Migration("20231210221808_addTitleDocument")]
+    partial class addTitleDocument
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -458,6 +461,9 @@ namespace SoftSignAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Cc")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(max)");
 
@@ -474,14 +480,8 @@ namespace SoftSignAPI.Migrations
                     b.Property<bool>("MyTurn")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("Paraphe")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("Signature")
-                        .HasColumnType("varbinary(max)");
 
                     b.Property<int>("Step")
                         .HasColumnType("int");

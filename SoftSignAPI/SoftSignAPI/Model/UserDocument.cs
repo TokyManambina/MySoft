@@ -18,7 +18,8 @@ namespace SoftSignAPI.Model
         public string? Role { get; set; }
         public string? Color { get; set; }
         public string? Message { get; set; }
-        public string? Cc { get; set; }
+        public byte[]? Signature { get; set; }
+        public byte[]? Paraphe { get; set; }
 
         public bool MyTurn { get; set; } = false;
         public bool IsFinished { get; set; } = false;
