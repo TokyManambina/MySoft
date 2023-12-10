@@ -142,7 +142,7 @@ namespace SoftSignAPI.Migrations
 
                     b.HasIndex("SubscriptionId");
 
-                    b.ToTable("DocumentDetails");
+                    b.ToTable("DynamicFields");
                 });
 
             modelBuilder.Entity("SoftSignAPI.Model.DynamicFieldItem", b =>
@@ -162,7 +162,7 @@ namespace SoftSignAPI.Migrations
 
                     b.HasIndex("DetailId");
 
-                    b.ToTable("DocumentDetailItems");
+                    b.ToTable("DynamicFieldItems");
                 });
 
             modelBuilder.Entity("SoftSignAPI.Model.Field", b =>
@@ -179,17 +179,20 @@ namespace SoftSignAPI.Migrations
                     b.Property<int?>("FieldType")
                         .HasColumnType("int");
 
+                    b.Property<string>("FirstPage")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double?>("Height")
                         .HasColumnType("float");
+
+                    b.Property<string>("LastPage")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double?>("PDF_Height")
                         .HasColumnType("float");
 
                     b.Property<double?>("PDF_Width")
                         .HasColumnType("float");
-
-                    b.Property<string>("Page")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");

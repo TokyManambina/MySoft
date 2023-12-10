@@ -24,8 +24,7 @@ function MyDocument() {
 			console.log(result)
 			
 			$(`#listDocument`).text("");
-
-			let code = ``;
+			
 			$.each(result, (k, v) => {
 				//var date = v.DateSign;
 				var icon = "fa-star";
@@ -36,26 +35,9 @@ function MyDocument() {
 					default: icon = "fa-star"; break;
 				}
 
-				code += `
-					<tr data-stat="${v.Status}" ViewDocument="${v.code}" >
-                        <td>
-                          <div class="icheck-primary">
-                            <input type="checkbox" value="" id="check1">
-                            <label for="check1"></label>
-                          </div>
-                        </td>
-                        <td class="mailbox-star"><a href="#"><i class="fa ${icon} text-secondary"></i></a></td>
-                        <td class="mailbox-name"></td>
-                        <td class="mailbox-subject pointer" style="min-width : 250px">
-							<span class="text-bold">${v.object}</span>
-							<span>${convertToPlain(v.message)}</span>
-                        </td>
-                        <td class="mailbox-date">${DateLast(v.dateSend)}</td>
-                        <td> <div></div> </td>
-					</tr>`;
+				$(`#listDocument`).append(documentListUI(v, icon));
 			});
-
-			$(`#listDocument`).append(code);
+			
 		},
 
 		Error: function (x, e) {
@@ -92,6 +74,10 @@ $(document).on('click', '[ViewDocument]', (e) => {
 
 			$(`#p_MyDocument`).hide();
 			$("#sign").text("");
+
+			$("#sign").append(`<div class="btn btn-success bg-gradient mb-3 col-12"><i class="fa fa-check p-2"> </i> Valider</div>`);
+			$("#sign").append(`<div class="btn btn-success bg-gradient mb-3 col-12"><i class="fa fa-signature p-2"> </i> Signé</div>`);
+
 			/*
 			if (Datas.Resender == true) $("#sign").append(`<div class="btn btn-success bg-gradient mb-3 col-12" data-bs-toggle="modal" data-bs-target="#MconfirmMail" id="btnvalidator" data-target="${id}"><i class="fa fa-paper-plane"></i> Envoyer</div>`);
 			else if (Datas.Validators == true) $("#sign").append(`<div class="btn btn-success bg-gradient mb-3 col-12" data-bs-toggle="modal" data-bs-target="#MconfirmMail" id="btnvalidator" data-target="${id}"><i class="fas fa-check"></i> Valider</div>`);
@@ -117,7 +103,6 @@ $(document).on('click', '[ViewDocument]', (e) => {
 				success: function (result) {
 					var blobUrl = URL.createObjectURL(result);
 
-					// Set the Blob URL as the source for the <embed> element
 					$("[pdf_Viewer]").attr("src", blobUrl);
 				},
 				Error: function (x, e) {
@@ -134,10 +119,30 @@ $(document).on('click', '[ViewDocument]', (e) => {
 	});
 });
 
+function documentListUI(document, icon) {
+	return `
+		<tr data-stat="${document.Status}" ViewDocument="${document.code}" >
+            <td>
+                <div class="icheck-primary">
+                <input type="checkbox" value="" id="check1">
+                <label for="check1"></label>
+                </div>
+            </td>
+            <td class="mailbox-star"><a href="#"><i class="fa ${icon} text-secondary"></i></a></td>
+            <td class="mailbox-name"></td>
+            <td class="mailbox-subject pointer" style="min-width : 250px">
+				<span class="text-bold">${document.object}</span>
+				<span>${convertToPlain(document.message)}</span>
+            </td>
+            <td class="mailbox-date">${DateLast(document.dateSend)}</td>
+            <td> <div></div> </td>
+		</tr>
+	`;
+}
 function documentUI(document) {
 	return `
 		<div id="p_doc" data-type="panel">
-			<div class="card card-primary card-outline mb-5">
+			<div class="card card-primary card-outline mb-1">
 				<div class="card-header">
 					<button class="btn btn-default btn-sm" onclick="changeList('All')">
 							<i class="fas fa-reply"></i>
@@ -149,11 +154,12 @@ function documentUI(document) {
 					</div>
 				</div>
 
-				<div class="card-body p-0">
-					<div class="mailbox-controls with-border text-center">${convertToPlain(document.message)}</div>
+				<div class="card-body p-2">
+					<h6><u>Message </u>:</h6>
+					<div class="mailbox-controls with-border p-3">${document.message}</div>
 
 					<div class="mailbox-read-message text-center flex-column">
-						<embed pdf_Viewer type="application/pdf" src="" width="80%" height="800">
+						<embed pdf_Viewer type="application/pdf" src="" width="100%" height="1000">
 					</div>
 				</div>
 			</div>

@@ -34,8 +34,6 @@ $('#inputFile').on('change', (e) => {
 	}
 })
 
-
-
 function loadPDF(data) {
 	const pdfFile = pdfjsLib.getDocument(data);
 	resetCurrentPDF();
@@ -91,39 +89,25 @@ function renderCurrentPage() {
 		page.render(renderContext);
 	});
 	$("#current_page").html(currentPDF.currentPage + ' sur ' + currentPDF.countOfPages);
-	changePage();
+	initPage();
 }
 
-function changePage() {
+function initPage() {
 	if (!test || lastFile != currentPDF.file) {
 		lastFile = currentPDF.file;
-		$("#signpage").val("1");
-		$("#signpage").attr("max", currentPDF.countOfPages);
-		$("#signpage").attr("min", 1);
 
 		$("[firstPage]").val("1");
 		$("[firstPage]").attr("max", currentPDF.countOfPages);
 		$("[firstPage]").attr("min", 1);
-
-		//$("[LastPage]").val(currentPDF.countOfPages);
+		
 		$("[LastPage]").val(1);
 		$("[LastPage]").attr("max", currentPDF.countOfPages);
 		$("[LastPage]").attr("min", 1);
 		test = !test;
 	}
 }
-
-
 //#endregion
 
-$("[firstPage], [LastPage], #signpage").on('change', (e) => {
-	var max = parseInt($( e.target).attr("max"));
-	var val = parseInt($(e.target).val());
-	var min = parseInt($(e.target).attr("min"));
-
-	if (val > max) $(e.target).val(max);
-	else if (val <= 0) $(e.target).val(min);
-});
 
 
 //#region next/previous Page

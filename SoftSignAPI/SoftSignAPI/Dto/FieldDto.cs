@@ -6,7 +6,8 @@ namespace SoftSignAPI.Dto
     {
         public int? Id { get; set; }
         public string? Variable { get; set; }
-        public string? Page { get; set; }
+        public string? FirstPage { get; set; }
+        public string? LastPage { get; set; }
         public double? X { get; set; }
         public double? Y { get; set; }
         public double? Width { get; set; }

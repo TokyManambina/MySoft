@@ -24,6 +24,7 @@ namespace SoftSignAPI.Model
         
 
 		public virtual List<User> Users { get; set; }
+
         public virtual List<Flow> Flows { get; set; }
         public virtual List<DynamicField> DynamicFields { get; set; }
 	}

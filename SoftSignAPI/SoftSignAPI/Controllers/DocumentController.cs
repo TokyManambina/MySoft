@@ -25,6 +25,7 @@ namespace SoftSignAPI.Controllers
         private readonly IUserService _userService;
         private readonly IUserRepository _userRepository;
         private readonly IUserDocumentRepository _userDocumentRepository;
+        private readonly IPdfService _pdfService;
 
         public DocumentController(
             IDocumentRepository documentRepository, 
@@ -34,7 +35,8 @@ namespace SoftSignAPI.Controllers
             IUserService userService, 
             IUserRepository userRepository,
             IUserDocumentService userDocumentService,
-            IUserDocumentRepository userDocumentRepository)
+            IUserDocumentRepository userDocumentRepository,
+            IPdfService pdfService)
         {
             _documentRepository = documentRepository;
             _mapper = mapper;
@@ -44,6 +46,7 @@ namespace SoftSignAPI.Controllers
             _userRepository = userRepository;
             _userDocumentService = userDocumentService;
             _userDocumentRepository = userDocumentRepository;
+            _pdfService = pdfService;
         }
 
 
@@ -123,45 +126,34 @@ namespace SoftSignAPI.Controllers
         }
         // GET api/<DocumentController>/5
         [HttpGet("{code}")]
-        public async Task<ActionResult<Document>> Get(string code)
+        public async Task<ActionResult<DocumentDto>> Get(string code)
         {
             try
             {
-                return Ok(_mapper.Map<Document?>(await _documentRepository.Get(code)));
+                return Ok(_mapper.Map<DocumentDto?>(await _documentRepository.Get(code)));
             }
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal Server Error");
             }
         }
-		// GET api/<DocumentController>/5
+		// GET api/document/d/5
 		[HttpGet("d/{code}")]
-		public async Task<ActionResult> GetPdf(string code)
+		public async Task<ActionResult?> GetPdf(string code)
 		{
 			try
 			{
-				string filePath = @"C:\facture.pdf";
+                var document = await _documentRepository.Get(code);
 
-				// Check if the file exists
-				if (!System.IO.File.Exists(filePath))
-				{
-					return NotFound(); // Or any other appropriate status code
-				}
+                var pdf = await _pdfService.GeneratePDF(document);
 
-				// Read the file contents into a byte array
-				byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+                if (pdf == null)
+                    return null;
+				
 
-				// Determine the file's content type based on its extension
-				string contentType = "application/octet-stream"; // Default content type
-
-				// You can add more content type mappings based on file extensions
-				if (Path.GetExtension(filePath).Equals(".pdf", System.StringComparison.OrdinalIgnoreCase))
-				{
-					contentType = "application/pdf";
-				}
-
-				// Return the file as a response
-				return File(fileBytes, contentType, Path.GetFileName(filePath));
+				string contentType = "application/octet-stream";
+                
+                return File(pdf, "application/pdf", code+".pdf");
 			}
 			catch (Exception ex)
 			{
@@ -187,7 +179,7 @@ namespace SoftSignAPI.Controllers
                 if(recipients == null || recipients.Count == 0)
 					return BadRequest("No Recipient");
 
-				var document = _documentService.CreateDocument(doc.Files, user);
+				var document = _documentService.CreateDocument(doc.Files, doc.Object, doc.Message, user);
 
                 if(document == null)
 					return BadRequest("error on document");
@@ -197,7 +189,6 @@ namespace SoftSignAPI.Controllers
                 var a = await _userDocumentRepository.CreateRange(userDocuments);
 
 				return Ok();
-				//return Ok(document.Code);
 			}
 			catch (Exception ex)
 			{
@@ -205,22 +196,43 @@ namespace SoftSignAPI.Controllers
 			}
 		}
 
-		[HttpPost("{code}")]
-        public ActionResult<string> Posts(string code, [FromBody] AllUserDocument list)
-        {
-            try
-            {
+		[HttpPost("me")]
+		[Authorize]
+		public async Task<ActionResult<string>> PostMe([FromForm] AllUserDocumentDto doc)
+		{
+			try
+			{
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
 
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Internal Server Error");
-            }
-        }
+				if (doc.Files == null || string.IsNullOrEmpty(doc.Recipients))
+					return BadRequest("File not exist");
 
-        // DELETE api/<DocumentController>/5
-        [HttpDelete("{id}")]
+				var recipients = JsonConvert.DeserializeObject<List<FieldDto>>(doc.Recipients);
+
+				if (recipients == null || recipients.Count == 0)
+					return BadRequest("No Recipient");
+
+				var document = _documentService.CreateDocument(doc.Files, doc.Object, doc.Message, user);
+
+				if (document == null)
+					return BadRequest("error on document");
+
+				var userDocuments = await _userDocumentService.CreateUserDocument(document, user, new List<DocumentRecipientsDto>());
+
+				var a = await _userDocumentRepository.CreateRange(userDocuments);
+
+				return Ok();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+
+		// DELETE api/<DocumentController>/5
+		[HttpDelete("{id}")]
         public async Task<ActionResult<bool>> Delete(string code)
         {
             try

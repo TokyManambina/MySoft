@@ -19,8 +19,8 @@ namespace SoftSignAPI.Context
         public DbSet<Attachement> Attachements{ get; set; }
         public DbSet<Historique> Historiques{ get; set; }
         public DbSet<DocumentLink> DocumentLinks{ get; set; }
-        public DbSet<DynamicField> DocumentDetails{ get; set; }
-        public DbSet<DynamicFieldItem> DocumentDetailItems{ get; set; }
+        public DbSet<DynamicField> DynamicFields{ get; set; }
+        public DbSet<DynamicFieldItem> DynamicFieldItems{ get; set; }
         public DbSet<DocumentDynamicField> DocumentDynamicFields{ get; set; }
 
         public DbSet<Flow> Flows{ get; set; }

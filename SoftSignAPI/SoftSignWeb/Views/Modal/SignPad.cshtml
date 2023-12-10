@@ -1,0 +1,34 @@
+﻿<link href="~/lib/singpad/style.css" rel="stylesheet" />
+
+<!-- Modal SignaturePad -->
+<div class="modal fade" id="signature_tab" data-bs-backdrop="static" data-bs-keyboard="false" style="font-family: Helvetica, Sans-Serif; display:none;">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header bg-gray-dark">
+				<h4 class="modal-title"><i class="fa fa-user-alt"></i> Signature</h4>
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body d-flex" id="signaturePad-container">
+				<div id="signature-pad" class="signature-pad col-12">
+					<div class="signature-pad--body">
+						<canvas id="signaturePad"></canvas>
+					</div>
+					<div class="signature-pad--footer">
+						<div class="description">Votre signature</div>
+					</div>
+
+					<button type="button" class=" button clear btn btn-secondary" sign-action="clear">Reinitialiser Signature</button>
+				</div>
+			</div>
+			<div class="modal-footer justify-content-between">
+				<button type="button" class=" button clear btn btn-danger" data-bs-dismiss="modal">Annuler</button>
+				<button type="button" class="btn btn-primary" sign-confirm>Valider</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="~/lib/singpad/signature_pad.umd.js"></script>
+<script src="~/lib/singpad/app.js"></script>
+<!-- Fin Modal SignaturePad -->
