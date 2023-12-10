@@ -179,7 +179,7 @@ namespace SoftSignAPI.Controllers
                 if(recipients == null || recipients.Count == 0)
 					return BadRequest("No Recipient");
 
-				var document = _documentService.CreateDocument(doc.Files, doc.Object, doc.Message, user);
+				var document = _documentService.CreateDocument(doc.Files, "", doc.Object, doc.Message, user);
 
                 if(document == null)
 					return BadRequest("error on document");
