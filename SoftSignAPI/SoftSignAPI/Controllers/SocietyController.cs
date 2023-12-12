@@ -4,6 +4,10 @@ using SoftSignAPI.Model;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Repositories;
 using SoftSignAPI.Dto;
+using SoftSignAPI.Services;
+using System.Collections;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,12 +19,16 @@ namespace SoftSignAPI.Controllers
     {
 
         private readonly ISocietyRepository _societyRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IUserService _UserService;
 
-        public SocietyController(ILogger<AuthenticationController> logger, IMapper mapper, ISocietyRepository societyRepository)
+        public SocietyController(IUserService userService, IMapper mapper, ISocietyRepository societyRepository, IUserRepository userRepository)
         {
             _mapper = mapper;
-            _societyRepository= societyRepository;
+            _societyRepository = societyRepository;
+            _userRepository = userRepository;
+            _UserService = userService;
         }
 
         // GET: api/<SocietyController>
@@ -29,7 +37,16 @@ namespace SoftSignAPI.Controllers
         {
             try
             {
-                return Ok(_mapper.Map<List<SocietyDto>?>(await _societyRepository.GetAll(count: count, page: page)));
+                var user = await _userRepository.GetByMail(_UserService.GetMail());
+                if (user?.Role != Role.User)
+                {
+                    bool status = user?.Role == Role.Admin ? true : false;
+                    return Ok(new { role = status, data = _mapper.Map<List<SocietyDto>?>(await _societyRepository.GetAll(count: count, page: page)) });
+                }
+                else
+                {
+                    return Ok(new { role = false, data = new ArrayList() });
+                }
             }
             catch (Exception ex)
             {

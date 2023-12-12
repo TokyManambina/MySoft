@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Controller"] = "Societe Management";
+    Layout = "~/Views/Shared/Navbar.cshtml";
+}
+<link href="~/admlte/plugins/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+
+
+<div class="modal fade" id="modal-user" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Insertion Societe</h3>
+                    <i class="fa fa-close" style="cursor:pointer;float:right;" modal-closed></i>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="nom">Nom</label>
+                        <input type="text" class="form-control" id="name" placeholder="Enter nom">
+                        <input type="hidden" id="id" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="prenom">Abbreviation</label>
+                        <input type="text" class="form-control" id="storage" placeholder="Enter abbreviation">
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary" user-create>Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header"><br />
+        <div class="col-lg-4 col-6" style="cursor:pointer" user-modal>
+            <div class="small-box bg-gradient-success">
+                <div class="inner">
+                    <h3>44</h3>
+                    <p>Nombre Utilisateur Total</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </div>
+        </div>
+        <br /><br />
+        <h3 class="card-title">Liste Societe</h3>
+        <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+                <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-default">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-nowrap">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Abbrev</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="liste_user">
+            </tbody>
+        </table>
+    </div>
+    <!-- /.card-body -->
+</div>
+        <!-- /.card -->
+
+
+<script src="~/admlte/plugins/sweetalert2/sweetalert2.all.min.js"></script>
+<script src="~/js/widgets.js"></script>
+<script src="~/js/usermanagement/society.js" asp-append-version="true" type="module"></script>

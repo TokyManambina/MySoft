@@ -48,6 +48,7 @@ $(`[data-id="login"]`).on('click', (k, v) => {
 				url: webUrl + "Auth",
 				contentType: "application/json",
 				success: function (data) {
+
 					localStorage.setItem("webBaseUrl", data.baseUrl);
 					window.location = data.url;
 				},

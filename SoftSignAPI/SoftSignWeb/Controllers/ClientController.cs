@@ -12,5 +12,9 @@ namespace SoftSignWeb.Controllers
 		{
 			return View();
 		}
-	}
+        public IActionResult SocietyManagement()
+        {
+            return View();
+        }
+    }
 }

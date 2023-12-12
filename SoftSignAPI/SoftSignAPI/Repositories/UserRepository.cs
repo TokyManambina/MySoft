@@ -52,7 +52,7 @@ namespace SoftSignAPI.Repositories
 					Password = BCrypt.Net.BCrypt.HashPassword(password)
 				});
                 				
-				//await _db.SaveChangesAsync();
+				await _db.SaveChangesAsync();
 
 				return newuser.Entity;
 			}

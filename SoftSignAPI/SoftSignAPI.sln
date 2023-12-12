@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftSignAPI", "SoftSignAPI\SoftSignAPI.csproj", "{7C8157AD-91FE-4D07-AF41-C7BF1DE4FA55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoftSignWeb", "SoftSignWeb\SoftSignWeb.csproj", "{A9CF31CA-D0B4-412D-BEEF-5E4434231268}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SoftSignWeb", "SoftSignWeb\SoftSignWeb.csproj", "{A9CF31CA-D0B4-412D-BEEF-5E4434231268}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

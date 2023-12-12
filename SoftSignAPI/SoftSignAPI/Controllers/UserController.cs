@@ -5,6 +5,8 @@ using SoftSignAPI.Dto;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
 using SoftSignAPI.Repositories;
+using SoftSignAPI.Services;
+using System.Collections;
 
 namespace SoftSignAPI.Controllers
 {
@@ -14,11 +16,15 @@ namespace SoftSignAPI.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly IUserService _UserService;
 
-        public UserController(ILogger<AuthenticationController> logger, IMapper mapper, IUserRepository userRepository)
+
+
+        public UserController(IMapper mapper, IUserService userService, IUserRepository userRepository)
         {
             _mapper = mapper;
             _userRepository = userRepository;
+            _UserService = userService;
         }
 
         // GET: api/<userController>
@@ -27,7 +33,29 @@ namespace SoftSignAPI.Controllers
         {
             try
             {
-                return Ok(_mapper.Map<List<UserDto>?>(await _userRepository.GetAll(count: count, page: page)));
+                var user=await _userRepository.GetByMail(_UserService.GetMail());
+                if(user?.Role!=Role.User)
+                {
+                    bool status = user?.Role==Role.Admin? true:false;
+                    return Ok(new { role=status,data= _mapper.Map<List<UserDto>?>(await _userRepository.GetAll(count: count, page: page)) });
+                }
+                else
+                {
+                    return Ok(new { role = false, data = new ArrayList() });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+        [HttpGet("GetListRole")]
+        public ActionResult<List<object>> GetListRole()
+        {
+            try
+            {
+                var role = Enum.GetValues(typeof(Role)).OfType<Role>().ToList().Select(u => new { value = u, name=Enum.GetName(typeof(Role),u)}) ;
+                return Ok(role);
             }
             catch (Exception ex)
             {
