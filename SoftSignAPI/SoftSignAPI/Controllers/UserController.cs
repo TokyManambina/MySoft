@@ -34,14 +34,15 @@ namespace SoftSignAPI.Controllers
             try
             {
                 var user=await _userRepository.GetByMail(_UserService.GetMail());
-                if(user?.Role!=Role.User)
+                bool status = user?.Role==Role.Admin? true:false;
+                var lista = await _userRepository.GetAll(count: count, page: page);
+                if(user?.Role==Role.Admin)
                 {
-                    bool status = user?.Role==Role.Admin? true:false;
-                    return Ok(new { role=status,data= _mapper.Map<List<UserDto>?>(await _userRepository.GetAll(count: count, page: page)) });
+                    return Ok(new { role=status,data= _mapper.Map<List<UserDto>?>(lista) });
                 }
                 else
                 {
-                    return Ok(new { role = false, data = new ArrayList() });
+                    return Ok(new { role = status, data = _mapper.Map<List<UserDto>?>(lista!.Where(u => u.SocietyId == user?.SocietyId)) });
                 }
             }
             catch (Exception ex)
@@ -84,6 +85,20 @@ namespace SoftSignAPI.Controllers
             try
             {
                 return Ok(_mapper.Map<UserDto?>(await _userRepository.Get(id)));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+        [HttpGet("isAdmin")]
+        public async Task<ActionResult<bool>> isAdmin()
+        {
+            try
+            {
+                var user = await _userRepository.GetByMail(_UserService.GetMail());
+                bool isAdmin=user?.Role!=Role.User?true:false;
+                return Ok(isAdmin);
             }
             catch (Exception ex)
             {

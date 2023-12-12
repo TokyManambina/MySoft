@@ -59,7 +59,7 @@ async function GetUsers() {
     var list_role = await GetListRole();
     $.ajax({
         type: "GET",
-        url: apiUrl + "api/user",
+        url: apiUrl + "api/user/get",
         headers: {
             'Authorization': sessionStorage.getItem("Authentication")
         },

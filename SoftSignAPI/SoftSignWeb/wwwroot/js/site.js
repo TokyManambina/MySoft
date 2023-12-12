@@ -1,5 +1,27 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+﻿import { apiUrl, webUrl } from "./apiConfig.js";
+// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
+
+$(document).ready(() => {
+	$.ajax({
+		type: "Get",
+		url: apiUrl + "api/User/isAdmin",
+		//data: JSON.stringify(WorkspaceId),
+		contentType: "application/json",
+		datatype: 'json',
+
+		success: function (Datas) {
+			if (!Datas) {
+				$("#espace_client").hide();
+			}
+		},
+
+		Error: function (x, e) {
+			alert("Some error");
+			//loading(false);
+		}
+	});
+});
 
 var colorList = [
 	"#bc5090", "#58508d", "#003f5c", "#c7522a", "#057dcd",
@@ -7,7 +29,6 @@ var colorList = [
 	"#6f42c1", "#e83e8c", "#dc3545", "#fd7e14", "#ffc107",
 	"#28a745", "#20c997", "#6c757d", "#17a2b8"
 ];
-
 // Write your JavaScript code.
 document.addEventListener('contextmenu', event => event.preventDefault());
 
