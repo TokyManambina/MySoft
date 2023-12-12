@@ -137,6 +137,17 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
+        public async Task<int> GetCountAll(int count)
+        {
+            try
+            {
+                return await _db.Users.CountAsync()/count;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         public async Task<User?> GetByMail(string mail)
         {
             try

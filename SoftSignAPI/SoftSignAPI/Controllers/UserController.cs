@@ -28,7 +28,7 @@ namespace SoftSignAPI.Controllers
         }
 
         // GET: api/<userController>
-        [HttpGet]
+        [HttpGet("get")]
         public async Task<ActionResult<List<UserDto>>> Get([FromQuery] int? count, [FromQuery] int? page)
         {
             try
@@ -79,7 +79,7 @@ namespace SoftSignAPI.Controllers
 
         // GET api/<userController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDto>> Get(Guid id)
+        public async Task<ActionResult<UserDto>> FindById(Guid id)
         {
             try
             {

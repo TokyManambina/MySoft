@@ -17,14 +17,13 @@ function GetUser(UserId) {
         success: function (Datas) {
             console.log(Datas);
             let User = Datas;
-            $("#id").val(User.id);
+            $("#id").val(User.id);  
             $("#prenom").val(User.firstName);
             $("#nom").val(User.lastName);
             $("#email").val(User.email);
             $("#role").val(User.role);
             $("#password").val(User.password);
             $("#societe").val(User.societyId);
-
         },
 
         Error: function (x, e) {
@@ -42,7 +41,12 @@ function DeleteUser(UserId) {
         datatype: 'json',
 
         success: function (Datas) {
-            alert(Datas);
+
+            let User = Datas.data;
+            $("#nom").val(User.firstName);
+            $("#prenom").val(User.lastName);
+            $("#email").val(User.email);
+            $("#role").val(User.role);
         },
 
         Error: function (x, e) {
