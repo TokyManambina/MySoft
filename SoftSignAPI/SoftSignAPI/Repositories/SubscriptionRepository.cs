@@ -91,7 +91,6 @@ namespace SoftSignAPI.Repositories
                 subscription.Code = updateSubscription.Code;
                 subscription.BeginDate = updateSubscription.BeginDate;
                 subscription.EndDate = updateSubscription.EndDate;
-                subscription.OfferId = updateSubscription.OfferId;
 
 
                 _db.Subscriptions.Update(subscription);

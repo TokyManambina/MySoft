@@ -131,7 +131,7 @@ namespace SoftSignAPI.Repositories
                 if (!await IsExist(code))
                     return null;
 
-                return await _db.Documents.FirstOrDefaultAsync(x => x.Code == code);
+                return await _db.Documents.Include(x=>x.UserDocuments).ThenInclude(x=>x.Fields).FirstOrDefaultAsync(x => x.Code == code);
             }
             catch (Exception ex)
             {

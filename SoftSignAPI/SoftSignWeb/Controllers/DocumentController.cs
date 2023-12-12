@@ -10,6 +10,7 @@ namespace SoftSignWeb.Controllers
     public class DocumentController : Controller
     {
         // GET: DocumentController
+        [Route("documents")]
         public async Task<ActionResult> Index()
         {
             return View();

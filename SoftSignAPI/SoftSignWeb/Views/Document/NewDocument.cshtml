@@ -88,6 +88,27 @@
 						</div>
 					</div>
 
+					<!-- Card detail -->
+					<div class="card" card-id="detail">
+						<div class="card-header bg-teal">
+							<h3 class="card-title text-bold"><i class="fa fa-circle-exclamation"></i> Champs obligatoires</h3>
+
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus text-white"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body p-2" listRequiredField>
+							<div class="input-group mb-2">
+								<div class="input-group-prepend">
+									<span class="input-group-text" id="basic-addon1">Titre du document</span>
+								</div>
+								<input type="text" class="form-control" detail-id="title">
+							</div>
+						</div>
+					</div>
+
 					<!-- Card Flow -->
 					<div class="card" card-id="recipient">
 						<div class="card-header bg-teal">
@@ -133,11 +154,11 @@
 										</div>
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
-											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
-											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
-											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listSignature"></i>
+											<i class="small text-gray col-md-2">De : </i>
+											<input type="number" class="form-control col-md-3" firstPage placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-md-2"> à </i>
+											<input type="number" class="form-control col-md-3" lastPage placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-md-2 text-success" data-action="addField" data-target="listSignature"></i>
 										</div>
 									</div>
 								</li>
@@ -151,11 +172,11 @@
 										</div>
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
-											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
-											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
-											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listParaphe"></i>
+											<i class="small text-gray col-md-2">De : </i>
+											<input type="number" class="form-control col-md-3" firstPage placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-md-2"> à </i>
+											<input type="number" class="form-control col-md-3" lastPage placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-md-2 text-success" data-action="addField" data-target="listParaphe"></i>
 										</div>
 									</div>
 								</li>
@@ -169,11 +190,11 @@
 										</div>
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
-											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
-											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
-											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listStamp"></i>
+											<i class="small text-gray col-md-2">De : </i>
+											<input type="number" class="form-control col-md-3" firstPage placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-md-2"> à </i>
+											<input type="number" class="form-control col-md-3" lastPage placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-md-2 text-success" data-action="addField" data-target="listStamp"></i>
 										</div>
 									</div>
 								</li>
@@ -187,11 +208,11 @@
 										</div>
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
-											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
-											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
-											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listDateSign"></i>
+											<i class="small text-gray col-md-2">De : </i>
+											<input type="number" class="form-control col-md-3" firstPage placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-md-2"> à </i>
+											<input type="number" class="form-control col-md-3" lastPage placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-md-2 text-success" data-action="addField" data-target="listDateSign"></i>
 										</div>
 									</div>
 								</li>
@@ -205,28 +226,51 @@
 										</div>
 										<div class="dropdown-menu form-inline">
 											<div class="dropdown-item dropdown-header text-left">Page :</div>
-											<i class="small text-gray col-2">De : </i>
-											<input type="number" class="form-control col-3" firstPage placeholder="0" min="0" max="0" />
-											<i class="small text-gray col-2"> à </i>
-											<input type="number" class="form-control col-3" lastPage placeholder="0" min="0" max="0" />
-											<i class="fa fa-plus-circle col-2 text-success" data-action="addField" data-target="listText"></i>
+											<i class="small text-gray col-md-2">De : </i>
+											<input type="number" class="form-control col-md-3" firstPage placeholder="0" min="0" max="0" />
+											<i class="small text-gray col-md-2"> à </i>
+											<input type="number" class="form-control col-md-3" lastPage placeholder="0" min="0" max="0" />
+											<i class="fa fa-plus-circle col-md-2 text-success" data-action="addField" data-target="listText"></i>
 										</div>
 									</div>
 								</li>
+								<li id="listText"></li>
+
+
 								<li class="">
 									<hr />
 								</li>
 								<li class="nav-item" showAll>
 									<div class="nav-link navbar dropdown">
 										<div class="pl-2 w-100">
-											<i class="far fa-square col-1"> </i> <span class="col" data-title>Afficher tout</span>
+											<i class="far fa-square-check col-1"> </i> <span class="col" data-title>Afficher tout</span>
 										</div>
 										
 									</div>
 								</li>
-								<li id="listText"></li>
 
 							</ul>
+						</div>
+					</div>
+
+					<!-- Card dynamic Filed -->
+					<div class="card" card-id="dynamic-Field">
+						<div class="card-header bg-teal">
+							<h3 class="card-title text-bold"><i class="fa fa-list"></i> Champ Dynamique</h3>
+
+							<div class="card-tools">
+								<button type="button" class="btn btn-tool" data-card-widget="collapse">
+									<i class="fas fa-minus text-white"></i>
+								</button>
+							</div>
+						</div>
+						<div class="card-body p-2">
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span class="input-group-text" id="basic-addon1">Titre du document</span>
+								</div>
+								<input type="text" class="form-control" dynamic-field-id="title">
+							</div>
 						</div>
 					</div>
 
@@ -265,10 +309,10 @@
 				</div>
 				<hr />
 				<div id="sendorsign">
-					<div class="btn btn-info btn-block p-3 disabled" data-action="sendDocument" id="YouSign" title="verifier les champs dans déstinataire et/ou les differents mails">
+					<div class="btn btn-info btn-block p-3 disabled" data-bs-toggle="modal" data-bs-target="#mailing" id="YouSign" title="verifier les champs dans déstinataire et/ou les differents mails">
 						<i class="fa fa-paper-plane"></i> Envoyer
 					</div>
-					<div class="btn btn-info btn-block p-3 hide" data-bs-toggle="modal" data-bs-target="#signature_tab" id="ISign" onclick="resizeCanvas()">
+					<div class="btn btn-info btn-block p-3 hide" data-bs-toggle="modal" data-bs-target="#signature_tab" id="ISign" onclick="signaturePad.clear();">
 						<i class="fas fa-signature"></i> Signer
 					</div>
 				</div>
@@ -293,23 +337,11 @@
 						<div id="next" class="nav-link d-inline-block"><i class="fas fa-arrow-alt-circle-right" style="cursor: pointer"></i></div>
 					</div>
 					<canvas id="pdfViewer" class="pdf-viewer"></canvas>
-					@* <div class="text-center btn btn-lg bg-secondary btn-secondary" id="pdftext" style="position: absolute; color: #fff; top: 50%; left: 50%; font-size: 1.5rem;transform: translate(-50%,-50%);"><i class="fa fa-file-pdf"></i> Ouvrir un fichier</div>  *@
 					<div class="text-center btn" id="pdfImg"></div> 
-					@* <div class="text-center" id="pdftext" style="color: rgb(214, 171, 27)">Ouvrir un fichier</div> *@
 				</div>
-
-				<!--
-				<div style="display: none;">
-					<span id="zoomValue">150%</span>
-					<input type="range" id="zoom" name="cowbell" min="100" max="300" value="150" step="50" disabled>
-				</div>
-				-->
 			</div>
 		</div>
 		<!--Fin JS PDF -->
-		@*
-		<partial name="~/Views/Main/ModalDocument.cshtml" />
-		*@
 	</div>
 </section>
 <!-- Fin Main content -->
@@ -355,22 +387,55 @@
 		</div>
 	</div>
 </div>
+<!-- Fin Modal Recipient -->
+
+<!-- Modal Mail -->
+<div class="modal fade" id="mailing">
+	<div class="modal-dialog modal-xl">
+		<div class="modal-content">
+			<div class="modal-header bg-gray-dark">
+				<h4 class="modal-title"><i class="fa fa-user-alt"></i> Mail</h4>
+				<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<label class="input-group-text" for="objectId">Objet</Label>
+						</div>
+						<input type="text" class="form-control" id="objectId" placeholder="Objet" aria-label="Username" aria-describedby="basic-addon1">
+					</div>
+
+					<div class="">
+						<textarea id="mailMessage"></textarea>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer justify-content-between">
+				<button type="button" class="btn btn-danger" data-action="resetMail">Réinitialiser</button>
+				<button type="button" class="btn btn-primary" data-action="sendDocument">Envoyé</button>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- Fin Modal Mail -->
 
-<partial name="~/Views/Modal/SignaturePad.cshtml" />
+@* <partial name="~/Views/Modal/SignaturePad.cshtml" /> *@
+<partial name="~/Views/Modal/SignPad.cshtml"/>
 
 <script src="~/js/pdf/jquery-ui.js"></script>
-
 @* <script src="~/js/doc/newDocument/script.js" asp-append-version="true"></script> *@
-<script src="~/js/doc/newdocumentmanager.js" asp-append-version="true"></script>
-<script src="~/js/doc/newDocument.js" asp-append-version="true" type="module"></script>
+<script src="~/js/doc/newDocument/newDocument.js" asp-append-version="true"></script>
+<script src="~/js/doc/newDocument/newDocument.menu.js" asp-append-version="true" type="module"></script>
 @* <script src="~/js/doc/NewDocument.js" asp-append-version="true"></script> *@
 
-<script src="~/js/doc/myPDF.js" asp-append-version="true"></script>
-<script src="~/js/doc/SignBox.js" asp-append-version="true"></script>
+<script src="~/js/doc/newDocument/myPDF.js" asp-append-version="true"></script>
+@* <script src="~/js/doc/SignBox.js" asp-append-version="true"></script> *@
 
 @* <script src="~/js/doc/newDocument/recipient.js" asp-append-version="true"></script>
 <script src="~/js/doc/newDocument/fields.js" asp-append-version="true"></script>
  *@
-<script src="~/lib/signaturepad/signature_pad.umd.js" asp-append-version="true"></script>
-<script src="~/lib/signaturepad/app.js" asp-append-version="true"></script>
+@* <script src="~/lib/signaturepad/signature_pad.umd.js" asp-append-version="true"></script>
+<script src="~/lib/signaturepad/app.js" asp-append-version="true"></script> *@

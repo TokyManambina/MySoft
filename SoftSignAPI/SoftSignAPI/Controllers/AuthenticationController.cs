@@ -43,7 +43,7 @@ namespace SoftSignAPI.Controllers
                 if (await _userRepository.IsExist(request.Email))
                     return Conflict("User already exist.");
 
-                request.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
+                //request.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
 
                 User entity = _mapper.Map<User>(request);
                 if (await _userRepository.Insert(entity.Email,entity.Password) == null)

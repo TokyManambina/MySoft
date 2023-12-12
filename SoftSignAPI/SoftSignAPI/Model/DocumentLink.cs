@@ -12,7 +12,5 @@ namespace SoftSignAPI.Model
 
 		[ForeignKey(nameof(CodeDocument))]
 		public virtual Document Document { get; set; }
-
-		//public virtual List<string>? Mails { get; set; }
 	}
 }

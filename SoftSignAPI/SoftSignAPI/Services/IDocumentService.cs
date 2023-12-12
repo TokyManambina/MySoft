@@ -5,6 +5,6 @@ namespace SoftSignAPI.Services
 {
     public interface IDocumentService
     {
-        Document? CreateDocument(IFormFile upload, User user);
+        Document? CreateDocument(IFormFile upload, string Title, string Object, string Message,User user);
     }
 }
