@@ -3,6 +3,12 @@ using SoftSignAPI.Context;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
 using System.Reflection.Metadata;
+using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text.RegularExpressions;
+using PdfSharp.Drawing;
+using Newtonsoft.Json;
+using SoftSignAPI.Dto;
 
 namespace SoftSignAPI.Repositories
 {
@@ -19,11 +25,12 @@ namespace SoftSignAPI.Repositories
         {
             return await _db.UserDocuments.AnyAsync(x => x.Id == id);
         }
+
         public async Task<UserDocument?> Get(int? id = null, Guid? userId = null, string? code = null)
         {
             try
             {
-                var query = _db.UserDocuments.AsQueryable();
+                var query = _db.UserDocuments.Include(x => x.Document).Include(x => x.Fields).AsQueryable();
 
                 if (query == null)
                     return null;
@@ -199,5 +206,28 @@ namespace SoftSignAPI.Repositories
             }
         }
 
-    }
+		public async Task<bool> UpdateSignAndParaphe(UserDocument? userDocument, string? fields, string? signImage, string? parapheImage)
+		{
+            try
+            {
+				userDocument.Fields = JsonConvert.DeserializeObject<List<Field>>(fields);
+				userDocument.Signature = datatoimage(signImage);
+                userDocument.Paraphe = datatoimage(parapheImage);
+                _db.UserDocuments.Update(userDocument);
+                await _db.SaveChangesAsync();
+                return true;
+            }catch (Exception ex)
+            {
+				throw new Exception(ex.Message);
+				return false;
+			}
+		}
+		byte[] datatoimage(string data)
+		{
+			var matchGroups = Regex.Match(data, @"^data:((?<type>[\w\/]+))?;base64,(?<data>.+)$").Groups;
+			var base64Data = matchGroups["data"].Value;
+			var binData = Convert.FromBase64String(base64Data);
+			return binData;
+		}
+	}
 }

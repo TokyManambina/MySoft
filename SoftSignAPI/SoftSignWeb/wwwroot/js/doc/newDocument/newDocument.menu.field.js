@@ -70,7 +70,7 @@ $(`[data-action="addField"]`).on("click", (e) => {
         y: 0,
         width: 0,
         height: 0,
-        type: parseInt($(header).attr("data-id")),
+        fieldType: parseInt($(header).attr("data-id")),
         firstPage: firstPage,
         lastPage: lastPage,
         variable: id,
@@ -82,12 +82,13 @@ $(`[data-action="addField"]`).on("click", (e) => {
 
     activeField(id, selectedRecipient);
     $(document).trigger("refreshField");
+    $(`[field-id]`).mousemove();
 });
 
 function activeField(id, recipient) {
 
     $(`[field-id="${id}"],[page-id="${id}"],[recipient-id="${recipient}"]`).hover((e, x) => {
-
+        console.log("aaa");
         if ($(`[recipient-id="${recipient}"]`).css("background-color") !== ListUserDocument[recipient].color)
             $(`[recipient-id="${recipient}"]`).css("background-color", ListUserDocument[recipient].color);
         if ($(`[page-id="${id}"]`).css("background-color") !== ListUserDocument[recipient].color)
@@ -110,6 +111,7 @@ function activeField(id, recipient) {
     });
 
     $(`[field-id="${id}"]`).mousemove((e) => {
+        console.log('er');
         let header = $(e.target).closest("[field-id]");
 
         let divPos = {
@@ -138,7 +140,6 @@ function activeField(id, recipient) {
             .catch((error) => {
                 console.error("Error:", error);
             });
-            
         $(`[field-id="${id}"]`).draggable(dragOption);
     });
     $(`[field-id="${id}"]`).hover();

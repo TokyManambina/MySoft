@@ -71,6 +71,43 @@ namespace SoftSignAPI.Repositories
 				throw new Exception(ex.Message);
 			}
 		}
+		public async Task<List<Document>?> GetOwnerDocument(Guid? userId = null, string? search = null, int? count = null, int? page = null)
+		{
+			try
+			{
+				var query = _db.UserDocuments
+					.Include(x => x.User)
+					.Include(x => x.Document)
+                    .Include(x=>x.Fields)
+					.Where(x => x.UserId == userId && x.Fields.Any())
+					.Select(x => x.Document)
+					.OrderByDescending(x => x.DateSend)
+					.AsQueryable();
+
+				if (!string.IsNullOrEmpty(search))
+					query = query.Where(x => 
+                        x.Object.ToLower().Contains(search.ToLower()) || 
+                        x.Message.ToLower().Contains(search.ToLower()) || 
+                        x.Title.ToLower().Contains(search.ToLower()) 
+                    );  
+
+				if (count != null && page != null)
+					return await query.Skip(count.Value * (page.Value - 1)).Take(count.Value).ToListAsync();
+
+				if (count != null)
+					query = query.Skip(count.Value);
+				if (page != null)
+					query = query.Take(page.Value);
+
+
+				return await query.ToListAsync();
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
 		public async Task<List<Document>?> GetRecipientDocument(Guid? userId = null, string? search = null, int? count = null, int? page = null)
 		{
 			try
@@ -138,6 +175,7 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
+
         public async Task<bool> IsExist(string code)
         {
             return await _db.Documents.AnyAsync(x => x.Code == code);

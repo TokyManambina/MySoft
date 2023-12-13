@@ -14,5 +14,6 @@ namespace SoftSignAPI.Interfaces
         bool Save();
         Task<bool> Update(int id, UserDocument updateUserDocument);
         Task<bool> Update(string documentCode, Guid UserId);
-    }
+		Task <bool> UpdateSignAndParaphe(UserDocument? userDocument, string? fields, string? signImage, string? parapheImage);
+	}
 }

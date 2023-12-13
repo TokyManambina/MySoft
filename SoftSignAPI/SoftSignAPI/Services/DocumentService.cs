@@ -18,7 +18,7 @@ namespace SoftSignAPI.Services
             _societyRepository = societyRepository;
             _hostingEnvironment = hostingEnvironment;
         }
-        public Document? CreateDocument(IFormFile upload, string Title, string Object, string Message, User user)
+        public Document? CreateDocument(IFormFile upload, string Title, string Object, string Message, User user, DocumentType type)
         {
             try
             {
@@ -27,6 +27,7 @@ namespace SoftSignAPI.Services
                 string filename = Path.GetFileNameWithoutExtension(uploadFile);
 
                 Document? document = new Document();
+                document.Type = type;
                 document.Title = Title;
                 document.Object = Object;
                 document.Message = Message;

@@ -6,7 +6,7 @@ import * as Recipient from './newDocument.menu.recipient.js?v=0.1.0';
 import * as Send from './newDocument.menu.send.js?v=0.1.0';
 
 $(`[card-id="attachement"]`).remove();
-$(`[card-id="dynamic-field"]`).remove();
+$(`[card-id="dynamic-Field"]`).remove();
 
 
 
@@ -16,8 +16,6 @@ $(document).ready(() => {
 	$("#ISign").hide();
 	$(`[card-id="field"]`).hide();
 	$('#signature_tab').hide();
-
-	$("#YouSign").removeClass('disabled');
 });
 
 

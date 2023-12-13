@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using PdfSharp.Drawing;
 using SoftSignAPI.Dto;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
 using SoftSignAPI.Repositories;
 using SoftSignAPI.Services;
+using System.Text.RegularExpressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -77,8 +80,38 @@ namespace SoftSignAPI.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
-        // GET: api/<DocumentController>/filter/posted?userId=
-        [HttpGet("filter/posted")]
+		// GET: api/<DocumentController>/filter/posted?userId=
+		[HttpGet("filter/owned")]
+		[Authorize]
+		public async Task<ActionResult<List<ShowDocument>>> GetOwnerDocument([FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+		{
+			try
+			{
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+                var document = await _documentRepository.GetOwnerDocument(userId: user.Id, search: search, count: count, page: page);
+
+                
+
+
+				return Ok( document.Select(x=> new 
+                {
+                    Code = x.Code,
+                    DateSend = x.DateSend,
+                    Message = x.Message,
+                    Object = x.Object,
+                    Status = x.Status,
+                    
+                }));
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+		[HttpGet("filter/posted")]
         [Authorize]
         public async Task<ActionResult<List<ShowDocument>>> GetSenderDocument([FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
         {
@@ -138,7 +171,7 @@ namespace SoftSignAPI.Controllers
             }
         }
 		// GET api/document/d/5
-		[HttpGet("d/{code}")]
+		[HttpGet("pdf/{code}")]
 		public async Task<ActionResult?> GetPdf(string code)
 		{
 			try
@@ -179,7 +212,7 @@ namespace SoftSignAPI.Controllers
                 if(recipients == null || recipients.Count == 0)
 					return BadRequest("No Recipient");
 
-				var document = _documentService.CreateDocument(doc.Files, "", doc.Object, doc.Message, user);
+				var document = _documentService.CreateDocument(doc.Files, doc.Title, doc.Object, doc.Message, user, DocumentType.WithFlow);
 
                 if(document == null)
 					return BadRequest("error on document");
@@ -209,7 +242,7 @@ namespace SoftSignAPI.Controllers
 				if (doc.Files == null)
 					return BadRequest("File not exist");
 
-				var document = _documentService.CreateDocument(doc.Files, doc.Title!, "", "", user);
+				var document = _documentService.CreateDocument(doc.Files, doc.Title!, "", "", user, DocumentType.WithoutFlow);
 
 				if (document == null)
 					return BadRequest("error on document");
@@ -218,12 +251,21 @@ namespace SoftSignAPI.Controllers
 
 				await _userDocumentRepository.CreateRange(userDocuments);
 
+                await _userDocumentRepository.UpdateSignAndParaphe(userDocuments.FirstOrDefault(), doc.Fields, doc.SignImage, doc.ParapheImage);
+
 				return Ok(document.Code);
 			}
 			catch (Exception ex)
 			{
 				return StatusCode(500, "Internal Server Error");
 			}
+		}
+		byte[] datatoimage(string data)
+		{
+			var matchGroups = Regex.Match(data, @"^data:((?<type>[\w\/]+))?;base64,(?<data>.+)$").Groups;
+			var base64Data = matchGroups["data"].Value;
+			var binData = Convert.FromBase64String(base64Data);
+			return binData;
 		}
 
 		// DELETE api/<DocumentController>/5

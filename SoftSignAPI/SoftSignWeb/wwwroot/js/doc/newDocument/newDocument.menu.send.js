@@ -75,11 +75,11 @@ $("#signature_tab").on('show.bs.modal', function (e) {
 	signExist = false;
 	parapheExist = false;
 
-	$("[sign-modal-dialog]").removeClass("modal-sm").addClass("modal-xl");
-	$("#paraphe-pad").removeClass("col-12").addClass("col-4");
+	//$("[sign-modal-dialog]").removeClass("modal-sm").addClass("modal-lg");
+	//$("#paraphe-pad").removeClass("col-12").addClass("col-4");
 
-	$("#signature-pad").hide();
-	$("#paraphe-pad").hide();
+	//$("#signature-pad").hide();
+	//$("#paraphe-pad").hide();
 
 	if ($(`[page-id][data-type="signature"]`).length > 0) {
 		$("#signature-pad").show();
@@ -88,10 +88,10 @@ $("#signature_tab").on('show.bs.modal', function (e) {
 	if ($(`[page-id][data-type="paraphe"]`).length > 0) {
 		$("#paraphe-pad").show();
 		parapheExist = true;
-		if (!signExist) {
-			$("#paraphe-pad").removeClass("col-4").addClass("col-12");
-			$("[sign-modal-dialog]").removeClass("modal-xl").addClass("modal-sm");
-		}
+		//if (!signExist) {
+		//	$("#paraphe-pad").removeClass("col-4").addClass("col-12");
+		//	$("[sign-modal-dialog]").removeClass("modal-lg").addClass("modal-sm");
+		//}
 	}
 
 	if (!signExist && !parapheExist) {
@@ -123,7 +123,7 @@ $(`[sign-confirm]`).on("click", (e) => {
 	let signImage = signaturePad.toDataURL();
 	let parapheImage = paraphePad.toDataURL();
 	
-
+	console.log(ListUserDocument["me"].fields)
 	let formData = new FormData();
 
 	formData.append("Files", files[0]);
