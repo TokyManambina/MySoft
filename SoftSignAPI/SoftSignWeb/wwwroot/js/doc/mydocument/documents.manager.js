@@ -9,13 +9,34 @@ $(document).ready(() => {
 		history.pushState(null, null, document.URL);
 		window.location.reload();
 	});
-	MyDocument();
+	MyDocument(0);
 })
 
-function MyDocument() {
+$(document).on(`click`, `[document-status]`, (e) => {
+	let header = $(e.target).closest("[document-status]");
+	let doc = header.attr("document-status");
+	let textBox = header.find("[document-name]");
+	$('[document-title]').text(textBox.text());
+	MyDocument(Number.parseInt(doc));
+});
+
+function MyDocument(docList) {
+	$(`#listDocument`).text("");
+
+	let listType = "";
+	switch (docList) {
+		case 0: listType = "received"; break;
+		case 1: listType = "posted"; break;
+		case 2: listType = "owned"; break;
+		case 3: listType = "0"; break;
+		case 4: listType = "1"; break;
+		case 5: listType = "2"; break;
+		default: listType = "received"; break;
+    }
+	console.log(listType);
 	$.ajax({
 		type: "GET",
-		url: apiUrl + "api/Document/filter/posted",
+		url: apiUrl + "api/Document/filter/" + listType,
 		contentType: "application/json",
 		datatype: 'json',
 		headers: {
@@ -122,20 +143,35 @@ $(document).on('click', '[ViewDocument]', (e) => {
 });
 
 function documentListUI(document, icon) {
+	let date = new Date(document.dateSend);
+	let newdate = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+
+	let de = "";
+	if (document.de != "") {
+		de = `
+			<span class="small text-gray text-decoration-underline">De :</span>
+			<span class="text-small text-primary">${document.de}</span>
+		`;
+	}
+	let pour = "";
+	if (document.pour != "") {
+		pour = `
+			<span class="small text-gray text-decoration-underline">Pour :</span>
+			<span class="text-small text-primary">${document.pour}</span>
+		`;
+	}
+
 	return `
 		<tr data-stat="${document.Status}" ViewDocument="${document.code}" >
-            <td>
-                <div class="icheck-primary">
-                <input type="checkbox" value="" id="check1">
-                <label for="check1"></label>
-                </div>
-            </td>
             <td class="mailbox-star"><i class="fa ${icon} text-secondary"></i></td>
-            <td class="mailbox-name"></td>
+            <td class="mailbox-name">${de}</td>
+            <td class="mailbox-name">${pour}</td>
             <td class="mailbox-subject pointer" style="min-width : 250px">
-				<span class="text-bold">${document.object}</span>
-				<span>${convertToPlain(document.message)}</span>
+				<span class="text-bold">${document.title}</span>
+				<!--<span>${convertToPlain(document.message)}</span>-->
             </td>
+			<td></td>
+            <td class="mailbox-date">${newdate}</td>
             <td class="mailbox-date">${DateLast(document.dateSend)}</td>
             <td> <div></div> </td>
 		</tr>

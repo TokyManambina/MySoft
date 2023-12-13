@@ -32,11 +32,6 @@ $(`[data-action="sendDocument"]`).on("click", (e) => {
 	var files = $("#inputFile").get(0).files;
 
 	let formData = new FormData();
-	//for (var i = 0; i < 5; i++) {
-	//	formData.append("Files", files[0]);
-	//}
-
-
 
 	formData.append("Files", files[0]);
 	formData.append("Recipients", JSON.stringify(dicoToList(ListUserDocument)));

@@ -81,6 +81,25 @@ namespace SoftSignAPI.Controllers
             }
         }
 		// GET: api/<DocumentController>/filter/posted?userId=
+		[HttpGet("filter/{stat}")]
+		[Authorize]
+		public async Task<ActionResult<List<ShowDocument>>> GetSignedDocuments(DocumentStat stat, [FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+		{
+			try
+			{
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+				var documents = await _documentRepository.GetDocuments(user: user, stat, search: search, count: count, page: page);
+
+				return Ok(documents);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
 		[HttpGet("filter/owned")]
 		[Authorize]
 		public async Task<ActionResult<List<ShowDocument>>> GetOwnerDocument([FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
@@ -91,20 +110,12 @@ namespace SoftSignAPI.Controllers
 				if (user == null)
 					return SignOut("Logout");
 
-                var document = await _documentRepository.GetOwnerDocument(userId: user.Id, search: search, count: count, page: page);
+                var documents = await _documentRepository.GetOwnerDocument(user: user, search: search, count: count, page: page);
 
                 
 
 
-				return Ok( document.Select(x=> new 
-                {
-                    Code = x.Code,
-                    DateSend = x.DateSend,
-                    Message = x.Message,
-                    Object = x.Object,
-                    Status = x.Status,
-                    
-                }));
+				return Ok(documents);
 			}
 			catch (Exception ex)
 			{
@@ -113,15 +124,16 @@ namespace SoftSignAPI.Controllers
 		}
 		[HttpGet("filter/posted")]
         [Authorize]
-        public async Task<ActionResult<List<ShowDocument>>> GetSenderDocument([FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+        public async Task<ActionResult<List<ShowDocument>>> GetSendedDocument([FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
                 var user = await _userRepository.GetByMail(_userService.GetMail());
                 if(user == null)
 					return SignOut("Logout");
+                var documents = await _documentRepository.GetSendedDocument(user: user, search: search, count: count, page: page);
 
-				return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetSenderDocument(userId: user.Id, search: search, count: count, page: page)));
+				return Ok(documents);
             }
             catch (Exception ex)
             {
@@ -130,11 +142,18 @@ namespace SoftSignAPI.Controllers
         }
         // GET: api/<DocumentController>/filter/received?userId=
         [HttpGet("filter/received")]
-        public async Task<ActionResult<List<ShowDocument>>> GetRecipientDocument([FromQuery] Guid? userId, [FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+		[Authorize]
+		public async Task<ActionResult<List<ShowDocument>>> GetReceivedDocument([FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetRecipientDocument(userId: userId, search: search, count: count, page: page)));
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+				var documents = await _documentRepository.GetReceivedDocument(user: user, search: search, count: count, page: page);
+
+				return Ok(documents);
             }
             catch (Exception ex)
             {
@@ -259,13 +278,6 @@ namespace SoftSignAPI.Controllers
 			{
 				return StatusCode(500, "Internal Server Error");
 			}
-		}
-		byte[] datatoimage(string data)
-		{
-			var matchGroups = Regex.Match(data, @"^data:((?<type>[\w\/]+))?;base64,(?<data>.+)$").Groups;
-			var base64Data = matchGroups["data"].Value;
-			var binData = Convert.FromBase64String(base64Data);
-			return binData;
 		}
 
 		// DELETE api/<DocumentController>/5
