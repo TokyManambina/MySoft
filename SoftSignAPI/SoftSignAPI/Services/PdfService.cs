@@ -66,12 +66,12 @@ namespace SoftSignAPI.Services
 			foreach (var recipient in RecipientList)
 			{
 				if (!recipient.IsFinished)
-					tasks.Add(CreateBox(pdf, recipient));
+					await CreateBox(pdf, recipient);
 				else
-					tasks.Add(BuildField(pdf, recipient));
+					await BuildField(pdf, recipient);
 			}
 			
-			await Task.WhenAll(tasks);
+			//await Task.WhenAll(tasks);
 
 			string filePath = "SoftSign.pdf";
 
@@ -94,10 +94,10 @@ namespace SoftSignAPI.Services
 			
 			foreach (var field in recipient.Fields)
 			{
-				tasks.Add(DrawBox(pdf, field, color));
+				await DrawBox(pdf, field, color);
             }
 
-			await Task.WhenAll(tasks);
+			//await Task.WhenAll(tasks);
 		}
 
 		private async Task BuildField(PdfDocument pdf, UserDocument recipient)
@@ -113,32 +113,33 @@ namespace SoftSignAPI.Services
 
 			if (recipient.Signature != null)
 			{
-				xImageSign = await ByteToXImage(recipient.Signature);
+				xImageSign = ByteToXImage(recipient.Signature);
 			}
 			if (recipient.Paraphe != null)
 			{
-				xImageParaphe = await ByteToXImage(recipient.Paraphe);
+				xImageParaphe = ByteToXImage(recipient.Paraphe);
 			}
 
 			foreach (var field in recipient.Fields)
 			{
 				if (field.FieldType == FieldType.Signature)
-					tasks.Add(DrawField(pdf, field, color, xImageSign));
+					await DrawField(pdf, field, color, xImageSign);
 				else if(field.FieldType == FieldType.Paraphe)
-					tasks.Add(DrawField(pdf, field, color, xImageParaphe));
+					await DrawField(pdf, field, color, xImageParaphe);
 
 			}
 
-			await Task.WhenAll(tasks);
+			//await Task.WhenAll(tasks);
 		}
 
-		private async Task<XImage> ByteToXImage(byte[] imageByte)
+		private XImage ByteToXImage(byte[] imageByte)
 		{
 			using (MemoryStream stream = new MemoryStream(imageByte, 0, imageByte.Length, true, true))
 			{
 				try
 				{
-					return XImage.FromStream(stream);
+					var image = XImage.FromStream(stream);
+					return image;
 				}
 				catch (Exception ex)
 				{
@@ -149,33 +150,34 @@ namespace SoftSignAPI.Services
 		}
 		private async Task DrawField(PdfDocument pdf, Field field, Color color, XImage image)
 		{
-			PdfPage page = new PdfPage();
-
-
-			for (int i = int.Parse(field.FirstPage) - 1; i <= int.Parse(field.LastPage) - 1; i++)
+			try
 			{
-				page = pdf.Pages[i];
+				PdfPage page = new PdfPage();
+				for (int i = int.Parse(field.FirstPage) - 1; i <= int.Parse(field.LastPage) - 1; i++)
+				{
+					page = pdf.Pages[i];
 
-				var scale = new
-				{
-					width = page.Width / field.PDF_Width,
-					height = page.Height / field.PDF_Height
-				};
-				try
-				{
+
+					var scale = new
+					{
+						width = page.Width / field.PDF_Width,
+						height = page.Height / field.PDF_Height
+					};
+				
 					var x = PixelsToPoints(field.X!.Value * scale.width!.Value, 96);
 					var y = PixelsToPoints(field.Y!.Value * scale.height!.Value, 96);
 					var width = PixelsToPoints(field.Width!.Value * scale.width!.Value, 96);
 					var height = PixelsToPoints(field.Height!.Value * scale.height!.Value, 96);
 
+
 					XGraphics gfx = XGraphics.FromPdfPage(page);
 					gfx.DrawImage(image, x, y, width, height );
 					gfx.Dispose();
 				}
-				catch (Exception ex)
-				{
-					var message = ex.ToString();
-				}
+			}
+			catch (Exception ex)
+			{
+				var message = ex.ToString();
 			}
 			return;
 		}

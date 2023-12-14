@@ -196,7 +196,7 @@ namespace SoftSignAPI.Repositories
 				_db.UserDocuments.Update(userDocument);
 				await _db.SaveChangesAsync();
 
-                return await Validate(code, userId);
+                return true;
 			}
 			catch (Exception ex)
 			{

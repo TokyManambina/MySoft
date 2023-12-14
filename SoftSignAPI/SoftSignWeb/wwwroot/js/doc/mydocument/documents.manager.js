@@ -224,7 +224,11 @@ function ShowList() {
 $(document).on('click', `[document-action="validate"]`, (e) => {
 	if (!confirm("Voulez vous vraiment valider le document?"))
 		return;
+		
+	validationSign(true);
+});
 
+function validationSign(show) {
 	let code = $("[document-code]").attr("document-code");
 	$.ajax({
 		type: "PUT",
@@ -236,17 +240,20 @@ $(document).on('click', `[document-action="validate"]`, (e) => {
 		},
 		xhrFields: { withCredentials: true },
 		success: function (result) {
-			alert("Document validé");
+			if (show) {
+				alert("Document validé");
 
-			history.pushState(null, null, docUrl);
-			window.location.reload();
+				history.pushState(null, null, docUrl);
+				window.location.reload();
+			}
+			
 		},
 
 		Error: function (x, e) {
 			alert("Please contact the administrator");
 		}
 	});
-});
+}
 
 $(document).on('click', `[document-action="sign"]`, (e) => {
 	$("#signature_tab").modal('show');
@@ -256,6 +263,7 @@ $(document).on('click', '[sign-confirm]', (e) => {
 	let signImage = signaturePad.toDataURL();
 	let parapheImage = paraphePad.toDataURL();
 	
+
 	if (signExist && !signaturePad.isSign) {
 		alert("Vous avez oublié le signature");
 		return;
@@ -283,6 +291,7 @@ $(document).on('click', '[sign-confirm]', (e) => {
 		},
 		xhrFields: { withCredentials: true },
 		success: function (result) {
+			validationSign(false);
 			alert("Document Signé");
 
 			history.pushState(null, null, docUrl);
