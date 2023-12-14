@@ -3,24 +3,13 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 $(document).ready(() => {
-	$.ajax({
-		type: "Get",
-		url: apiUrl + "api/User/isAdmin",
-		//data: JSON.stringify(WorkspaceId),
-		contentType: "application/json",
-		datatype: 'json',
-
-		success: function (Datas) {
-			if (!Datas) {
-				$("#espace_client").hide();
-			}
-		},
-
-		Error: function (x, e) {
-			alert("Some error");
-			//loading(false);
-		}
-	});
+	var role = atob(sessionStorage.getItem("role"));
+	if (role== 0) {
+		$("#espace_client").hide();
+	}
+	if (role!= 2) {
+		$("[societe-nav]").hide();
+	}
 });
 
 var colorList = [

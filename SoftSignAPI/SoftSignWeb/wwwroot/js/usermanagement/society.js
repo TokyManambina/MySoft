@@ -2,8 +2,28 @@
 
 $(document).ready(() => {
     GetSocieties();
+    GetSociete();
 });
+function GetSociete() {
+    $.ajax({
+        type: "Get",
+        url: apiUrl + "api/society/statistique",
+        contentType: "application/json",
+        datatype: 'json',
+        headers: {
+            'Authorization': sessionStorage.getItem("Authentication")
+        },
+        xhrFields: { withCredentials: true },
+        success: function (Datas) {
+            $("#societe_nombre").html(Datas);
+        },
 
+        Error: function (x, e) {
+            alert("Some error");
+            //loading(false);
+        }
+    });
+}
 function GetUser(UserId) {
     $.ajax({
         type: "Get",

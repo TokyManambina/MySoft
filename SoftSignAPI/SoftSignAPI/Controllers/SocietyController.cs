@@ -40,13 +40,14 @@ namespace SoftSignAPI.Controllers
                 var user = await _userRepository.GetByMail(_UserService.GetMail());
                 bool status = user?.Role == Role.Admin ? true : false;
                 var lista = await _societyRepository.GetAll(count: count, page: page);
-                if (user?.Role != Role.Admin)
+                if (user?.Role == Role.Admin)
                 {
                     return Ok(new { role = status, data = _mapper.Map<List<SocietyDto>?>(lista) });
                 }
                 else
                 {
-                    return Ok(new { role = status, data = _mapper.Map<List<SocietyDto>?>(lista) });
+                    lista = lista?.Where(u=>u.Id==user?.SocietyId).ToList();
+                    return Ok(new { role = status, data = lista });
                 }
             }
             catch (Exception ex)
@@ -83,7 +84,20 @@ namespace SoftSignAPI.Controllers
             }
         }
 
-
+        [HttpGet("statistique")]
+        public async Task<ActionResult> Getstatistique([FromQuery] Guid subscriptionId, [FromQuery] int? count, [FromQuery] int? page)
+        {
+            try
+            {
+                var user = await _userRepository.GetByMail(_UserService.GetMail());
+                var list = await _societyRepository.GetAll(count: count, page: page);
+                return Ok(list?.Count());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
         // POST api/<SocietyController>
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] SocietyDto newSociety)

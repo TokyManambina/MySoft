@@ -4,7 +4,33 @@ $(document).ready(() => {
     GetUsers();
     GetListSociete();
     showListRole();
+    GetStatistique();
 });
+
+function GetStatistique() {
+    $.ajax({
+        type: "Get",
+        url: apiUrl + "api/User/statistique",
+        contentType: "application/json",
+        datatype: 'json',
+        headers: {
+            'Authorization': sessionStorage.getItem("Authentication")
+        },
+        xhrFields: { withCredentials: true },
+        success: function (Datas) {
+            var icon_max = !Datas.max_user ? `<i class="fa-solid fa-infinity"></i>` : Datas.max_user;
+            var reste_user = !Datas.reste_user ? `<i class="fa-solid fa-infinity"></i>` : Datas.reste_user;
+            $("#max_user").html(icon_max);
+            $("#curr_user").html(Datas.curr_user);
+            $("#reste_user").html(reste_user);
+        },
+
+        Error: function (x, e) {
+            alert("Some error");
+            //loading(false);
+        }
+    });
+}
 
 function GetUser(UserId) {
     $.ajax({
@@ -127,7 +153,7 @@ function GetListSociete() {
 
                 code += societeUI(v);
             });
-            $(`#societe`).html(code);
+            $(`#society`).html(code);
         },
 
         Error: function (x, e) {
@@ -145,7 +171,7 @@ $(document).on('click', '[user-create]', (e) => {
     let password = $("#password").val();
     let email = $("#email").val();
     let role = parseInt($("#role").val());
-    let society = parseInt($("#societe").val());
+    let society = $("#societe").val();
 
     if (email == "") {
         Toast.fire({
@@ -167,7 +193,8 @@ $(document).on('click', '[user-create]', (e) => {
             datatype: 'json',
             data: JSON.stringify({
                 "email": email,
-                "password": password
+                "password": password,
+                "SocietyId":society
 
             }),
             success: function (Datas) {
@@ -209,7 +236,7 @@ $(document).on('click', '[user-create]', (e) => {
                 "firstName": nom,
                 "lastName": prenom,
                 "role": role,
-                "societyId" : society
+                "SocietyId" : society
             }),
 
             success: function (Datas) {
@@ -237,7 +264,6 @@ $(document).on('click', '[user-create]', (e) => {
         });
         $("#modal-user").modal("hide");
     }
-    alert("Mis à jour réussit!");
     window.location.reload();
 });
 $(document).on('click', '[user-update]', (e) => {
@@ -247,7 +273,6 @@ $(document).on('click', '[user-update]', (e) => {
     $("#id_nom").show();
     $("#id_prenom").show();
     $("#id_role").show();
-    $("#id_societe").show();
     $("#id_password").hide();
     $("#modal-user").modal("toggle");
 
@@ -258,11 +283,12 @@ $(document).on('click', '[user-modal]', (e) => {
     $("#password").val("");
     $("#nom").val("");
     $("#prenom").val("");
+    $("#id").val("");
+    $("#societe").val("");
     $("#id_password").show();
     $("#id_nom").hide();
     $("#id_prenom").hide();
     $("#id_role").hide();
-    $("#id_societe").hide();
     $("#role").val("1");
     $("#modal-user").modal("toggle");
 });

@@ -23,12 +23,14 @@ namespace SoftSignAPI.Controllers
         private readonly ILogger<AuthenticationController> _logger;
         private readonly IMapper _mapper;
         private readonly IUserRepository _userRepository;
+        private readonly IUserService _userservice;
         private readonly ITokenService _tokenService;
         
-        public AuthenticationController(ILogger<AuthenticationController> logger, IMapper mapper, IUserRepository userRepository, ITokenService tokenService)
+        public AuthenticationController(ILogger<AuthenticationController> logger, IUserService userservice, IMapper mapper, IUserRepository userRepository, ITokenService tokenService)
         {
             _logger = logger;
             _mapper = mapper;
+            _userservice =userservice;
             _userRepository = userRepository;
             _tokenService = tokenService;
         }
@@ -44,9 +46,8 @@ namespace SoftSignAPI.Controllers
                     return Conflict("User already exist.");
 
                 //request.Password = BCrypt.Net.BCrypt.HashPassword(request.Password);
-
                 User entity = _mapper.Map<User>(request);
-                if (await _userRepository.Insert(entity.Email,entity.Password) == null)
+                if (await _userRepository.Insert(entity.Email,entity.Password,entity.SocietyId) == null)
                     return StatusCode(500, "Internal Server Error");
 
                 return Ok("User created successfully.");
@@ -77,6 +78,7 @@ namespace SoftSignAPI.Controllers
 
                 return Ok(new {
                     token = token,
+                    role=user.Role,
                     refresh = refresh.Token,
                     Created = refresh.Created,
                     Expires = refresh.Expires
