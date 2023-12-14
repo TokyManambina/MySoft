@@ -1,6 +1,10 @@
 ﻿import { apiUrl, webUrl } from "../../apiConfig.js";
 import * as Validate from './documents.manager.validate.js?v=0.1.0';
 import * as Sign from './documents.manager.sign.js?v=0.1.0';
+let docUrl = document.URL;
+
+let signExist = false;
+let parapheExist = false;
 
 $(document).ready(() => {
 	$("#sign").text("");
@@ -22,7 +26,7 @@ $(document).on(`click`, `[document-status]`, (e) => {
 
 function MyDocument(docList) {
 	$(`#listDocument`).text("");
-
+	ShowList();
 	let listType = "";
 	switch (docList) {
 		case 0: listType = "received"; break;
@@ -32,8 +36,8 @@ function MyDocument(docList) {
 		case 4: listType = "1"; break;
 		case 5: listType = "2"; break;
 		default: listType = "received"; break;
-    }
-	console.log(listType);
+	}
+
 	$.ajax({
 		type: "GET",
 		url: apiUrl + "api/Document/filter/" + listType,
@@ -74,6 +78,9 @@ $(document).on('click', '[ViewDocument]', (e) => {
 	let header = $(e.target).closest('[ViewDocument');
 	let id = header.attr('ViewDocument');
 
+	signExist = false;
+	parapheExist = false;
+
 	$.ajax({
 		type: "GET",
 		url: apiUrl + "api/Document/" + id,
@@ -86,8 +93,6 @@ $(document).on('click', '[ViewDocument]', (e) => {
 		success: function (result) {
 			console.log(result)
 
-
-
 			var panel = $(`#Panel`).find("div[data-type='panel']:not(div#p_MyDocument)");
 
 			panel.remove();
@@ -97,17 +102,17 @@ $(document).on('click', '[ViewDocument]', (e) => {
 			$(`#p_MyDocument`).hide();
 			$("#sign").text("");
 
-			$("#sign").append(`<div class="btn btn-success bg-gradient mb-3 col-12" document-action="validate"><i class="fa fa-check p-2"> </i> Valider</div>`);
-			$("#sign").append(`<div class="btn btn-success bg-gradient mb-3 col-12" document-action="sign"><i class="fa fa-signature p-2"> </i> Signé</div>`);
-
-			/*
-			if (Datas.Resender == true) $("#sign").append(`<div class="btn btn-success bg-gradient mb-3 col-12" data-bs-toggle="modal" data-bs-target="#MconfirmMail" id="btnvalidator" data-target="${id}"><i class="fa fa-paper-plane"></i> Envoyer</div>`);
-			else if (Datas.Validators == true) $("#sign").append(`<div class="btn btn-success bg-gradient mb-3 col-12" data-bs-toggle="modal" data-bs-target="#MconfirmMail" id="btnvalidator" data-target="${id}"><i class="fas fa-check"></i> Valider</div>`);
-			else if (Datas.Sign == true || Datas.Receiver == "" && Datas.Stat != "Sign") $("#sign").append(`<div class="btn btn-success bg-gradient mb-3 col-12" data-bs-toggle="modal" data-bs-target="#signature_tab" id="btnSign" data-target="${id}"><i class="fas fa-signature"></i> Signé</div>`);
-			*/
-			//signaturePad.clear();
-			//loading(false);
-
+			if (result.myTurn) { 
+				if (result.hasSign || result.hasParaphe) {
+					signExist = result.hasSign;
+					parapheExist = result.hasParaph;
+					$("#sign").append(`<div class="btn btn-success bg-gradient mb-3 col-12" document-action="sign"><i class="fa fa-signature p-2"> </i> Signé</div>`);
+				}
+				else {
+					$("#sign").append(`<div class="btn btn-success bg-gradient mb-3 col-12" document-action="validate"><i class="fa fa-check p-2"> </i> Valider</div>`);
+				}
+			}
+			
 
 			history.replaceState(null, null, document.URL + "/" + id.split('-')[0])
 
@@ -179,10 +184,10 @@ function documentListUI(document, icon) {
 }
 function documentUI(document) {
 	return `
-		<div id="p_doc" data-type="panel">
+		<div id="p_doc" data-type="panel" document-code="${document.code}">
 			<div class="card card-primary card-outline mb-1">
 				<div class="card-header">
-					<button class="btn btn-default btn-sm" onclick="changeList('All')">
+					<button class="btn btn-default btn-sm" action-reply>
 							<i class="fas fa-reply"></i>
 					</button><br><br>
 					<h6 class="col"><u>Objet</u> : ${document.object}</h6>
@@ -204,3 +209,88 @@ function documentUI(document) {
 		</div>
 	`;
 }
+
+$(document).on("click", "[action-reply]", (e) => {
+	ShowList();
+});
+function ShowList() {
+	history.pushState(null, null, docUrl);
+	$('#p_doc').remove();
+	$("#sign").text("");
+
+	$('#p_MyDocument').show();
+}
+
+$(document).on('click', `[document-action="validate"]`, (e) => {
+	if (!confirm("Voulez vous vraiment valider le document?"))
+		return;
+
+	let code = $("[document-code]").attr("document-code");
+	$.ajax({
+		type: "PUT",
+		url: apiUrl + "api/Document/validate/" + code,
+		contentType: "application/json",
+		datatype: 'json',
+		headers: {
+			'Authorization': sessionStorage.getItem("Authentication")
+		},
+		xhrFields: { withCredentials: true },
+		success: function (result) {
+			alert("Document validé");
+
+			history.pushState(null, null, docUrl);
+			window.location.reload();
+		},
+
+		Error: function (x, e) {
+			alert("Please contact the administrator");
+		}
+	});
+});
+
+$(document).on('click', `[document-action="sign"]`, (e) => {
+	$("#signature_tab").modal('show');
+});
+
+$(document).on('click', '[sign-confirm]', (e) => {
+	let signImage = signaturePad.toDataURL();
+	let parapheImage = paraphePad.toDataURL();
+	
+	if (signExist && !signaturePad.isSign) {
+		alert("Vous avez oublié le signature");
+		return;
+	}
+	if (parapheExist && !paraphePad.isSign) {
+		alert("Vous avez oublié le paraphe");
+		return;
+	}
+	
+	let formData = new FormData();
+	
+	formData.append("SignImage", signImage);
+	formData.append("ParapheImage", parapheImage);
+
+	let code = $("[document-code]").attr("document-code");
+	$.ajax({
+		type: "PUT",
+		url: apiUrl + "api/Document/sign/" + code,
+		data: formData,
+		contentType: false,
+		processData: false,
+		async: true,
+		headers: {
+			'Authorization': sessionStorage.getItem("Authentication")
+		},
+		xhrFields: { withCredentials: true },
+		success: function (result) {
+			alert("Document Signé");
+
+			history.pushState(null, null, docUrl);
+			window.location.reload();
+		},
+
+		Error: function (x, e) {
+			alert("Please contact the administrator");
+		}
+	});
+});

@@ -260,8 +260,41 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
+		public async Task<DocumentViewAction?> GetWithUser(string code, Guid userId)
+		{
+			try
+			{
+				if (!await IsExist(code))
+					return null;
 
-        public async Task<bool> IsExist(string code)
+				var userDocument = await _db.UserDocuments
+					.Include(x => x.Document)
+					.Include(x=>x.Fields)
+					.FirstOrDefaultAsync(x => x.DocumentCode == code && x.UserId == userId);
+
+
+				return new DocumentViewAction
+				{
+					Code = code,
+					DateSend = userDocument.Document.DateSend,
+					Filename = userDocument.Document.Filename,
+					Message = userDocument.Document.Message,
+					Object = userDocument.Document.Object,
+					Title = userDocument.Document.Title,
+					Status = userDocument.Document.Status,
+					MyTurn = userDocument.MyTurn,
+					hasSign = userDocument.Fields.Any(x=>x.FieldType == FieldType.Signature),
+					hasParaphe = userDocument.Fields.Any(x=>x.FieldType == FieldType.Paraphe),
+				};
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+			}
+		}
+
+
+		public async Task<bool> IsExist(string code)
         {
             return await _db.Documents.AnyAsync(x => x.Code == code);
         }
@@ -335,5 +368,6 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-    }
+
+	}
 }

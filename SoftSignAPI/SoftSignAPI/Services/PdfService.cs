@@ -69,7 +69,6 @@ namespace SoftSignAPI.Services
 					tasks.Add(CreateBox(pdf, recipient));
 				else
 					tasks.Add(BuildField(pdf, recipient));
-				//tasks.Add(BuildField(pdf, recipient));
 			}
 			
 			await Task.WhenAll(tasks);

@@ -8,6 +8,7 @@ namespace SoftSignAPI.Interfaces
         Task<Document?> Create(Document document);
         Task<bool> Delete(string code);
         Task<Document?> Get(string code);
+        Task<DocumentViewAction?> GetWithUser(string code, Guid userId);
         Task<List<Document>> GetAll(string? search = null, int? count = null, int? page = null);
 		Task<List<DocInfo>?> GetDocumentInfo(Guid userId);
 		Task<List<ShowDocument>?> GetOwnerDocument(User user, string? search = null, int? count = null, int? page = null);

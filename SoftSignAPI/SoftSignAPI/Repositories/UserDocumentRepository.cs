@@ -136,44 +136,6 @@ namespace SoftSignAPI.Repositories
             }
         }
 
-        public async Task<bool> Update(string documentCode, Guid userId)
-        {
-            try
-            {
-                var userDocument = await Get(userId:userId, code:documentCode);
-
-                if (userDocument == null)
-                    return false;
-
-                userDocument.IsFinished = true;
-                userDocument.MyTurn = false;
-
-                _db.UserDocuments.Update(userDocument);
-
-                var nextUserDocument = _db.UserDocuments.Where(x=>x.Step == (userDocument.Step + 1)).FirstOrDefault();
-                if (nextUserDocument == null)
-                {
-                    var document = _db.Documents.Where(x=> x.Code== documentCode).FirstOrDefault();
-                    if (document == null)
-                        return false;
-
-                    document.Status = DocumentStat.Completed; 
-                    _db.Documents.Update(document);
-                    return Save();
-                }
-
-                nextUserDocument.MyTurn = true;
-
-                _db.UserDocuments.Update(nextUserDocument);
-
-                return Save();
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
 
         public async Task<bool> Delete(int id)
         {
@@ -220,6 +182,64 @@ namespace SoftSignAPI.Repositories
             {
 				throw new Exception(ex.Message);
 				return false;
+			}
+		}
+		public async Task<bool> UpdateSignAndParaphe(string code, Guid userId, string? signImage, string? parapheImage)
+		{
+			try
+			{
+                var userDocument = await _db.UserDocuments.Where(x => x.UserId == userId && x.DocumentCode == code).FirstOrDefaultAsync();
+
+				userDocument.Signature = datatoimage(signImage);
+				userDocument.Paraphe = datatoimage(parapheImage);
+
+				_db.UserDocuments.Update(userDocument);
+				await _db.SaveChangesAsync();
+
+                return await Validate(code, userId);
+			}
+			catch (Exception ex)
+			{
+				throw new Exception(ex.Message);
+				return false;
+			}
+		}
+
+		public async Task<bool> Validate(string code, Guid userId)
+		{
+			try
+			{
+				var udoc = await _db.UserDocuments.Include(x => x.Document).Where(x => x.UserId == userId && x.DocumentCode == code).FirstOrDefaultAsync();
+
+				if (udoc == null)
+					return false;
+
+				udoc.MyTurn = false;
+				udoc.IsFinished = true;
+				_db.UserDocuments.Update(udoc);
+				var nextUser = await _db.UserDocuments.Where(x => x.Step == udoc.Step + 1 && x.DocumentCode == code).FirstOrDefaultAsync();
+
+				if (nextUser == null)
+				{
+					udoc.Document.Status = DocumentStat.Completed;
+					_db.UserDocuments.Update(udoc);
+				}
+				else
+				{
+					nextUser.MyTurn = true;
+					_db.UserDocuments.Update(nextUser);
+				}
+
+				
+
+				await _db.SaveChangesAsync();
+				return true;
+
+			}
+			catch (Exception ex)
+			{
+				return false;
+				throw new Exception(ex.Message);
 			}
 		}
 		byte[] datatoimage(string data)

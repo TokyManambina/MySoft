@@ -178,11 +178,18 @@ namespace SoftSignAPI.Controllers
         }
         // GET api/<DocumentController>/5
         [HttpGet("{code}")]
+        [Authorize]
         public async Task<ActionResult<DocumentDto>> Get(string code)
         {
             try
             {
-                return Ok(_mapper.Map<DocumentDto?>(await _documentRepository.Get(code)));
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+				var document = await _documentRepository.GetWithUser(code, user.Id);
+
+				return Ok(document);
             }
             catch (Exception ex)
             {
@@ -273,6 +280,50 @@ namespace SoftSignAPI.Controllers
                 await _userDocumentRepository.UpdateSignAndParaphe(userDocuments.FirstOrDefault(), doc.Fields, doc.SignImage, doc.ParapheImage);
 
 				return Ok(document.Code);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+
+		[HttpPut("sign/{code}")]
+		[Authorize]
+		public async Task<ActionResult<string>> Sign(string code, [FromForm] SignAndParaphe doc)
+		{
+			try
+			{
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+				bool isValidated = await _userDocumentRepository.UpdateSignAndParaphe(code, user.Id, doc.SignImage, doc.ParapheImage);
+				if (isValidated)
+					return Ok();
+				else
+					return BadRequest();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+
+		[HttpPut("validate/{code}")]
+		[Authorize]
+		public async Task<ActionResult<string>> Validated(string code)
+		{
+			try
+			{
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+                bool isValidated = await _userDocumentRepository.Validate(code, user.Id);
+                if (isValidated)
+                    return Ok();
+                else
+                    return BadRequest();
 			}
 			catch (Exception ex)
 			{
