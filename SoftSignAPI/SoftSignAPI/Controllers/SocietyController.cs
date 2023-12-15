@@ -5,8 +5,6 @@ using SoftSignAPI.Interfaces;
 using SoftSignAPI.Repositories;
 using SoftSignAPI.Dto;
 using SoftSignAPI.Services;
-using System.Collections;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -38,14 +36,16 @@ namespace SoftSignAPI.Controllers
             try
             {
                 var user = await _userRepository.GetByMail(_UserService.GetMail());
-                if (user?.Role != Role.User)
+                bool status = user?.Role == Role.Admin ? true : false;
+                var lista = await _societyRepository.GetAll(count: count, page: page);
+                if (user?.SubscriptionId == null)
                 {
-                    bool status = user?.Role == Role.Admin ? true : false;
-                    return Ok(new { role = status, data = _mapper.Map<List<SocietyDto>?>(await _societyRepository.GetAll(count: count, page: page)) });
+                    return Ok(new { role = status, data = _mapper.Map<List<SocietyDto>?>(lista) });
                 }
                 else
                 {
-                    return Ok(new { role = false, data = new ArrayList() });
+                    lista = lista?.Where(u=>u.Id==user?.SocietyId).ToList();
+                    return Ok(new { role = status, data = _mapper.Map<List<SocietyDto>?>(lista) });
                 }
             }
             catch (Exception ex)
@@ -82,6 +82,20 @@ namespace SoftSignAPI.Controllers
             }
         }
 
+        [HttpGet("statistique")]
+        public async Task<ActionResult> Getstatistique([FromQuery] Guid subscriptionId, [FromQuery] int? count, [FromQuery] int? page)
+        {
+            try
+            {
+                var user = await _userRepository.GetByMail(_UserService.GetMail());
+                var list = await _societyRepository.GetAll(count: count, page: page);
+                return Ok(list?.Count());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
         // POST api/<SocietyController>
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] SocietyDto newSociety)
@@ -98,11 +112,11 @@ namespace SoftSignAPI.Controllers
 
         // PUT api/<SocietyController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] Society updateSociety)
+        public async Task<ActionResult> Put(Guid id, [FromBody] SocietyDto updateSociety)
         {
             try
             {
-                return Ok(await _societyRepository.Update(id, updateSociety));
+                return Ok(await _societyRepository.Update(id, _mapper.Map<Society>(updateSociety)));
             }
             catch (Exception ex)
             {

@@ -4,7 +4,34 @@ $(document).ready(() => {
     GetUsers();
     GetListSociete();
     showListRole();
+    GetStatistique();
+    GetListSubscription();
 });
+
+function GetStatistique() {
+    $.ajax({
+        type: "Get",
+        url: apiUrl + "api/User/statistique",
+        contentType: "application/json",
+        datatype: 'json',
+        headers: {
+            'Authorization': sessionStorage.getItem("Authentication")
+        },
+        xhrFields: { withCredentials: true },
+        success: function (Datas) {
+            var icon_max = !Datas.max_user ? `<i class="fa-solid fa-infinity"></i>` : Datas.max_user;
+            var reste_user = !Datas.reste_user ? `<i class="fa-solid fa-infinity"></i>` : Datas.reste_user;
+            $("#max_user").html(icon_max);
+            $("#curr_user").html(Datas.curr_user);
+            $("#reste_user").html(reste_user);
+        },
+
+        Error: function (x, e) {
+            alert("Some error");
+            //loading(false);
+        }
+    });
+}
 
 function GetUser(UserId) {
     $.ajax({
@@ -24,6 +51,7 @@ function GetUser(UserId) {
             $("#role").val(User.role);
             $("#password").val(User.password);
             $("#societe").val(User.societyId);
+            $("#subscription").val(User.SubscriptionId);
         },
 
         Error: function (x, e) {
@@ -41,12 +69,10 @@ function DeleteUser(UserId) {
         datatype: 'json',
 
         success: function (Datas) {
-
-            let User = Datas.data;
-            $("#nom").val(User.firstName);
-            $("#prenom").val(User.lastName);
-            $("#email").val(User.email);
-            $("#role").val(User.role);
+            Toast.fire({
+                icon: "success",
+                title: "Utilisateur supprimé"
+            });
         },
 
         Error: function (x, e) {
@@ -59,7 +85,7 @@ async function GetUsers() {
     var list_role = await GetListRole();
     $.ajax({
         type: "GET",
-        url: apiUrl + "api/user",
+        url: apiUrl + "api/user/get",
         headers: {
             'Authorization': sessionStorage.getItem("Authentication")
         },
@@ -110,7 +136,10 @@ function GetListSociete() {
     $.ajax({
         type: "GET",
         url: apiUrl + "api/society",
-
+        headers: {
+            'Authorization': sessionStorage.getItem("Authentication")
+        },
+        xhrFields: { withCredentials: true },
         success: function (result) {
             /*if (result == "login") {
                 ToLogin();
@@ -127,7 +156,39 @@ function GetListSociete() {
 
                 code += societeUI(v);
             });
-            $(`#societe`).html(code);
+            $(`#society`).html(code);
+        },
+
+        Error: function (x, e) {
+            alert("Some error");
+            //loading(false);
+        }
+    });
+}
+function GetListSubscription() {
+    $.ajax({
+        type: "GET",
+        url: apiUrl + "api/subscription/get",
+        headers: {
+            'Authorization': sessionStorage.getItem("Authentication")
+        },
+        xhrFields: { withCredentials: true },
+        success: function (result) {
+            /*if (result == "login") {
+                ToLogin();
+            }*/
+            if (result == "error") {
+                Toast.fire({
+                    icon: 'error',
+                    title: Datas.msg
+                });
+            }
+
+            let code = ``;
+            $.each(result, function (k, v) {
+                code += subscriptionUI(v);
+            });
+            $(`#subscriptions`).html(code);
         },
 
         Error: function (x, e) {
@@ -138,14 +199,15 @@ function GetListSociete() {
 }
 
 
-$(document).on('click', '[user-create]', (e) => {
+$(document).on('click', '[user-create]', async() => {
     let id = $("#id").val();
     let nom = $("#nom").val();
     let prenom = $("#prenom").val();
     let password = $("#password").val();
     let email = $("#email").val();
     let role = parseInt($("#role").val());
-    let society = parseInt($("#societe").val());
+    let society = $("#societe").val();
+    let subscription = $("#subscription").val();
 
     if (email == "") {
         Toast.fire({
@@ -162,13 +224,16 @@ $(document).on('click', '[user-create]', (e) => {
             type: "POST",
             url: apiUrl + "api/Auth/Register",
             xhrFields: { withCredentials: true },
-
+            headers: {
+                'Authorization': sessionStorage.getItem("Authentication")
+            },
             contentType: "application/json",
             datatype: 'json',
             data: JSON.stringify({
                 "email": email,
-                "password": password
-
+                "password": password,
+                "SocietyId": society,
+                "SubscriptionId": subscription
             }),
             success: function (Datas) {
                 console.log(Datas);
@@ -200,7 +265,9 @@ $(document).on('click', '[user-create]', (e) => {
             type: "Put",
             url: apiUrl + "api/User/" + id,
             xhrFields: { withCredentials: true },
-
+            headers: {
+                'Authorization': sessionStorage.getItem("Authentication")
+            },
             contentType: "application/json",
             datatype: 'json',
             data: JSON.stringify({
@@ -209,7 +276,8 @@ $(document).on('click', '[user-create]', (e) => {
                 "firstName": nom,
                 "lastName": prenom,
                 "role": role,
-                "societyId" : society
+                "SocietyId": society,
+                "SubscriptionId": subscription
             }),
 
             success: function (Datas) {
@@ -237,7 +305,6 @@ $(document).on('click', '[user-create]', (e) => {
         });
         $("#modal-user").modal("hide");
     }
-    alert("Mis à jour réussit!");
     window.location.reload();
 });
 $(document).on('click', '[user-update]', (e) => {
@@ -247,10 +314,12 @@ $(document).on('click', '[user-update]', (e) => {
     $("#id_nom").show();
     $("#id_prenom").show();
     $("#id_role").show();
-    $("#id_societe").show();
     $("#id_password").hide();
-    $("#modal-user").modal("toggle");
-
+    $("#id_subscription").hide();
+    var role = atob(sessionStorage.getItem("role"));
+    if (role == 2) {
+        $("#modal-user").modal("toggle");
+    }
 });
 
 $(document).on('click', '[user-modal]', (e) => {
@@ -258,13 +327,17 @@ $(document).on('click', '[user-modal]', (e) => {
     $("#password").val("");
     $("#nom").val("");
     $("#prenom").val("");
+    $("#id").val("");
+    $("#societe").val("");
     $("#id_password").show();
     $("#id_nom").hide();
-    $("#id_prenom").hide();
+    $("#id_prenom").hide();    
     $("#id_role").hide();
-    $("#id_societe").hide();
     $("#role").val("1");
-    $("#modal-user").modal("toggle");
+    var role = atob(sessionStorage.getItem("role"));
+    if (role == 2) {
+        $("#modal-user").modal("toggle");
+    }
 });
 $(document).on('click', '[modal-closed]', (e) => {
     $("#modal-user").modal("hide");
@@ -301,8 +374,13 @@ function OptionUI(role) {
         <option value="${role.value}">${role.name}</option>
     `;
 }
-function societeUI(role) {
+function societeUI(societe) {
     return `
-        <option value="${role.id}">${role.name}</option>
+        <option value="${societe.id}">Nom: ${societe.name}</option>
+    `;
+}
+function subscriptionUI(societe) {
+    return `
+        <option value="${societe.id}">Nom: ${societe.code}</option>
     `;
 }

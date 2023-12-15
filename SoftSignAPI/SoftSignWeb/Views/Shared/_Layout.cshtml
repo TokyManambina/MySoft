@@ -30,7 +30,7 @@
 
 	<script src="~/lib/SoftSign/js/adminlte.min.js"></script>
 	<script src="~/lib/summernote/summernote-lite.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="~/js/site.js" asp-append-version="true" type="module"></script>
 
 
 	<script src="~/lib/emails-input/utils.js"></script>
@@ -45,8 +45,9 @@
 			<div class="container-fluid">
 				<div class="logo text-bold ml-3 text-white navbar-header" style="font-size: x-large;">
 					<a class="navbar-brand">Soft<span class="text-danger">Sign</span></a>
-					<a asp-action="" asp-controller="documents" class="text-white ml-3 topm" style="font-size: large;">Accueil</a>
-					<a asp-action="" asp-controller="ClientSpace" class="text-white ml-3 topm" style="font-size: large;">Espace Client</a>
+
+					<a asp-action="Index" asp-controller="Home" class="text-white ml-3 topm" style="font-size: large;">Accueil</a>
+					<a asp-action="usermanagement" asp-controller="client" class="text-white ml-3 topm" style="font-size: large;" id="espace_client">Espace Client</a>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
 					<li class="nav-item dropdown">

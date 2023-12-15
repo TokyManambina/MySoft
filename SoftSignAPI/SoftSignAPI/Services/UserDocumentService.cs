@@ -9,12 +9,14 @@ namespace SoftSignAPI.Services
     public class UserDocumentService : IUserDocumentService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserService _userservice;
         private readonly IUserDocumentRepository _userDocumentRepository;
         private readonly IDocumentRepository _documentRepository;
         private readonly IMapper _mapper;
 
-        public UserDocumentService(IUserRepository userRepository, IUserDocumentRepository userDocumentRepository, IDocumentRepository documentRepository, IMapper mapper)
+        public UserDocumentService(IUserRepository userRepository, IUserService userservice, IUserDocumentRepository userDocumentRepository, IDocumentRepository documentRepository, IMapper mapper)
         {
+            _userservice= userservice;
             _userRepository = userRepository;
             _userDocumentRepository = userDocumentRepository;
             _documentRepository = documentRepository;
@@ -26,7 +28,7 @@ namespace SoftSignAPI.Services
             try
             {
 				int step = 1;
-
+                var userconnected = await _userRepository.GetByMail(_userservice.GetMail());
 				List<UserDocument> recipients = new List<UserDocument>();
 
 				UserDocument recipient;
@@ -44,7 +46,7 @@ namespace SoftSignAPI.Services
 					userDoc = new User();
 
 					if (!await _userRepository.IsExist(item.Mail))
-						userDoc = (await _userRepository.Insert(item.Mail, "123"))!;
+						userDoc = (await _userRepository.Insert(item.Mail, "123", userconnected?.SocietyId, userconnected?.SubscriptionId))!;
 					else
 						userDoc = (await _userRepository.GetByMail(item.Mail))!;
 

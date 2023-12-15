@@ -34,14 +34,16 @@ namespace SoftSignAPI.Controllers
             try
             {
                 var user=await _userRepository.GetByMail(_UserService.GetMail());
-                if(user?.Role!=Role.User)
+                bool status = user?.Role==Role.Admin? true:false;
+                var lista = await _userRepository.GetAll(count: count, page: page);
+                if(user?.SubscriptionId==null)
                 {
-                    bool status = user?.Role==Role.Admin? true:false;
-                    return Ok(new { role=status,data= _mapper.Map<List<UserDto>?>(await _userRepository.GetAll(count: count, page: page)) });
+                    return Ok(new { role=status,data= _mapper.Map<List<UserDto>?>(lista) });
                 }
                 else
                 {
-                    return Ok(new { role = false, data = new ArrayList() });
+
+                    return Ok(new { role = status, data = _mapper.Map<List<UserDto>?>(lista!.Where(u => u.SubscriptionId == user?.SubscriptionId)) });
                 }
             }
             catch (Exception ex)
@@ -76,7 +78,39 @@ namespace SoftSignAPI.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+        [HttpGet("statistique")]
+        public async Task<ActionResult> Getstatistique([FromQuery] Guid subscriptionId, [FromQuery] int? count, [FromQuery] int? page)
+        {
+            try
+            {
+                var user = await _userRepository.GetByMail(_UserService.GetMail());
+                var list = await _userRepository.GetAll(count: count, page: page);
+                var max_user = user?.Subscription?.MaxUser;
+                var curr_user = user?.SubscriptionId==null? list?.Count(): list?.Where(u=>u.SubscriptionId==user?.SubscriptionId).Count();
+                var curr_admin = user?.SubscriptionId == null ? list?.Where(u=>u.Role==Role.Admin).Count() : list?.Where(u => (u.SubscriptionId == user?.SubscriptionId) && (u.Role==Role.Admin)).Count();
+                var reste_user=max_user-curr_user;
 
+                return Ok(new {max_user=max_user,curr_user=curr_user,curr_admin=curr_admin,reste_user=reste_user});
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+        [HttpGet("IsAdmin")]
+        public async Task<ActionResult<bool>> IsAdmin()
+        {
+            try
+            {
+                var user = await _userRepository.GetByMail(_UserService.GetMail());
+                bool statut=user?.SubscriptionId==null?true:false;
+                return Ok(statut);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
         // GET api/<userController>/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> FindById(Guid id)
@@ -90,6 +124,7 @@ namespace SoftSignAPI.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
 
         // POST api/<userController>
         [HttpPost]

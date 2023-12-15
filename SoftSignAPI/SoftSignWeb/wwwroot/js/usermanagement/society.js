@@ -2,8 +2,28 @@
 
 $(document).ready(() => {
     GetSocieties();
+    GetSociete();
 });
+function GetSociete() {
+    $.ajax({
+        type: "Get",
+        url: apiUrl + "api/society/statistique",
+        contentType: "application/json",
+        datatype: 'json',
+        headers: {
+            'Authorization': sessionStorage.getItem("Authentication")
+        },
+        xhrFields: { withCredentials: true },
+        success: function (Datas) {
+            $("#societe_nombre").html(Datas);
+        },
 
+        Error: function (x, e) {
+            alert("Some error");
+            //loading(false);
+        }
+    });
+}
 function GetUser(UserId) {
     $.ajax({
         type: "Get",
@@ -80,7 +100,7 @@ function GetSocieties() {
 
 
 
-$(document).on('click', '[user-create]', (e) => {
+$(document).on('click', '[user-create]', async() => {
     let id = $("#id").val();
     let name = $("#name").val();
     let storage = $("#storage").val();
@@ -100,7 +120,9 @@ $(document).on('click', '[user-create]', (e) => {
             type: "POST",
             url: apiUrl + "api/society",
             xhrFields: { withCredentials: true },
-
+            headers: {
+                'Authorization': sessionStorage.getItem("Authentication")
+            },
             contentType: "application/json",
             datatype: 'json',
             data: JSON.stringify({
@@ -137,10 +159,13 @@ $(document).on('click', '[user-create]', (e) => {
             type: "Put",
             url: apiUrl + "api/society/" + id,
             xhrFields: { withCredentials: true },
-
+            headers: {
+                'Authorization': sessionStorage.getItem("Authentication")
+            },
             contentType: "application/json",
             datatype: 'json',
             data: JSON.stringify({
+                "id":id,
                 "name": name,
                 "storage": storage
             }),
@@ -170,7 +195,6 @@ $(document).on('click', '[user-create]', (e) => {
         });
         $("#modal-user").modal("hide");
     }
-    alert("Mis à jour réussit!");
     window.location.reload();
 });
 $(document).on('click', '[user-update]', (e) => {

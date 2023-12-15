@@ -42,7 +42,7 @@ $(`[data-id="login"]`).on('click', (k, v) => {
 		success: function (result) {
 			console.log(result)
 			sessionStorage.setItem("Authentication", `Bearer ${result.token}`);
-
+			sessionStorage.setItem("role",btoa(result.role));
 			$.ajax({
 				type: "GET",
 				url: webUrl + "Auth",
