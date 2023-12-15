@@ -1,6 +1,7 @@
 ﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 // for details on configuring this project to bundle and minify static web assets.
 
+
 var colorList = [
 	"#bc5090", "#58508d", "#003f5c", "#c7522a", "#057dcd",
 	"#007f4e", "#008585", "#bf5b04", "#007bff", "#6610f2",

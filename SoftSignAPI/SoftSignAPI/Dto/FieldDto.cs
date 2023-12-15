@@ -15,7 +15,7 @@ namespace SoftSignAPI.Dto
         public string? PDF { get; set; }
         public double? PDF_Width { get; set; }
         public double? PDF_Height { get; set; }
-        public FieldType? Type { get; set; }
+        public FieldType? FieldType { get; set; }
         public string? Detail { get; set; }
         public string? Text { get; set; }
     }

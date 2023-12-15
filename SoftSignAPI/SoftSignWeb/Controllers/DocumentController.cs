@@ -15,8 +15,13 @@ namespace SoftSignWeb.Controllers
         {
             return View();
         }
-
-        public ActionResult NewDocument()
+		[Route("document/{code}")]
+		public async Task<ActionResult> Detail()
+		{
+			return View();
+		}
+        [Route("newDocument")]
+		public async Task<ActionResult> NewDocument()
         {
             return View();
         }

@@ -13,6 +13,7 @@ namespace SoftSignAPI.Model
         public string? Title { get; set; }
         public string? Object { get; set; }
         public string? Message { get; set; }
+        public DocumentType Type { get; set; }
         public DateTime DateSend { get; set; } = DateTime.Now;
         public DocumentStat Status { get; set; } = DocumentStat.Remaining;
 
@@ -20,6 +21,10 @@ namespace SoftSignAPI.Model
         public virtual List<UserDocument> UserDocuments { get; set; }
         public virtual List<DocumentDynamicField> DocumentDetailValues { get; set; }
         public virtual List<DocumentLink> DocumentLinks { get; set; }
+    }
+    public enum DocumentType
+    {
+		WithoutFlow, WithFlow
     }
     public enum DocumentStat
     {

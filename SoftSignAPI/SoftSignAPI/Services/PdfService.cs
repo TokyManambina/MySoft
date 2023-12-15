@@ -5,6 +5,10 @@ using PdfSharp.Pdf.IO;
 using SoftSignAPI.Model;
 using PdfSharp.Drawing;
 using System.Drawing;
+using System.Collections;
+using PdfSharp.Fonts;
+using PdfSharp.Snippets.Font;
+using PdfSharp.Quality;
 
 namespace SoftSignAPI.Services
 {
@@ -52,16 +56,22 @@ namespace SoftSignAPI.Services
 
 			List<Task> tasks = new List<Task>();
 
-			var a = document.UserDocuments.Where(x => x.Step != 0).OrderBy(x => x.Step).ToList();
-			foreach (var recipient in document.UserDocuments.Where(x=>x.Step!=0).OrderBy(x=>x.Step).ToList())
+			List<UserDocument> RecipientList = new List<UserDocument>();
+
+			if (document.Type == DocumentType.WithoutFlow)
+				RecipientList = document.UserDocuments.Where(x => x.Step == 0).ToList();
+			else
+				RecipientList = document.UserDocuments.Where(x => x.Step != 0).OrderBy(x => x.Step).ToList();
+
+			foreach (var recipient in RecipientList)
 			{
 				if (!recipient.IsFinished)
-					tasks.Add(CreateBox(pdf, recipient));
+					await CreateBox(pdf, recipient);
 				else
-					tasks.Add(BuildField(pdf, recipient));
+					await BuildField(pdf, recipient);
 			}
 			
-			await Task.WhenAll(tasks);
+			//await Task.WhenAll(tasks);
 
 			string filePath = "SoftSign.pdf";
 
@@ -84,11 +94,10 @@ namespace SoftSignAPI.Services
 			
 			foreach (var field in recipient.Fields)
 			{
-				tasks.Add(DrawField(pdf, field, color));
-				//tasks.Add(DrawBox(pdf, field, color));
+				await DrawBox(pdf, field, color);
             }
 
-			await Task.WhenAll(tasks);
+			//await Task.WhenAll(tasks);
 		}
 
 		private async Task BuildField(PdfDocument pdf, UserDocument recipient)
@@ -99,46 +108,76 @@ namespace SoftSignAPI.Services
 
 			List<Task> tasks = new List<Task>();
 
-			foreach (var field in recipient.Fields)
+			XImage xImageSign = null;
+			XImage xImageParaphe = null;
+
+			if (recipient.Signature != null)
 			{
-				tasks.Add(DrawField(pdf, field, color));
+				xImageSign = ByteToXImage(recipient.Signature);
+			}
+			if (recipient.Paraphe != null)
+			{
+				xImageParaphe = ByteToXImage(recipient.Paraphe);
 			}
 
-			await Task.WhenAll(tasks);
-		}
-		private async Task DrawField(PdfDocument pdf, Field field, Color color)
-		{
-			PdfPage page = new PdfPage();
-
-			for (int i = int.Parse(field.FirstPage) - 1; i <= int.Parse(field.LastPage) - 1; i++)
+			foreach (var field in recipient.Fields)
 			{
-				page = pdf.Pages[i];
+				if (field.FieldType == FieldType.Signature)
+					await DrawField(pdf, field, color, xImageSign);
+				else if(field.FieldType == FieldType.Paraphe)
+					await DrawField(pdf, field, color, xImageParaphe);
 
-				var scale = new
-				{
-					width = page.Width / field.PDF_Width,
-					height = page.Height / field.PDF_Height
-				};
+			}
+
+			//await Task.WhenAll(tasks);
+		}
+
+		private XImage ByteToXImage(byte[] imageByte)
+		{
+			using (MemoryStream stream = new MemoryStream(imageByte, 0, imageByte.Length, true, true))
+			{
 				try
 				{
+					var image = XImage.FromStream(stream);
+					return image;
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine("Error converting byte array to XImage: " + ex.Message);
+					return null;
+				}
+			}
+		}
+		private async Task DrawField(PdfDocument pdf, Field field, Color color, XImage image)
+		{
+			try
+			{
+				PdfPage page = new PdfPage();
+				for (int i = int.Parse(field.FirstPage) - 1; i <= int.Parse(field.LastPage) - 1; i++)
+				{
+					page = pdf.Pages[i];
+
+
+					var scale = new
+					{
+						width = page.Width / field.PDF_Width,
+						height = page.Height / field.PDF_Height
+					};
+				
 					var x = PixelsToPoints(field.X!.Value * scale.width!.Value, 96);
 					var y = PixelsToPoints(field.Y!.Value * scale.height!.Value, 96);
 					var width = PixelsToPoints(field.Width!.Value * scale.width!.Value, 96);
 					var height = PixelsToPoints(field.Height!.Value * scale.height!.Value, 96);
-					FileStream fileStream = new FileStream("default/total.png", FileMode.Open);
-					MemoryStream a = new MemoryStream();
-					fileStream.CopyTo(a);
-					fileStream.Close();
-					XImage image = XImage.FromStream(a);
-					fileStream.Close();
+
+
 					XGraphics gfx = XGraphics.FromPdfPage(page);
-					gfx.DrawImage(image, x, y, image.Width, image.Height);
+					gfx.DrawImage(image, x, y, width, height );
 					gfx.Dispose();
 				}
-				catch (Exception ex)
-				{
-					var message = ex.ToString();
-				}
+			}
+			catch (Exception ex)
+			{
+				var message = ex.ToString();
 			}
 			return;
 		}
@@ -164,8 +203,18 @@ namespace SoftSignAPI.Services
 					var height = PixelsToPoints(field.Height!.Value * scale.height!.Value, 96);
 					XGraphics gfx = XGraphics.FromPdfPage(page);
 					XRect rectangle = new XRect(x,y, width, height);
-					XSolidBrush brush = new XSolidBrush(XColor.FromArgb(75, color.R, color.G, color.B));
+					XPen borderPen = new XPen(XColors.Black, 1)
+					{
+						DashStyle = XDashStyle.Dash,
+						Color = XColor.FromArgb(255, color.R, color.G, color.B),
+						Width = 2
+					};
+					XSolidBrush brush = new XSolidBrush(XColor.FromArgb(50, 100, 100, 100));
+					
+
 					gfx.DrawRectangle(brush, rectangle);
+					gfx.DrawRectangle(borderPen, rectangle);
+
 					gfx.Dispose();
 				}catch(Exception ex)
 				{
@@ -173,15 +222,6 @@ namespace SoftSignAPI.Services
 				}
 			}
 			return;
-		}
-		private object GetPage(string page)
-		{
-			var pages = page.Split('-');
-			return new
-			{
-				FirstPage = int.Parse(pages.First().Trim()),
-				LastPage = int.Parse(pages.Last().Trim())
-			};
 		}
 	}
 }
