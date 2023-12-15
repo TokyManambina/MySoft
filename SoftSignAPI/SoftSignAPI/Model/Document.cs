@@ -6,17 +6,20 @@ namespace SoftSignAPI.Model
     public class Document
     {
         [Key]
-        public string CodeDoc { get; set; }
+        public string Code { get; set; }
         public string? DocPasword { get; set; }
         public string Filename { get; set; }
         public string Url { get; set; }
-        public string? Cc { get; set; }
-        public string Object { get; set; }
-        public string Message { get; set; }
-        public DateTime DateSend { get; set; }
-        public DocumentStat Status { get; set; }
+        public string? Title { get; set; }
+        public string? Object { get; set; }
+        public string? Message { get; set; }
+        public DateTime DateSend { get; set; } = DateTime.Now;
+        public DocumentStat Status { get; set; } = DocumentStat.Remaining;
 
+        public virtual List<Attachement> Attachements { get; set; }
         public virtual List<UserDocument> UserDocuments { get; set; }
+        public virtual List<DocumentDynamicField> DocumentDetailValues { get; set; }
+        public virtual List<DocumentLink> DocumentLinks { get; set; }
     }
     public enum DocumentStat
     {

@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Controller"] = "Client Management";
+}
+
+
+<div class="modal fade" id="modal-user" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+                <div class="card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Insertion Utilisateur</h3>
+                        <i class="fa fa-close" style="cursor:pointer;float:right;" modal-closed></i>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="nom">Nom</label>
+                            <input type="text" class="form-control" id="nom" placeholder="Enter nom">
+                            <input type="hidden" id="id">
+                        </div>
+                        <div class="form-group">
+                            <label for="prenom">Prenom</label>
+                            <input type="text" class="form-control" id="prenom" placeholder="Enter prenom">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter email">
+                        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select class="form-control" id="role">
+                                <option value="1">Reader</option>
+                                <option value="2">Writer</option>
+                                <option value="3">Admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary" user-create>Submit</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-2">
+    </div>
+    <div class="col-10">
+        <div class="card">
+            <div class="card-header">
+                <div class="col-lg-3 col-6" style="cursor:pointer" user-modal>
+                    <div class="small-box small-box2 wsbg-create">
+                        <div class="inner">
+                            <h5 class="w-name text-bold text-gray">
+                                Ajouter utilisateur
+                                <i class="fa fa-plus"></i>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="card-title">Liste Utilisateur</h3>
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Prenom</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody id="liste_user">
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>
+<script src="~/js/usermanagement/user.js" asp-append-version="true" type="module"></script>

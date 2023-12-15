@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SoftSignAPI.Dto;
 using SoftSignAPI.Model;
 
 namespace SoftSignAPI.Helpers
@@ -8,6 +9,37 @@ namespace SoftSignAPI.Helpers
         public MappingProfiles() 
         {
             CreateMap<User, User>();
+
+            CreateMap<Society, SocietyDto>();
+            CreateMap<SocietyDto, Society>();
+
+            CreateMap<User, UserDto>();
+            CreateMap<AuthenticationDto, User>();
+            CreateMap<UserDto, User>();
+            CreateMap<User, string>();
+            CreateMap<string, User>();
+
+            CreateMap<Offer, OfferDto>();
+            CreateMap<OfferDto, Offer>();
+
+            CreateMap<Document, DocumentDto>();
+            CreateMap<SubscriptionDto, Subscription>();
+            CreateMap<Subscription, SubscriptionDto>();
+            CreateMap<DocumentDto, Document>();
+            CreateMap<ShowDocument, Document>();
+            CreateMap<Document, ShowDocument>();
+
+            CreateMap<DocumentByUserDto, UserDocument>();
+            CreateMap<UserDocument, DocumentByUserDto>();
+
+            CreateMap<UserDocument, DocumentRecipientsDto>();
+            CreateMap<DocumentRecipientsDto, UserDocument>();
+
+            CreateMap<Field, FieldDto>();
+            CreateMap<FieldDto, Field>();
+
+
+
         }
     }
 }

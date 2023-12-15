@@ -13,6 +13,7 @@ namespace SoftSignAPI.Interfaces
          * count : number of object that i take 
          * page : page number
         */
+        
         Task<List<T>?> GetAll(object? id = null, int? count = null, int? page = null);
 
         //IsExist name, code ...
@@ -25,7 +26,7 @@ namespace SoftSignAPI.Interfaces
         Task<T?> Create(T newObject);
 
         //Update T if Id = ???
-        Task<bool> Update(object id, T updateOffer);
+        Task<bool> Update(object id, T updateObject);
 
         //Delete T 
         Task<bool> Delete(object id);
