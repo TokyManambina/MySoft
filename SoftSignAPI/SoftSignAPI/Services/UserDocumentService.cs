@@ -46,7 +46,7 @@ namespace SoftSignAPI.Services
 					userDoc = new User();
 
 					if (!await _userRepository.IsExist(item.Mail))
-						userDoc = (await _userRepository.Insert(item.Mail, "123", userconnected?.SocietyId))!;
+						userDoc = (await _userRepository.Insert(item.Mail, "123", userconnected?.SocietyId, userconnected?.SubscriptionId))!;
 					else
 						userDoc = (await _userRepository.GetByMail(item.Mail))!;
 

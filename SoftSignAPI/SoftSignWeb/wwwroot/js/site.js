@@ -7,9 +7,23 @@ $(document).ready(() => {
 	if (role== 0) {
 		$("#espace_client").hide();
 	}
-	if (role!= 2) {
-		$("[societe-nav]").hide();
-	}
+	$.ajax({
+		type: "GET",
+		url: apiUrl + "api/user/isAdmin",
+		headers: {
+			'Authorization': sessionStorage.getItem("Authentication")
+		},
+		xhrFields: { withCredentials: true },
+		success: function (result) {
+			if (!result) {
+				$("[societe-nav]").hide();
+			}
+		},
+		Error: function (x, e) {
+			alert("Some error");
+			//loading(false);
+		}
+	});
 });
 
 var colorList = [
@@ -20,6 +34,7 @@ var colorList = [
 ];
 // Write your JavaScript code.
 document.addEventListener('contextmenu', event => event.preventDefault());
+
 
 function RandomColor() {
 	return colorList[Math.floor(Math.random() * colorList.length)];

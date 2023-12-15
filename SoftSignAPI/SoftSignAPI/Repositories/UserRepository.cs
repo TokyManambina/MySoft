@@ -30,7 +30,7 @@ namespace SoftSignAPI.Repositories
                 throw new Exception(ex.Message);
             }
         }
-		public async Task<User?> Insert(string mail, string password, Guid? societyId)
+		public async Task<User?> Insert(string mail, string password, Guid? societeId, Guid? SubscriptionId)
 		{
 			try
 			{
@@ -50,9 +50,11 @@ namespace SoftSignAPI.Repositories
 				{
 					Email = mail,
 					Password = BCrypt.Net.BCrypt.HashPassword(password),
-                    SocietyId = societyId
+                    SubscriptionId = SubscriptionId,
+                    SocietyId = societeId,
 
                 });
+
                 				
 				await _db.SaveChangesAsync();
 

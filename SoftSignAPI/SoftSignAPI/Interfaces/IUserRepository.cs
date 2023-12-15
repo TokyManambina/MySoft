@@ -6,7 +6,7 @@ namespace SoftSignAPI.Interfaces
     public interface IUserRepository
     {
         Task<User> Create(User user);
-        Task<User?> Insert(string mail, string password,Guid? societyId);
+        Task<User?> Insert(string mail, string password, Guid? societeId, Guid? subscriptionId);
         Task<bool> Delete(Guid id);
         Task<User?> Get(Guid id);
         Task<int> GetCountAll(int count);

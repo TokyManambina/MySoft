@@ -5,8 +5,6 @@ using SoftSignAPI.Interfaces;
 using SoftSignAPI.Repositories;
 using SoftSignAPI.Dto;
 using SoftSignAPI.Services;
-using System.Collections;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Data;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -40,14 +38,14 @@ namespace SoftSignAPI.Controllers
                 var user = await _userRepository.GetByMail(_UserService.GetMail());
                 bool status = user?.Role == Role.Admin ? true : false;
                 var lista = await _societyRepository.GetAll(count: count, page: page);
-                if (user?.Role == Role.Admin)
+                if (user?.SubscriptionId == null)
                 {
                     return Ok(new { role = status, data = _mapper.Map<List<SocietyDto>?>(lista) });
                 }
                 else
                 {
                     lista = lista?.Where(u=>u.Id==user?.SocietyId).ToList();
-                    return Ok(new { role = status, data = lista });
+                    return Ok(new { role = status, data = _mapper.Map<List<SocietyDto>?>(lista) });
                 }
             }
             catch (Exception ex)
@@ -114,11 +112,11 @@ namespace SoftSignAPI.Controllers
 
         // PUT api/<SocietyController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] Society updateSociety)
+        public async Task<ActionResult> Put(Guid id, [FromBody] SocietyDto updateSociety)
         {
             try
             {
-                return Ok(await _societyRepository.Update(id, updateSociety));
+                return Ok(await _societyRepository.Update(id, _mapper.Map<Society>(updateSociety)));
             }
             catch (Exception ex)
             {
