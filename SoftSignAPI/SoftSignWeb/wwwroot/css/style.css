@@ -230,7 +230,7 @@ footer ul li:last-child{
 	background-color: rgba(68, 65, 65, 0.59);
 }
 .boxSign[data-type="signature"] {
-	width: 200px !important;
+	width: 300px !important;
 	height: 200px !important;
 }
 .boxSign[data-type="paraphe"] {

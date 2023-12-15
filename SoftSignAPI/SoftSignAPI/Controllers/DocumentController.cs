@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
+using PdfSharp.Drawing;
 using SoftSignAPI.Dto;
 using SoftSignAPI.Interfaces;
 using SoftSignAPI.Model;
 using SoftSignAPI.Repositories;
 using SoftSignAPI.Services;
+using System.Text.RegularExpressions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -77,18 +80,60 @@ namespace SoftSignAPI.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
-        // GET: api/<DocumentController>/filter/posted?userId=
-        [HttpGet("filter/posted")]
+		// GET: api/<DocumentController>/filter/posted?userId=
+		[HttpGet("filter/{stat}")]
+		[Authorize]
+		public async Task<ActionResult<List<ShowDocument>>> GetSignedDocuments(DocumentStat stat, [FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+		{
+			try
+			{
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+				var documents = await _documentRepository.GetDocuments(user: user, stat, search: search, count: count, page: page);
+
+				return Ok(documents);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+		[HttpGet("filter/owned")]
+		[Authorize]
+		public async Task<ActionResult<List<ShowDocument>>> GetOwnerDocument([FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+		{
+			try
+			{
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+                var documents = await _documentRepository.GetOwnerDocument(user: user, search: search, count: count, page: page);
+
+                
+
+
+				return Ok(documents);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+		[HttpGet("filter/posted")]
         [Authorize]
-        public async Task<ActionResult<List<ShowDocument>>> GetSenderDocument([FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+        public async Task<ActionResult<List<ShowDocument>>> GetSendedDocument([FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
                 var user = await _userRepository.GetByMail(_userService.GetMail());
                 if(user == null)
 					return SignOut("Logout");
+                var documents = await _documentRepository.GetSendedDocument(user: user, search: search, count: count, page: page);
 
-				return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetSenderDocument(userId: user.Id, search: search, count: count, page: page)));
+				return Ok(documents);
             }
             catch (Exception ex)
             {
@@ -97,11 +142,18 @@ namespace SoftSignAPI.Controllers
         }
         // GET: api/<DocumentController>/filter/received?userId=
         [HttpGet("filter/received")]
-        public async Task<ActionResult<List<ShowDocument>>> GetRecipientDocument([FromQuery] Guid? userId, [FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
+		[Authorize]
+		public async Task<ActionResult<List<ShowDocument>>> GetReceivedDocument([FromQuery] string? search, [FromQuery] int? count, [FromQuery] int? page)
         {
             try
             {
-                return Ok(_mapper.Map<List<ShowDocument>?>(await _documentRepository.GetRecipientDocument(userId: userId, search: search, count: count, page: page)));
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+				var documents = await _documentRepository.GetReceivedDocument(user: user, search: search, count: count, page: page);
+
+				return Ok(documents);
             }
             catch (Exception ex)
             {
@@ -126,11 +178,18 @@ namespace SoftSignAPI.Controllers
         }
         // GET api/<DocumentController>/5
         [HttpGet("{code}")]
+        [Authorize]
         public async Task<ActionResult<DocumentDto>> Get(string code)
         {
             try
             {
-                return Ok(_mapper.Map<DocumentDto?>(await _documentRepository.Get(code)));
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+				var document = await _documentRepository.GetWithUser(code, user.Id);
+
+				return Ok(document);
             }
             catch (Exception ex)
             {
@@ -138,7 +197,7 @@ namespace SoftSignAPI.Controllers
             }
         }
 		// GET api/document/d/5
-		[HttpGet("d/{code}")]
+		[HttpGet("pdf/{code}")]
 		public async Task<ActionResult?> GetPdf(string code)
 		{
 			try
@@ -179,7 +238,7 @@ namespace SoftSignAPI.Controllers
                 if(recipients == null || recipients.Count == 0)
 					return BadRequest("No Recipient");
 
-				var document = _documentService.CreateDocument(doc.Files, "", doc.Object, doc.Message, user);
+				var document = _documentService.CreateDocument(doc.Files, doc.Title, doc.Object, doc.Message, user, DocumentType.WithFlow);
 
                 if(document == null)
 					return BadRequest("error on document");
@@ -209,7 +268,7 @@ namespace SoftSignAPI.Controllers
 				if (doc.Files == null)
 					return BadRequest("File not exist");
 
-				var document = _documentService.CreateDocument(doc.Files, doc.Title!, "", "", user);
+				var document = _documentService.CreateDocument(doc.Files, doc.Title!, "", "", user, DocumentType.WithoutFlow);
 
 				if (document == null)
 					return BadRequest("error on document");
@@ -218,7 +277,53 @@ namespace SoftSignAPI.Controllers
 
 				await _userDocumentRepository.CreateRange(userDocuments);
 
+                await _userDocumentRepository.UpdateSignAndParaphe(userDocuments.FirstOrDefault(), doc.Fields, doc.SignImage, doc.ParapheImage);
+
 				return Ok(document.Code);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+
+		[HttpPut("sign/{code}")]
+		[Authorize]
+		public async Task<ActionResult<string>> Sign(string code, [FromForm] SignAndParaphe doc)
+		{
+			try
+			{
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+				bool isValidated = await _userDocumentRepository.UpdateSignAndParaphe(code, user.Id, doc.SignImage, doc.ParapheImage);
+				if (isValidated)
+					return Ok();
+				else
+					return BadRequest();
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, "Internal Server Error");
+			}
+		}
+
+		[HttpPut("validate/{code}")]
+		[Authorize]
+		public async Task<ActionResult<string>> Validated(string code)
+		{
+			try
+			{
+				var user = await _userRepository.GetByMail(_userService.GetMail());
+				if (user == null)
+					return SignOut("Logout");
+
+                bool isValidated = await _userDocumentRepository.Validate(code, user.Id);
+                if (isValidated)
+                    return Ok();
+                else
+                    return BadRequest();
 			}
 			catch (Exception ex)
 			{
