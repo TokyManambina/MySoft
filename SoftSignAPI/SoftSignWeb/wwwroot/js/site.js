@@ -1,33 +1,4 @@
-﻿import { apiUrl, webUrl } from "./apiConfig.js";
-// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-
-$(document).ready(() => {
-	var role = atob(sessionStorage.getItem("role"));
-	if (role== 0) {
-		$("#espace_client").hide();
-	}
-	$.ajax({
-		type: "GET",
-		url: apiUrl + "api/user/isAdmin",
-		headers: {
-			'Authorization': sessionStorage.getItem("Authentication")
-		},
-		xhrFields: { withCredentials: true },
-		success: function (result) {
-			if (!result) {
-				$("[societe-nav]").hide();
-			}
-		},
-		Error: function (x, e) {
-			alert("Some error");
-			//loading(false);
-		}
-	});
-});
-
-var colorList = [
+﻿var colorList = [
 	"#bc5090", "#58508d", "#003f5c", "#c7522a", "#057dcd",
 	"#007f4e", "#008585", "#bf5b04", "#007bff", "#6610f2",
 	"#6f42c1", "#e83e8c", "#dc3545", "#fd7e14", "#ffc107",

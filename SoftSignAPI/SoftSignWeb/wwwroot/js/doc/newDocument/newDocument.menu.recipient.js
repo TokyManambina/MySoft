@@ -1,7 +1,6 @@
 ﻿import { apiUrl, webUrl } from "../../apiConfig.js";
 
 
-
 $("#ccContainer").hide();
 $("#ccCheck").on("change", (k, v) => {
     if ($("#ccCheck").is(":checked")) $("#ccContainer").show();
